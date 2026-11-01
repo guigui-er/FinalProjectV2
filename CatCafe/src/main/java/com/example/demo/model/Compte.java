@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="Compte")
 @Inheritance(strategy =InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="type_personne",columnDefinition = "ENUM('Client','Employe')")
+@DiscriminatorColumn(name="type_compte",columnDefinition = "ENUM('Client','Employe')")
 public abstract class Compte {
 
     @Id

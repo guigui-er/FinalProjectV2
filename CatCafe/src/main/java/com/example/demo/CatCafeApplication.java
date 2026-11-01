@@ -10,7 +10,7 @@ import com.example.demo.model.Client;
 import com.example.demo.model.Genre;
 
 @SpringBootApplication
-public class CatCafeApplication implements CommandLineRunner {
+public class CatCafeApplication /*implements CommandLineRunner*/ {
 
 	@Autowired 
 	IDAOCompte dao;
@@ -19,7 +19,7 @@ public class CatCafeApplication implements CommandLineRunner {
 		SpringApplication.run(CatCafeApplication.class, args);
 	}
 
-	@Override
+	/*@Override
     public void run(String... args) {          // appelé par Spring, sur une instance → dao est injecté
         Client client1 = new Client(null, "yolo", "eh", "fred", "meid", Genre.Femme);
         Client client2 = new Client(null, "yala", "oh", "Abid", "jordan", Genre.Homme);
@@ -37,6 +37,6 @@ public class CatCafeApplication implements CommandLineRunner {
 		
 
         
-    }
+    }*/
 
 }
