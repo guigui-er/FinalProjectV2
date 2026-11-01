@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,6 +55,23 @@ public class ClientRestController {
 	  client.setId(id);
       dao.save(client);
       return client;
+	}
+
+    	
+	@PatchMapping("/{id}")
+	public Client modifierPartiel(@PathVariable Integer id,@RequestBody Client client) 
+	{
+
+      Client clientBdd=  (Client) dao.findById(id).orElse(null);
+
+      clientBdd.setLogin((client.getLogin()!=null) ? client.getLogin() : clientBdd.getLogin());
+      clientBdd.setPassword((client.getPassword()!=null) ? client.getPassword() : clientBdd.getPassword());
+      clientBdd.setNom((client.getNom()!=null) ? client.getNom() : clientBdd.getNom());
+      clientBdd.setPrenom((client.getPrenom()!=null) ? client.getPrenom() : clientBdd.getPrenom());
+      clientBdd.setGenre((client.getGenre()!=null) ? client.getGenre() : clientBdd.getGenre());
+
+      dao.save(clientBdd);
+      return clientBdd;
 	}
 
 }
