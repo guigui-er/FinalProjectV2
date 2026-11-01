@@ -1,5 +1,9 @@
 package com.example.demo.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+
+@Entity
 public abstract class Employe extends Compte {
 
     protected double salaire;
@@ -9,6 +13,8 @@ public abstract class Employe extends Compte {
         super(id, login, password, nom, prenom, genre);
         this.salaire = salaire;
     }
+
+    public Employe(){}
 
     public double getSalaire() {
         return salaire;

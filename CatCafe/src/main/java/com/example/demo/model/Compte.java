@@ -1,13 +1,41 @@
 package com.example.demo.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="Compte")
+@Inheritance(strategy =InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="type_personne",columnDefinition = "ENUM('Client','Employe')")
 public abstract class Compte {
 
-
+    @Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
+
+    @Column(length = 30,nullable = false,unique = true)
 	protected String login;
+
+    @Column(length = 60,nullable = false)
 	protected String password;
+
+    @Column(length = 25,nullable = false)
 	protected String nom;
+
+    @Column(length = 25,nullable = false)
 	protected String prenom;
+    
+    @Enumerated(EnumType.STRING)
+	@Column(name="civilite",nullable = false)
 	protected Genre genre;
 	
 
@@ -19,6 +47,8 @@ public abstract class Compte {
 		this.prenom = prenom;
 		this.genre = genre;
 	}
+
+    public Compte(){}
 
 
 
