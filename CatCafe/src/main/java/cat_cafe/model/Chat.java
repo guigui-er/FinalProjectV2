@@ -1,4 +1,4 @@
-package cafe.model;
+package cat_cafe.model;
 
 import java.time.LocalDate;
 

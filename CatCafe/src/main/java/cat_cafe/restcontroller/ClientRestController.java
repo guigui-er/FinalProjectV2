@@ -1,4 +1,4 @@
-package com.example.demo.restcontroller;
+package cat_cafe.restcontroller;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dao.IDAOCompte;
-import com.example.demo.model.Client;
-import com.example.demo.model.Compte;
+import cat_cafe.dao.IDAOCompte;
+import cat_cafe.model.Client;
+import cat_cafe.model.Compte;
 
 @RestController 
 @RequestMapping ("/api/client")

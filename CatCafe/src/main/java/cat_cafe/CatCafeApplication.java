@@ -1,13 +1,14 @@
-package com.example.demo;
+package cat_cafe;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.example.demo.dao.IDAOCompte;
-import com.example.demo.model.Client;
-import com.example.demo.model.Genre;
+import cat_cafe.dao.IDAOCompte;
+import cat_cafe.model.Client;
+import cat_cafe.model.Genre;
 
 @SpringBootApplication
 public class CatCafeApplication /*implements CommandLineRunner*/ {
