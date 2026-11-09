@@ -15,14 +15,17 @@ public class Assise {
 
     public Assise(){}
 
-    public Assise(int id, int capacite, boolean complet) {
-        this.id = id;
-        this.capacite = capacite;
-        this.complet = complet;
-    }
+    // public Assise(int capacite, boolean complet) {
+    //     this.capacite = capacite;
+    //     this.complet = complet;
+    // }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getCapacite() {

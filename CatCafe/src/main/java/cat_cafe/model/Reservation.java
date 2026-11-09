@@ -26,14 +26,17 @@ public class Reservation {
 
     public Reservation(){}
 
-    public Reservation(int id, LocalDateTime dateTime, int nbClient) {
-        this.id = id;
-        this.dateTime = dateTime;
-        this.nbClient = nbClient;
-    }
+    // public Reservation(LocalDateTime dateTime, int nbClient) {
+    //     this.dateTime = dateTime;
+    //     this.nbClient = nbClient;
+    // }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public LocalDateTime getDateTime() {
@@ -50,6 +53,14 @@ public class Reservation {
 
     public void setNbClient(int nbClient) {
         this.nbClient = nbClient;
+    }
+
+    public Assise getAssise() {
+        return assise;
+    }
+
+    public void setAssise(Assise assise) {
+        this.assise = assise;
     }
 
 }
