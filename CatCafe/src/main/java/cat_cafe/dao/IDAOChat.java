@@ -1,6 +1,5 @@
-package cat_cafe.dao;
 
-import java.util.List;
+package cat_cafe.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,6 +10,5 @@ public interface IDAOChat extends JpaRepository<Chat,Integer>{
     public List<Chat> findByNameContaining(String recherche);
 	public List<Chat> findAllByOrderByLibelleDesc();
 	public Integer countByGonades(String recherche); // Compter le nombre de mâles et de femelles ?
-	public Integer countByAge(String recherche); // Compter le nombre de chatons/chats ?
-*/
+	public Integer countByAge(String recherche); // Compter le nombre de chatons/chats ?*/
 }
