@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,26 +24,30 @@ public class Chat  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
-    @Column(length = 25,nullable = false)
+    @Column(length = 35,nullable = false)
     protected String nom;
 
-    @Column(length = 25,nullable = false)
+    @Column(length = 35,nullable = false)
     protected String race;
 
+    @Column(length = 25,nullable = false)
+    protected long age; // Mettre l'âge en mois et faire une conversion en années avec une division euclidienne
 
-    protected int age; // Mettre l'âge en mois et faire une conversion en années avec une division euclidienne
+	@Enumerated(EnumType.STRING)
+	@Column(name="sexe",nullable = false)
+    protected ChatMF sexe; // Faire un enum plutôt ?
 
-    protected String sexe; // Faire un enum plutôt ?
-
+    @Column(length = 25,nullable = false)
     protected boolean adopted;
 
 	@DateTimeFormat(pattern="yyyy-MM-dd")
+    @Column(nullable = false)
     protected LocalDate date_veto;
 
     public Chat() {
     }
 
-    public Chat(Integer id, String nom, String race, String sexe, int age, boolean adopted, LocalDate date_veto) {
+    public Chat(Integer id, String nom, String race, ChatMF sexe, long age, boolean adopted, LocalDate date_veto) {
         this.adopted = adopted;
         this.age = age;
         this.date_veto = date_veto;
@@ -75,19 +81,19 @@ public class Chat  {
         this.race = race;
     }
 
-    public int getAge() {
+    public long getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(long age) {
         this.age = age;
     }
 
-    public String getSexe() {
+    public ChatMF getSexe() {
         return sexe;
     }
 
-    public void setSexe(String sexe) {
+    public void setSexe(ChatMF sexe) {
         this.sexe = sexe;
     }
 

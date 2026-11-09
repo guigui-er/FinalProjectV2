@@ -1,16 +1,18 @@
 package cat_cafe.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cat_cafe.dao.IDAOServeur;
+import cat_cafe.dao.IDAOCompte;
 
 @Service 
 public class ServeurService {
 
-    private final IDAOServeur daoServeur;
+    @Autowired 
+    IDAOCompte daoCompte;
 
-    public ServeurService(IDAOServeur daoServeur){
-        this.daoServeur=daoServeur;
+    public ServeurService(IDAOCompte daoCompte){
+        this.daoCompte=daoCompte;
     }
 
 

@@ -8,7 +8,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 @Entity 
-@DiscriminatorValue ("serveur")
 public class Serveur extends Employe{
 
     /*@OneToMany(mappedBy = "serveur")
