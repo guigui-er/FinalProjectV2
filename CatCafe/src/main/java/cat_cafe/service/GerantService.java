@@ -1,16 +1,19 @@
 package cat_cafe.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cat_cafe.dao.IDAOGerant;
+import cat_cafe.dao.IDAOCompte;
+
 
 @Service 
 public class GerantService {
 
-    public final IDAOGerant daoGerant;
+    @Autowired 
+    IDAOCompte daoCompte;
 
-    public GerantService(IDAOGerant daoGerant){
-        this.daoGerant=daoGerant;
+    public GerantService(IDAOCompte daoCompte){
+        this.daoCompte=daoCompte;
     }
 
     public void emmenerVeto(){
