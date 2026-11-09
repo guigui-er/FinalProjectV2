@@ -8,11 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import cat_cafe.dao.IDAOAlimentaire;
 import cat_cafe.model.Alimentaire;
 import cat_cafe.model.TypeAliment;
 
+@RestController 
+@RequestMapping ("/api/alimentaires")
 public class AlimentaireRestController {
 
     @Autowired
@@ -30,7 +34,7 @@ public class AlimentaireRestController {
 		return daoAlimentaire.findById(id).orElse(null);
 	}
 
-    @GetMapping ("/{type}")
+    @GetMapping ("/type/{type}")
     public List<Alimentaire> afficherParType(@PathVariable TypeAliment type)
 	{
 		return daoAlimentaire.findByType(type);

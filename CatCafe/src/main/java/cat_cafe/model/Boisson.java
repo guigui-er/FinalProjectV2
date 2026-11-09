@@ -8,7 +8,7 @@ import jakarta.persistence.Enumerated;
 @Entity
 public class Boisson extends Article{
 
-	private boolean Chaud ;
+	private boolean chaud ;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="format",nullable = false)
@@ -18,14 +18,13 @@ public class Boisson extends Article{
 
 	public Boisson(Integer id, double prix, String description, boolean chaud, FormatBoisson format) {
 		super(id, prix, description);
-		Chaud = chaud;
 		this.format = format;
 	}
 	public boolean isChaud() {
-		return Chaud;
+		return chaud;
 	}
 	public void setChaud(boolean chaud) {
-		Chaud = chaud;
+		this.chaud = chaud ;
 	}
 	public FormatBoisson getFormat() {
 		return format;
@@ -35,7 +34,7 @@ public class Boisson extends Article{
 	}
 	@Override
 	public String toString() {
-		return "Boisson [Chaud=" + Chaud + ", format=" + format + "]";
+		return "Boisson [Chaud=" + chaud + ", format=" + format + "]";
 	}
 	
 	
