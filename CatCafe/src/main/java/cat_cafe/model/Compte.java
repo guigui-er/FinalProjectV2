@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="Compte")
 @Inheritance(strategy =InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="type_compte")
+@DiscriminatorColumn(name="type_compte",columnDefinition = "ENUM('Client','Serveur','Gerant')")
 public abstract class Compte {
 
     @Id
@@ -49,9 +49,6 @@ public abstract class Compte {
 	}
 
     public Compte(){}
-
-
-
 
 	public Integer getId() {
 		return id;

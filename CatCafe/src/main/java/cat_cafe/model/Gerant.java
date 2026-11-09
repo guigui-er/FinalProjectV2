@@ -4,7 +4,6 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity 
-@DiscriminatorValue ("gerant")
 public class Gerant extends Employe{
 
     public Gerant(Integer id, String login, String password, String nom, String prenom, Genre civilite,
