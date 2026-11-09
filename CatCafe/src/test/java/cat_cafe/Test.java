@@ -1,7 +1,7 @@
-package com.example.demo;
+package cat_cafe;
 
-import com.example.demo.model.Client;
-import com.example.demo.model.Genre;
+import cat_cafe.model.Client;
+import cat_cafe.model.Genre;
 
 public class Test {
 public static void main(String[] args) {
