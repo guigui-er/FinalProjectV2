@@ -11,6 +11,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -39,15 +41,19 @@ public class Chat  {
 
     @Column(length = 25,nullable = false)
     protected boolean adopted;
-
+   
 	@DateTimeFormat(pattern="yyyy-MM-dd")
     @Column(nullable = false)
     protected LocalDate date_veto;
 
+    @OneToOne
+    @JoinColumn(name="proprietaire")
+    protected Client proprietaire; 
+     
     public Chat() {
     }
 
-    public Chat(Integer id, String nom, String race, ChatMF sexe, long age, boolean adopted, LocalDate date_veto) {
+    public Chat(Integer id, String nom, String race, ChatMF sexe, long age, boolean adopted, LocalDate date_veto, Client proprietaire) {
         this.adopted = adopted;
         this.age = age;
         this.date_veto = date_veto;
@@ -55,6 +61,7 @@ public class Chat  {
         this.nom = nom;
         this.race = race;
         this.sexe = sexe;
+        this.proprietaire = proprietaire; // Le chat n'a pas de propriétaire par défaut
     }
 
     public Integer getId() {
@@ -113,6 +120,15 @@ public class Chat  {
         this.date_veto = date_veto;
     }
 
+    public Client getProprietaire() {
+        return proprietaire;
+    }
+
+    public void setProprietaire(Client proprietaire) {
+        this.proprietaire = proprietaire;
+    }
+
+}
     // Faire un toString avec des paramètres évolutifs (age, sexe)
 /* 
 - id : Integer
@@ -131,4 +147,3 @@ public class Chat  {
 */
 
 
-}

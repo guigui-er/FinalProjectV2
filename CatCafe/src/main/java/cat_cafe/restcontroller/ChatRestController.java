@@ -57,7 +57,7 @@ public class ChatRestController {
       return chat;
 	}
 
-	@PatchMapping("/{id}") // TESTÉ POSTMAN
+	@PatchMapping("/{id}") // TESTÉ POSTMAN pour modifier le propriétaire insérer un objet Client au format JSON {"id":1,"login":"login1" etc...)}
 	public Chat modifierPartiel(@PathVariable Integer id,@RequestBody Chat chat) 
 	{
 
@@ -67,6 +67,7 @@ public class ChatRestController {
 	  chatBdd.setRace(chat.getRace()!=null? chat.getRace() : chatBdd.getRace());
 	  chatBdd.setSexe(chat.getSexe()!=null? chat.getSexe() : chatBdd.getSexe());
 	  chatBdd.setAge(chat.getAge()!=0? chat.getAge() : chatBdd.getAge());
+	  chatBdd.setProprietaire(chat.getProprietaire()!=null? chat.getProprietaire() : chatBdd.getProprietaire());
 
       daoChat.save(chatBdd);
       return chatBdd;
