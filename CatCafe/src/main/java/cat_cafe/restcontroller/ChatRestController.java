@@ -1,4 +1,4 @@
-package cafe.restcontroller;
+package cat_cafe.restcontroller;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cafe.dao.IDAOChat;
-import cafe.model.Chat;
+import cat_cafe.dao.IDAOChat;
+import cat_cafe.model.Chat;
 
 @RestController
 @RequestMapping("/api/chat")

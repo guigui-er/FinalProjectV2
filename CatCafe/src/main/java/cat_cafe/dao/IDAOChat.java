@@ -1,10 +1,10 @@
-package cafe.dao;
+package cat_cafe.dao;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import cafe.model.Chat;
+import cat_cafe.model.Chat;
 
 public interface IDAOChat extends JpaRepository<Chat,Integer>{
 

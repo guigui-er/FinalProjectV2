@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package cat_cafe.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="Compte")
 @Inheritance(strategy =InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="type_compte",columnDefinition = "ENUM('Client','Employe')")
+@DiscriminatorColumn(name="type_compte")
 public abstract class Compte {
 
     @Id
