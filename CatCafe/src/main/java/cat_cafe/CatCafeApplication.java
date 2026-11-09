@@ -1,20 +1,12 @@
 package cat_cafe;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import cat_cafe.dao.IDAOCompte;
-import cat_cafe.model.Client;
-import cat_cafe.model.Genre;
 
 @SpringBootApplication
 public class CatCafeApplication /*implements CommandLineRunner*/ {
 
-	@Autowired 
-	IDAOCompte dao;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CatCafeApplication.class, args);
