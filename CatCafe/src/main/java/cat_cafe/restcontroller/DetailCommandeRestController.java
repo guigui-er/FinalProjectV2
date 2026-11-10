@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cat_cafe.dao.IDAOArticle;
 import cat_cafe.dao.IDAOCommande;
 import cat_cafe.dao.IDAODetailCommande;
 import cat_cafe.dto.request.DetailCommandeRequest;
 import cat_cafe.dto.response.DetailCommandeResponse;
-import cat_cafe.model.Commande;
 import cat_cafe.model.DetailCommande;
+import jakarta.transaction.Transactional;
 
 @RestController 
 @RequestMapping("/api/detailCommande")
@@ -29,16 +30,25 @@ public class DetailCommandeRestController {
 	@Autowired 
 	IDAOCommande daoCommande;
 
+	@Autowired 
+	IDAOArticle daoArticle;
+
      @GetMapping
-	public List<DetailCommande> afficherTous() 
+	 @Transactional 
+	public List<DetailCommandeResponse> afficherTous() 
 	{
-	  return daoDetailCommande.findAll();
+	  return this.daoDetailCommande.findAll().stream()
+	  .map(DetailCommandeResponse::convert)
+	  .toList();
 	}
 
     @GetMapping("/{id}")
-	public DetailCommande afficherParId(@PathVariable Integer id)
+	@Transactional 
+	public DetailCommandeResponse afficherParId(@PathVariable Integer id)
 	{
-		return daoDetailCommande.findById(id).orElse(null);
+		return this.daoDetailCommande.findById(id)
+		.map(DetailCommandeResponse::convert)
+		.orElse(null);
 	}
     
     @DeleteMapping("/{id}")
@@ -48,6 +58,7 @@ public class DetailCommandeRestController {
 	}
 
     @PostMapping
+	@Transactional 
 	public DetailCommandeResponse ajouter(@RequestBody DetailCommandeRequest detailCommandeRequest)
 	{
 		DetailCommande detailCommande = new DetailCommande();
@@ -55,6 +66,7 @@ public class DetailCommandeRestController {
 		detailCommande.setQte(detailCommandeRequest.qte());
 		detailCommande.setPrix(detailCommandeRequest.prix());
 		detailCommande.setCommande(this.daoCommande.getReferenceById(detailCommandeRequest.commandeId()));
+		detailCommande.setArticle(this.daoArticle.getReferenceById(detailCommandeRequest.articleId()));
 		daoDetailCommande.save(detailCommande);
 		return DetailCommandeResponse.convert(detailCommande);
 	

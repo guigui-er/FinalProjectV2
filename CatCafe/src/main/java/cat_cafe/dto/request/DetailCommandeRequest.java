@@ -2,9 +2,10 @@ package cat_cafe.dto.request;
 
 public record DetailCommandeRequest(
     
-    Integer qte,
+    int qte,
     double prix,
-    Integer commandeId
+    Integer commandeId,
+    Integer articleId
 
 ) {
     
