@@ -10,6 +10,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -26,6 +28,10 @@ public class Commande {
 	@Enumerated(EnumType.STRING)
 	private StatutCommande statutCommande;
 	
+	@ManyToOne 
+	@JoinColumn (name = "serveur_id")
+	private Serveur serveur;
+
 	@OneToMany (mappedBy = "commande")
 	private List<DetailCommande> details = new ArrayList();
 	
@@ -80,10 +86,21 @@ public class Commande {
 		this.details = details;
 	}
 
+	public Serveur getServeur() {
+		return serveur;
+	}
+
+	public void setServeur(Serveur serveur) {
+		this.serveur = serveur;
+	}
+
+	
 	@Override
 	public String toString() {
 		return "Commande [id=" + id + ", date=" + date + ", accepter_paiement=" + accepter_paiement
 				+ ", statutCommande=" + statutCommande + "]";
 	}
+
+	
 	
 }
