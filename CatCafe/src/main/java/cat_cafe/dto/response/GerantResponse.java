@@ -1,12 +1,14 @@
 package cat_cafe.dto.response;
 
+import cat_cafe.model.Genre;
 import cat_cafe.model.Gerant;
 
 public record GerantResponse(
     Integer id,
     String login, // necessaire ??
     String nom,
-    String prenom
+    String prenom,
+    Genre genre
 ) {
 
     public static GerantResponse convert(Gerant gerant){
@@ -14,7 +16,9 @@ public record GerantResponse(
         gerant.getId(),
         gerant.getLogin(),
         gerant.getNom(),
-        gerant.getPrenom());
+        gerant.getPrenom(),
+        gerant.getGenre()
+    );
     }
 
 }
