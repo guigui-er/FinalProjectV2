@@ -26,7 +26,7 @@ public class DataLoader implements CommandLineRunner{
     @Override 
     public void run(String... args) throws Exception{
 
-        Gerant gerant1 = new Gerant(null,"s_matou","miaoudu123","Matou","Sophie",Genre.Femme,2700.0);
+        /*Gerant gerant1 = new Gerant(null,"s_matou","miaoudu123","Matou","Sophie",Genre.Femme,2700.0);
         Gerant gerant2 = new Gerant(null,"g_bernard","pizza789","Bernard","Garfield",Genre.Homme,2800.0);
 
         daoCompte.save(gerant1);
@@ -50,7 +50,7 @@ public class DataLoader implements CommandLineRunner{
         //daoCommande.save(commande2);
         //daoCommande.save(commande3);
         //daoCommande.save(commande4);
-        //daoCommande.save(commande5);
+        //daoCommande.save(commande5);*/
 
     }
 
