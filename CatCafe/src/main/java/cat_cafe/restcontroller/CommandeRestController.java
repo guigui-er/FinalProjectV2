@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cat_cafe.dao.IDAOCommande;
+import cat_cafe.dto.response.CommandeResponse;
 import cat_cafe.model.Commande;
+import jakarta.transaction.Transactional;
 
 @RestController 
 @RequestMapping("/api/commande")
@@ -23,15 +25,21 @@ public class CommandeRestController {
     IDAOCommande daoCommande;
 
     @GetMapping
-	public List<Commande> afficherTous() 
+	@Transactional 
+	public List<CommandeResponse> afficherTous() 
 	{
-	  return daoCommande.findAll();
+	  return this.daoCommande.findAll().stream()
+	  .map(CommandeResponse::convert)
+	  .toList();
 	}
 
     @GetMapping("/{id}")
-	public Commande afficherParId(@PathVariable Integer id)
+	@Transactional 
+	public CommandeResponse afficherParId(@PathVariable Integer id)
 	{
-		return daoCommande.findById(id).orElse(null);
+		return daoCommande.findById(id)
+		.map(CommandeResponse::convert)
+		.orElse(null);
 	}
 
     @DeleteMapping("/{id}")

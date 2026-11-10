@@ -23,9 +23,13 @@ public class DetailCommande {
 	@ManyToOne
 	@JoinColumn(name = "commande_id", nullable = false)
 	private Commande commande;
+
+	@ManyToOne
+	@JoinColumn(name = "article_id", nullable = false)
+	private Article article;
 	
 	public DetailCommande() {}
-	
+
 	public DetailCommande(Integer id, int qte, double prix) {
 		this.id = id;
 		this.qte = qte;
@@ -64,10 +68,17 @@ public class DetailCommande {
         this.commande = commande;
     }
 
-    @Override
-    public String toString() {
-        return "DetailCommande [id=" + id + ", qte=" + qte + ", prix=" + prix + ", commande=" + commande + "]";
-    }
-	
+	public Article getArticle() {
+		return article;
+	}
+
+	public void setArticle(Article article) {
+		this.article = article;
+	}
+
+	@Override
+	public String toString() {
+		return "DetailCommande [id=" + id + ", qte=" + qte + ", prix=" + prix + "]";
+	}
 
 }

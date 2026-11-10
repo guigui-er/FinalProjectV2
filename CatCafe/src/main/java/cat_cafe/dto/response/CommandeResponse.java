@@ -1,7 +1,12 @@
 package cat_cafe.dto.response;
 
-public record CommandeResponse(
-    Integer commandeId
-) {
+import cat_cafe.model.Commande;
 
+public record CommandeResponse(Integer commandeId) {
+
+     public static CommandeResponse convert(Commande commande) {
+        return new CommandeResponse(
+            commande.getId()
+        );
+     }
 }
