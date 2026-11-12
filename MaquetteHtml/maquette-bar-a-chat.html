@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Chat Perché — Bar à chats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* ===========================================================
+   MAQUETTE STATIQUE — Bar à chats « Le Chat Perché »
+   Direction artistique : aquarelle / cinéma d'animation japonais
+   (bois chaud, lumière dorée, personnages ronds aux joues rosées)
+   Tout est en vanilla JS : à porter ensuite en composants Angular
+   (voir la note en bas du fichier).
+   =========================================================== */
+
+:root{
+  --encre:        #4e3b2c;   /* contour chaud, jamais de noir pur */
+  --encre-doux:   #7b6350;
+  --creme:        #fdf4e0;
+  --papier:       #f7e9ca;
+  --mur:          #efdcb6;
+  --mur-ombre:    #e2c796;
+  --bois:         #c99a62;
+  --bois-fonce:   #a97745;
+  --bois-clair:   #ddb782;
+  --terre:        #c9664a;
+  --vert:         #6f9e59;
+  --vert-fonce:   #4b7441;
+  --vert-clair:   #a8cb7e;
+  --ciel:         #bfe4e2;
+  --or:           #f8e3a6;
+  --rose:         #e79a93;
+  --ombre:        rgba(94,67,45,.22);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family:'Nunito',"Segoe UI",system-ui,sans-serif;
+  color:var(--encre);
+  background:
+    radial-gradient(900px 500px at 15% 0%, #fbeccd 0%, transparent 60%),
+    radial-gradient(700px 500px at 95% 100%, #e7d7b4 0%, transparent 55%),
+    #f1dfbe;
+  min-height:100%;
+}
+
+/* ---------- Mise en page ---------- */
+.app{
+  max-width:1480px;margin:0 auto;padding:18px 22px 40px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.entete{display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.enseigne h1{
+  font-family:'Caveat',cursive;font-size:44px;line-height:1;margin:0;
+  color:#4a3627;letter-spacing:.5px;
+}
+.enseigne p{margin:4px 0 0;font-size:14px;color:var(--encre-doux)}
+.compteurs{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+.compteur{
+  background:var(--creme);border:2px solid #e3cda4;border-radius:16px;
+  padding:8px 14px;min-width:104px;box-shadow:0 3px 0 #e0c9a0;
+}
+.compteur b{display:block;font-size:21px;font-weight:800}
+.compteur span{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--encre-doux)}
+
+.scene-et-panneau{display:grid;grid-template-columns:minmax(0,1fr) 352px;gap:18px;align-items:start}
+@media (max-width:1080px){.scene-et-panneau{grid-template-columns:1fr}}
+
+/* ---------- Le salon ---------- */
+.salon{
+  position:relative;width:100%;aspect-ratio:1000/660;
+  border-radius:22px;overflow:hidden;
+  border:3px solid #cdae84;
+  box-shadow:0 18px 40px -16px rgba(80,56,34,.55), inset 0 0 0 2px rgba(255,255,255,.35);
+  cursor:default;
+}
+.salon svg.decor{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* rayons de lumière + poussières */
+.rayon{
+  position:absolute;top:-6%;pointer-events:none;mix-blend-mode:screen;
+  background:linear-gradient(180deg,rgba(255,246,212,.75),rgba(255,240,196,.08) 72%,transparent);
+  filter:blur(7px);transform:skewX(-15deg);border-radius:40%;
+  animation:respire 11s ease-in-out infinite;
+}
+@keyframes respire{0%,100%{opacity:.55}50%{opacity:.95}}
+.poussiere{
+  position:absolute;width:5px;height:5px;border-radius:50%;
+  background:radial-gradient(circle,#fff9dd,rgba(255,249,221,0));
+  pointer-events:none;animation:flotte linear infinite;
+}
+@keyframes flotte{
+  0%{transform:translate(0,0);opacity:0}
+  15%{opacity:.9}
+  100%{transform:translate(26px,-120px);opacity:0}
+}
+
+/* ---------- Entités cliquables ---------- */
+.ent{position:absolute;transform:translate(-50%,-100%);pointer-events:auto}
+.ent.cliquable{cursor:pointer}
+.ent svg{display:block;overflow:visible}
+.ent.chat .corps{transform-origin:50% 100%}
+.ent.cliquable:hover svg{filter:drop-shadow(0 0 7px rgba(255,236,170,.95))}
+.ent.actif svg{filter:drop-shadow(0 0 10px rgba(255,214,120,1))}
+
+.etiquette{
+  position:absolute;left:50%;top:-12px;transform:translate(-50%,-100%);
+  background:var(--creme);border:2px solid #e0c79c;border-radius:12px;
+  padding:3px 9px;font-size:11.5px;font-weight:700;white-space:nowrap;
+  opacity:0;transition:opacity .18s, transform .18s;pointer-events:none;
+  box-shadow:0 3px 0 #e0c79c;
+}
+.ent:hover .etiquette{opacity:1;transform:translate(-50%,-100%) translateY(-4px)}
+
+/* le petit balancement « animé à la main » */
+.respire-doux{animation:balance 3.4s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes balance{0%,100%{transform:rotate(-1.1deg) translateY(0)}50%{transform:rotate(1.1deg) translateY(-1.5px)}}
+.marche{animation:sautille .5s ease-in-out infinite}
+@keyframes sautille{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.queue{animation:queueWag 1.6s ease-in-out infinite;transform-origin:88% 62%}
+@keyframes queueWag{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(12deg)}}
+.zzz{animation:zzzMonte 3s ease-in-out infinite}
+@keyframes zzzMonte{0%{opacity:0;transform:translate(0,0) scale(.7)}30%{opacity:.95}100%{opacity:0;transform:translate(9px,-20px) scale(1.1)}}
+.vapeur{animation:vapeurMonte 3.6s ease-in-out infinite}
+@keyframes vapeurMonte{0%{opacity:0;transform:translateY(2px) scaleX(.8)}40%{opacity:.75}100%{opacity:0;transform:translateY(-14px) scaleX(1.25)}}
+
+/* ---------- Panneau latéral (papier) ---------- */
+.panneau{
+  background:
+    repeating-linear-gradient(180deg, transparent 0 27px, rgba(130,100,70,.07) 27px 28px),
+    var(--creme);
+  border:3px solid #e0c79c;border-radius:20px;padding:18px;
+  box-shadow:0 12px 26px -14px rgba(80,56,34,.5);
+  position:relative;min-height:320px;
+}
+.panneau::before{ /* ruban adhésif */
+  content:"";position:absolute;top:-11px;left:50%;transform:translateX(-50%) rotate(-2deg);
+  width:92px;height:22px;background:rgba(246,224,170,.85);border:1px solid rgba(190,160,110,.5);
+  border-radius:3px;
+}
+.panneau h2{font-family:'Caveat',cursive;font-size:30px;margin:4px 0 2px}
+.panneau .sous{font-size:12.5px;color:var(--encre-doux);margin:0 0 12px}
+.vide{text-align:center;padding:36px 8px;color:var(--encre-doux);font-size:14px}
+.vide .patte{font-size:40px;display:block;margin-bottom:8px;opacity:.65}
+
+.fiche-haut{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.portrait{
+  width:88px;height:88px;flex:0 0 auto;border-radius:50%;
+  background:linear-gradient(160deg,#fff6de,#f0dcb4);
+  border:3px solid #e3cba1;display:grid;place-items:center;overflow:hidden;
+  box-shadow:inset 0 -6px 12px rgba(190,160,110,.25);
+}
+.portrait svg{width:auto;height:auto;max-width:84px;max-height:84px}
+.badge{
+  display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;padding:3px 9px;border-radius:999px;
+  background:#e6f0d8;color:#466b38;border:1.5px solid #c2d9ab;
+}
+.badge.rouge{background:#fbe2da;color:#a44b32;border-color:#eec3b5}
+.badge.bleu{background:#dcecf2;color:#3d6a7d;border-color:#b9d6e1}
+
+dl.infos{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:13.5px}
+dl.infos dt{color:var(--encre-doux);font-weight:600}
+dl.infos dd{margin:0;font-weight:700}
+.humeur{
+  margin-top:12px;padding:10px 12px;border-radius:14px;
+  background:#f6e7c6;border:2px dashed #dcc096;font-family:'Caveat',cursive;font-size:18px;
+}
+
+/* commande */
+.bloc{margin-top:14px}
+.bloc h3{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--encre-doux);margin:0 0 8px}
+.choix-tables{display:flex;gap:7px;flex-wrap:wrap}
+.pastille{
+  border:2px solid #e0c79c;background:#fff8e7;border-radius:12px;padding:6px 10px;
+  font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;color:var(--encre);
+  box-shadow:0 2px 0 #e0c79c;
+}
+.pastille:hover{background:#fdeec6}
+.pastille.on{background:var(--terre);color:#fff8e7;border-color:#a84f36;box-shadow:0 2px 0 #a84f36}
+.pastille:disabled{opacity:.42;cursor:not-allowed}
+
+.carte{max-height:206px;overflow:auto;padding-right:4px;margin:0}
+.carte .cat{font-family:'Caveat',cursive;font-size:19px;margin:8px 0 2px;color:#8a6a45}
+.ligne{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dotted #ddc49c}
+.ligne .nom{flex:1;font-size:13.5px;font-weight:600}
+.ligne .prix{font-size:12.5px;color:var(--encre-doux);font-variant-numeric:tabular-nums}
+.qte{display:flex;align-items:center;gap:5px}
+.qte button{
+  width:24px;height:24px;border-radius:8px;border:2px solid #e0c79c;background:#fff8e7;
+  font-weight:800;cursor:pointer;line-height:1;color:var(--encre);font-family:inherit;
+}
+.qte button:hover{background:#fdeec6}
+.qte span{min-width:16px;text-align:center;font-weight:800;font-size:13px}
+
+.total{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;font-size:15px}
+.total b{font-size:23px;font-family:'Caveat',cursive}
+.btn{
+  width:100%;margin-top:10px;padding:12px;border-radius:14px;border:none;cursor:pointer;
+  background:var(--terre);color:#fff6e2;font-weight:800;font-size:15px;font-family:inherit;
+  box-shadow:0 4px 0 #a84f36;transition:transform .08s;
+}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #a84f36}
+.btn:disabled{background:#d9c6a6;box-shadow:0 4px 0 #c3ae8c;cursor:not-allowed;color:#8d7a5e}
+
+/* commandes en cours */
+.ardoise{
+  margin-top:18px;background:#4a5d4a;border:3px solid #6b4f33;border-radius:18px;
+  padding:14px 16px;color:#eef3e4;box-shadow:inset 0 0 26px rgba(0,0,0,.33);
+}
+.ardoise h2{font-family:'Caveat',cursive;font-size:26px;margin:0 0 8px;color:#f6e6bd}
+.ardoise .vide2{font-size:13px;opacity:.72}
+.cmd{display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px dashed rgba(246,230,189,.3);font-size:13px}
+.cmd .t{font-weight:800;background:rgba(246,230,189,.17);border-radius:8px;padding:2px 7px}
+.cmd .d{flex:1;opacity:.9}
+.cmd .s{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;padding:2px 7px;border-radius:999px;background:#c9814a;color:#fff6e2}
+.cmd .s.servie{background:#7fa05c}
+
+/* légende */
+.legende{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--encre-doux);padding:0 4px}
+.legende i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* toast */
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,120%);
+  background:var(--creme);border:3px solid #e0c79c;border-radius:16px;
+  padding:12px 20px;font-weight:700;box-shadow:0 12px 24px -10px rgba(80,56,34,.6);
+  transition:transform .35s cubic-bezier(.2,1.5,.4,1);z-index:60;display:flex;gap:9px;align-items:center;
+}
+.toast.on{transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="entete">
+    <div class="enseigne">
+      <h1>Le Chat Perché</h1>
+      <p>Salon de thé &amp; refuge félin — 12 rue des Glycines</p>
+    </div>
+    <div class="compteurs">
+      <div class="compteur"><b id="cpt-places">—</b><span>Places libres</span></div>
+      <div class="compteur"><b id="cpt-clients">—</b><span>Clients</span></div>
+      <div class="compteur"><b id="cpt-chats">—</b><span>Chats présents</span></div>
+      <div class="compteur"><b id="cpt-cmd">—</b><span>Commandes</span></div>
+    </div>
+  </header>
+
+  <div class="scene-et-panneau">
+    <div>
+      <div class="salon" id="salon"></div>
+      <p class="legende">
+        <span><i style="background:var(--terre)"></i>Serveurs — clique pour commander</span>
+        <span><i style="background:var(--vert)"></i>Chats — clique pour la fiche</span>
+        <span><i style="background:var(--bois-fonce)"></i>Tables — clique pour l'occupation</span>
+      </p>
+    </div>
+
+    <div>
+      <section class="panneau" id="panneau"></section>
+      <section class="ardoise">
+        <h2>Commandes en cours</h2>
+        <div id="liste-cmd"><p class="vide2">Aucune commande. Clique sur un serveur pour en prendre une.</p></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span>🐾</span><span id="toast-txt"></span></div>
+
+<script>
+/* ============================================================
+   1. DONNÉES  (ce qui viendra plus tard de l'API REST Spring)
+   ============================================================ */
+
+const TABLES = [
+  { id:1, nom:'Table 1', places:2, x:170, y:372, theme:'Près de la fenêtre' },
+  { id:2, nom:'Table 2', places:4, x:487, y:362, theme:'Grande tablée' },
+  { id:3, nom:'Table 3', places:6, x:742, y:530, theme:'Coin bibliothèque' },
+  { id:4, nom:'Table 4', places:3, x:286, y:566, theme:'Sous l\'arbre à chat' }
+];
+
+// teintes de peau / cheveux / vêtements façon film d'animation
+const PEAU = ['#f4d2b4','#e8bb97','#d49e76','#b97e55','#f7ddc3'];
+const CHEVEUX = ['#3b2a21','#6b4428','#2f3b4a','#8a5a3b','#4a3a52','#1f2a33','#9a6b4a'];
+
+const CLIENTS = [
+  { id:1, nom:'Camille',  tableId:1, siege:0, peau:PEAU[0], cheveux:CHEVEUX[1], coiffe:'carre',   yeux:'#6b4a33', habit:'#8fa9c9', bas:'#4f5a6b', jupe:true,  boisson:'Chai latte' },
+  { id:2, nom:'Yann',     tableId:1, siege:1, peau:PEAU[2], cheveux:CHEVEUX[0], coiffe:'court',   yeux:'#3b2a21', habit:'#c98a5e', bas:'#5f5244', boisson:'Café filtre' },
+  { id:3, nom:'Inès',     tableId:2, siege:0, peau:PEAU[1], cheveux:CHEVEUX[3], coiffe:'chignon', yeux:'#4a6b5a', habit:'#d8838c', bas:'#6b5565', jupe:true,  boisson:'Thé vert' },
+  { id:4, nom:'Marco',    tableId:2, siege:2, peau:PEAU[3], cheveux:CHEVEUX[0], coiffe:'court',   yeux:'#2f2520', habit:'#7fa07a', bas:'#4d5a52', boisson:'Limonade' },
+  { id:5, nom:'Jade',     tableId:2, siege:3, peau:PEAU[4], cheveux:CHEVEUX[4], coiffe:'queue',   yeux:'#3f5a72', habit:'#a98fc9', bas:'#5a4f6b', jupe:true,  boisson:'Chocolat chaud' },
+  { id:6, nom:'Oscar',    tableId:3, siege:1, peau:PEAU[0], cheveux:CHEVEUX[5], coiffe:'court',   yeux:'#3f5a72', habit:'#6f8fa8', bas:'#4a5260', boisson:'Expresso' },
+  { id:7, nom:'Noémie',   tableId:3, siege:4, peau:PEAU[1], cheveux:CHEVEUX[6], coiffe:'carre',   yeux:'#8a6a3c', habit:'#dfa96a', bas:'#7a5f46', jupe:true,  boisson:'Matcha' },
+  { id:8, nom:'Hugo',     tableId:4, siege:0, peau:PEAU[2], cheveux:CHEVEUX[1], coiffe:'court',   yeux:'#6b4a33', habit:'#8c99b5', bas:'#555f6b', boisson:'Cappuccino' }
+];
+
+const EMPLOYES = [
+  { id:1, nom:'Lila',  role:'Serveuse',  x:380, y:430, peau:PEAU[0], cheveux:CHEVEUX[1], coiffe:'queue', yeux:'#5a8a6a', habit:'#f5f1e8', bas:'#3f4552', jupe:true,  tablier:'#e9d6a8', col:'#c9664a', plateau:true,  anciennete:'3 ans', note:'Connaît le prénom de chaque chat.' },
+  { id:2, nom:'Téo',   role:'Serveur',   x:640, y:470, peau:PEAU[3], cheveux:CHEVEUX[5], coiffe:'court', yeux:'#3f5a72', habit:'#f5f1e8', bas:'#3f4552',             tablier:'#e9d6a8', col:'#c9664a', plateau:true,  anciennete:'8 mois', note:'Spécialiste des latte art en forme de patte.' },
+  { id:3, nom:'Akiko', role:'Barista',   x:470, y:258, peau:PEAU[4], cheveux:CHEVEUX[0], coiffe:'carre', yeux:'#6b3f3a', habit:'#f5f1e8', bas:'#5a3f49', jupe:true,  tablier:'#f0e2bd', col:'#c9664a', plateau:false, anciennete:'5 ans', note:'Torréfie elle-même le café du mois.' },
+  { id:4, nom:'Jonas', role:'Soigneur',  x:120, y:520, peau:PEAU[1], cheveux:CHEVEUX[2], coiffe:'court', yeux:'#4a6b5a', habit:'#6f9e7e', bas:'#44504a',             tablier:'',        plateau:false, anciennete:'2 ans', note:'Veille sur la santé et le repos des chats.' }
+];
+
+const CHATS = [
+  { id:1, nom:'Mochi',      race:'Scottish Fold',  age:3, sexe:'Femelle', poids:'4,1 kg', robe:'#e8c9a0', robe2:'#cfa878', motif:'bicolore', oeil:'#d9a441', caractere:'Câline, ronronne dès qu\'on s\'assoit', adoptable:true,  consigne:'Adore les genoux, déteste les sacs plastique' },
+  { id:2, nom:'Pixel',      race:'Européen tigré', age:1, sexe:'Mâle',    poids:'3,2 kg', robe:'#b79a74', robe2:'#8a6e4e', motif:'tigre',    oeil:'#7fae63',    caractere:'Joueur infatigable', adoptable:true,  consigne:'Ne pas laisser de couverts sur la table' },
+  { id:3, nom:'Nouilles',   race:'Maine Coon',     age:5, sexe:'Mâle',    poids:'7,4 kg', robe:'#a8865f', robe2:'#7d6244', motif:'tigre',    oeil:'#c9893f',    caractere:'Placide, observe depuis l\'arbre à chat', adoptable:false, consigne:'Mascotte du bar — non adoptable' },
+  { id:4, nom:'Sushi',      race:'Siamois',        age:2, sexe:'Femelle', poids:'3,6 kg', robe:'#f0e3cd', robe2:'#8d7059', motif:'colourpoint', oeil:'#6fb0dd', caractere:'Très bavarde, suit les serveurs', adoptable:true,  consigne:'Régime strict, aucune friandise' },
+  { id:5, nom:'Gribouille', race:'Chartreux',      age:7, sexe:'Mâle',    poids:'5,8 kg', robe:'#9fb0bb', robe2:'#7d8e9a', motif:'uni',      oeil:'#e0b24a',      caractere:'Dort 18 h par jour', adoptable:false, consigne:'Ne pas réveiller, arthrose' },
+  { id:6, nom:'Pépite',     race:'Bengal',         age:4, sexe:'Femelle', poids:'4,6 kg', robe:'#dcae6a', robe2:'#a8773c', motif:'rosette',  oeil:'#8fbf57',  caractere:'Exploratrice, grimpe partout', adoptable:true,  consigne:'Vérifier que la porte d\'entrée est fermée' }
+];
+
+const CARTE = [
+  { cat:'Boissons chaudes', items:[
+    { id:'c1', nom:'Café filtre', prix:2.50 },
+    { id:'c2', nom:'Latte maison', prix:3.80 },
+    { id:'c3', nom:'Chocolat chaud', prix:3.60 },
+    { id:'c4', nom:'Thé des glycines', prix:3.20 }
+  ]},
+  { cat:'Boissons fraîches', items:[
+    { id:'f1', nom:'Limonade au yuzu', prix:4.00 },
+    { id:'f2', nom:'Thé glacé pêche', prix:3.90 }
+  ]},
+  { cat:'Pâtisseries', items:[
+    { id:'p1', nom:'Cheesecake matcha', prix:5.50 },
+    { id:'p2', nom:'Cookie du chef', prix:2.80 },
+    { id:'p3', nom:'Muffin chaton', prix:3.20 }
+  ]},
+  { cat:'Formules', items:[
+    { id:'x1', nom:'Entrée bar à chats (1 h)', prix:8.00 },
+    { id:'x2', nom:'Formule Câlin (1 h + boisson)', prix:11.50 }
+  ]}
+];
+
+const W = 1000, H = 660;              // repère virtuel de la scène
+const pc = (v, max) => (v / max * 100) + '%';
+
+/* ============================================================
+   2. DÉCOR  — un seul grand SVG peint « à la main »
+   ============================================================ */
+
+function decor(){
+  const planches = [];
+  for(let i=0;i<13;i++){
+    const y = 252 + i*32;
+    planches.push(`<line x1="0" y1="${y}" x2="1000" y2="${y}" stroke="rgba(120,84,48,.20)" stroke-width="2"/>`);
+  }
+  for(let i=0;i<22;i++){
+    const x = (i*61 + (i%2?28:0)) % 1010, y0 = 252 + (i%13)*32;
+    planches.push(`<line x1="${x}" y1="${y0}" x2="${x+3}" y2="${y0+32}" stroke="rgba(120,84,48,.14)" stroke-width="2"/>`);
+  }
+
+  const fenetre = (x,y,w,h) => `
+    <g>
+      <rect x="${x-7}" y="${y-7}" width="${w+14}" height="${h+14}" rx="${w/2+7}" fill="#b98f5c"/>
+      <path d="M${x} ${y+h} L${x} ${y+w/2} A${w/2} ${w/2} 0 0 1 ${x+w} ${y+w/2} L${x+w} ${y+h} Z" fill="url(#jardin)"/>
+      <!-- verdure vue par la fenêtre -->
+      <g clip-path="url(#clip${x})">
+        <circle cx="${x+w*.22}" cy="${y+h*.86}" r="${w*.30}" fill="#7fae63" opacity=".95"/>
+        <circle cx="${x+w*.62}" cy="${y+h*.94}" r="${w*.34}" fill="#689a52"/>
+        <circle cx="${x+w*.92}" cy="${y+h*.82}" r="${w*.22}" fill="#8cbd6e"/>
+        <circle cx="${x+w*.45}" cy="${y+h*.62}" r="${w*.17}" fill="#a3cb7c" opacity=".85"/>
+        <circle cx="${x+w*.78}" cy="${y+h*.5}" r="${w*.10}" fill="#cfe3a6" opacity=".7"/>
+      </g>
+      <clipPath id="clip${x}"><path d="M${x} ${y+h} L${x} ${y+w/2} A${w/2} ${w/2} 0 0 1 ${x+w} ${y+w/2} L${x+w} ${y+h} Z"/></clipPath>
+      <!-- croisillons -->
+      <line x1="${x+w/2}" y1="${y}" x2="${x+w/2}" y2="${y+h}" stroke="#b98f5c" stroke-width="7"/>
+      <line x1="${x}" y1="${y+h*.58}" x2="${x+w}" y2="${y+h*.58}" stroke="#b98f5c" stroke-width="7"/>
+      <path d="M${x} ${y+h} L${x} ${y+w/2} A${w/2} ${w/2} 0 0 1 ${x+w} ${y+w/2} L${x+w} ${y+h}"
+            fill="none" stroke="#a87f4e" stroke-width="5"/>
+      <!-- rebord -->
+      <rect x="${x-16}" y="${y+h}" width="${w+32}" height="12" rx="5" fill="#c99a62"/>
+      <rect x="${x-16}" y="${y+h+9}" width="${w+32}" height="5" rx="3" fill="#a97745"/>
+      <!-- plante sur le rebord -->
+      <g transform="translate(${x+w-26},${y+h-2})">
+        <path d="M0 0 h22 l-3 14 h-16 Z" fill="#c9664a"/>
+        <path d="M4 0 c-2 -13 -11 -16 -14 -22 c10 1 16 7 18 14" fill="#6f9e59"/>
+        <path d="M14 0 c3 -12 12 -14 16 -20 c-9 0 -17 6 -19 13" fill="#8cbd6e"/>
+        <path d="M9 0 c0 -14 2 -18 2 -25 c3 7 3 14 2 25" fill="#4b7441"/>
+      </g>
+    </g>`;
+
+  return `
+<svg class="decor" viewBox="0 0 1000 660" preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="mur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3e2bd"/><stop offset="1" stop-color="#e3c898"/>
+    </linearGradient>
+    <linearGradient id="sol" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d3a673"/><stop offset=".55" stop-color="#c99a62"/><stop offset="1" stop-color="#bd8a54"/>
+    </linearGradient>
+    <linearGradient id="jardin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cdeaf0"/><stop offset=".55" stop-color="#bfe4e2"/><stop offset="1" stop-color="#dcecc6"/>
+    </linearGradient>
+    <radialGradient id="halo" cx=".5" cy=".2" r=".9">
+      <stop offset="0" stop-color="#fff3cd" stop-opacity=".85"/><stop offset="1" stop-color="#fff3cd" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="comptoir" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9834d"/><stop offset="1" stop-color="#8f6338"/>
+    </linearGradient>
+  </defs>
+
+  <!-- mur + sol -->
+  <rect x="0" y="0" width="1000" height="256" fill="url(#mur)"/>
+  <rect x="0" y="252" width="1000" height="408" fill="url(#sol)"/>
+  ${planches.join('')}
+  <rect x="0" y="236" width="1000" height="22" fill="#c99a62"/>
+  <rect x="0" y="236" width="1000" height="6" fill="#dfb784"/>
+  <rect x="0" y="252" width="1000" height="10" fill="rgba(94,67,45,.22)"/>
+
+  <!-- lambris -->
+  <rect x="0" y="196" width="1000" height="42" fill="#e6cda2"/>
+  <rect x="0" y="196" width="1000" height="4" fill="#cbac7d"/>
+
+  <!-- fenêtres -->
+  ${fenetre(62, 52, 196, 136)}
+  ${fenetre(742, 52, 196, 136)}
+
+  <!-- étagère + bocaux -->
+  <g>
+    <rect x="300" y="78" width="200" height="9" rx="4" fill="#b9834d"/>
+    <g>
+      <rect x="312" y="48" width="26" height="30" rx="6" fill="#d8e6d4" opacity=".9"/><rect x="312" y="62" width="26" height="16" fill="#c08a52" opacity=".75"/>
+      <rect x="348" y="42" width="30" height="36" rx="7" fill="#e3dcc4" opacity=".9"/><rect x="348" y="58" width="30" height="20" fill="#8d6a44" opacity=".7"/>
+      <rect x="388" y="52" width="24" height="26" rx="6" fill="#d9e3ea" opacity=".9"/><rect x="388" y="64" width="24" height="14" fill="#a4b98f" opacity=".75"/>
+      <rect x="424" y="44" width="28" height="34" rx="7" fill="#eee6cd" opacity=".9"/><rect x="424" y="60" width="28" height="18" fill="#c9664a" opacity=".6"/>
+      <rect x="462" y="54" width="26" height="24" rx="6" fill="#dde8d8" opacity=".9"/><rect x="462" y="66" width="26" height="12" fill="#6f9e59" opacity=".7"/>
+    </g>
+  </g>
+
+  <!-- ardoise du jour -->
+  <g transform="translate(542,40)">
+    <rect x="0" y="0" width="150" height="104" rx="10" fill="#6b4f33"/>
+    <rect x="7" y="7" width="136" height="90" rx="7" fill="#4a5d4a"/>
+    <text x="75" y="33" text-anchor="middle" font-family="Caveat, cursive" font-size="21" fill="#f6e6bd">Du jour</text>
+    <text x="75" y="56" text-anchor="middle" font-family="Caveat, cursive" font-size="16" fill="#dfe8cf">Latte noisette</text>
+    <text x="75" y="76" text-anchor="middle" font-family="Caveat, cursive" font-size="16" fill="#dfe8cf">Cheesecake matcha</text>
+    <line x1="24" y1="84" x2="126" y2="84" stroke="#dfe8cf" stroke-width="1.5" opacity=".5"/>
+  </g>
+
+  <!-- plantes suspendues -->
+  <g>
+    <line x1="300" y1="0" x2="300" y2="34" stroke="#8d6a44" stroke-width="3"/>
+    <path d="M284 34 h32 l-5 16 h-22 Z" fill="#c9664a"/>
+    <path d="M288 50 c-4 26 -14 34 -20 54 c-2 -26 6 -44 20 -54" fill="#6f9e59"/>
+    <path d="M300 50 c0 30 -4 42 -4 62 c-6 -22 -4 -44 4 -62" fill="#8cbd6e"/>
+    <path d="M312 50 c6 24 16 30 22 48 c-14 -6 -24 -24 -22 -48" fill="#4b7441"/>
+  </g>
+  <g>
+    <line x1="700" y1="0" x2="700" y2="26" stroke="#8d6a44" stroke-width="3"/>
+    <path d="M686 26 h28 l-4 14 h-20 Z" fill="#b58a6a"/>
+    <path d="M692 40 c-4 22 -12 28 -16 46 c-2 -22 4 -38 16 -46" fill="#7fae63"/>
+    <path d="M706 40 c6 20 14 24 18 40 c-12 -4 -20 -20 -18 -40" fill="#4b7441"/>
+  </g>
+
+  <!-- lampes suspendues -->
+  <g>
+    <line x1="180" y1="0" x2="180" y2="44" stroke="#8d6a44" stroke-width="3"/>
+    <path d="M152 44 h56 l-12 26 h-32 Z" fill="#c9664a"/>
+    <ellipse cx="180" cy="72" rx="11" ry="8" fill="#ffeeb8"/>
+    <circle cx="180" cy="76" r="34" fill="url(#halo)"/>
+  </g>
+  <g>
+    <line x1="838" y1="0" x2="838" y2="60" stroke="#8d6a44" stroke-width="3"/>
+    <path d="M812 60 h52 l-11 24 h-30 Z" fill="#7f9e86"/>
+    <ellipse cx="838" cy="86" rx="10" ry="7" fill="#ffeeb8"/>
+    <circle cx="838" cy="90" r="30" fill="url(#halo)"/>
+  </g>
+
+  <!-- COMPTOIR -->
+  <g>
+    <rect x="352" y="196" width="246" height="66" rx="9" fill="url(#comptoir)"/>
+    <rect x="344" y="188" width="262" height="16" rx="8" fill="#d8a96f"/>
+    <rect x="344" y="188" width="262" height="6" rx="3" fill="#ecc795"/>
+    <g opacity=".5" stroke="#6f4a26" stroke-width="2">
+      <line x1="394" y1="210" x2="394" y2="258"/><line x1="452" y1="210" x2="452" y2="258"/>
+      <line x1="510" y1="210" x2="510" y2="258"/><line x1="560" y1="210" x2="560" y2="258"/>
+    </g>
+    <!-- machine à café -->
+    <g transform="translate(362,142)">
+      <rect x="0" y="0" width="56" height="46" rx="7" fill="#b5553f"/>
+      <rect x="5" y="5" width="46" height="16" rx="4" fill="#e9d6a8"/>
+      <circle cx="16" cy="30" r="5" fill="#f6e6bd"/><circle cx="30" cy="30" r="5" fill="#f6e6bd"/>
+      <rect x="40" y="26" width="10" height="4" rx="2" fill="#8a3f2d"/>
+      <rect x="2" y="44" width="52" height="4" rx="2" fill="#8a3f2d"/>
+    </g>
+    <!-- cloche à gâteaux -->
+    <g transform="translate(540,150)">
+      <ellipse cx="22" cy="38" rx="25" ry="5" fill="#d8a96f"/>
+      <path d="M0 38 a22 24 0 0 1 44 0 Z" fill="#dff0f2" opacity=".8"/>
+      <path d="M0 38 a22 24 0 0 1 44 0" fill="none" stroke="#bcd7da" stroke-width="2"/>
+      <path d="M8 38 a14 10 0 0 1 28 0 Z" fill="#e8c9a0"/>
+      <path d="M12 34 a10 6 0 0 1 20 0 Z" fill="#c9664a" opacity=".8"/>
+      <circle cx="22" cy="15" r="3" fill="#bcd7da"/>
+    </g>
+    <!-- tasses alignées -->
+    <g transform="translate(452,168)">
+      <g><ellipse cx="8" cy="18" rx="9" ry="3" fill="#cbac7d"/><path d="M0 8 h16 l-2 10 h-12 Z" fill="#fdf4e0"/></g>
+      <g transform="translate(22,0)"><ellipse cx="8" cy="18" rx="9" ry="3" fill="#cbac7d"/><path d="M0 8 h16 l-2 10 h-12 Z" fill="#f0dcb4"/></g>
+      <g transform="translate(44,0)"><ellipse cx="8" cy="18" rx="9" ry="3" fill="#cbac7d"/><path d="M0 8 h16 l-2 10 h-12 Z" fill="#fdf4e0"/></g>
+    </g>
+  </g>
+
+  <!-- BIBLIOTHÈQUE (droite) -->
+  <g transform="translate(606,120)">
+    <rect x="0" y="0" width="118" height="140" rx="7" fill="#9c6f42"/>
+    <rect x="6" y="8" width="106" height="36" fill="#7d5733"/>
+    <rect x="6" y="52" width="106" height="36" fill="#7d5733"/>
+    <rect x="6" y="96" width="106" height="36" fill="#7d5733"/>
+    <g>
+      <rect x="10" y="12" width="9" height="30" fill="#c9664a"/><rect x="21" y="14" width="7" height="28" fill="#e9d6a8"/>
+      <rect x="30" y="11" width="10" height="31" fill="#6f9e59"/><rect x="42" y="16" width="8" height="26" fill="#8fa9c9"/>
+      <rect x="52" y="13" width="9" height="29" fill="#d8838c"/><rect x="63" y="15" width="7" height="27" fill="#f0dcb4"/>
+      <rect x="10" y="56" width="8" height="30" fill="#8fa9c9"/><rect x="20" y="58" width="10" height="28" fill="#c9664a"/>
+      <rect x="32" y="55" width="7" height="31" fill="#e9d6a8"/><rect x="41" y="60" width="9" height="26" fill="#6f9e59"/>
+      <rect x="10" y="100" width="9" height="30" fill="#a98fc9"/><rect x="21" y="102" width="8" height="28" fill="#dfa96a"/>
+      <rect x="31" y="99" width="10" height="31" fill="#7f9e86"/>
+      <!-- un chat en porcelaine sur l'étagère -->
+      <g transform="translate(78,70)"><ellipse cx="10" cy="16" rx="11" ry="6" fill="#fdf4e0"/><circle cx="10" cy="7" r="7" fill="#fdf4e0"/><path d="M4 2 l1 -6 l5 4 Z M16 2 l-1 -6 l-5 4 Z" fill="#fdf4e0"/><circle cx="7.5" cy="7" r="1" fill="#4e3b2c"/><circle cx="12.5" cy="7" r="1" fill="#4e3b2c"/></g>
+    </g>
+  </g>
+
+  <!-- TAPIS -->
+  <ellipse cx="500" cy="470" rx="300" ry="112" fill="#d5b07e" opacity=".55"/>
+  <ellipse cx="500" cy="470" rx="300" ry="112" fill="none" stroke="#c0905c" stroke-width="5" opacity=".6"/>
+  <ellipse cx="500" cy="470" rx="250" ry="90" fill="none" stroke="#c0905c" stroke-width="3" opacity=".45"/>
+
+  <!-- ARBRE À CHAT (droite) -->
+  <g transform="translate(884,268)">
+    <ellipse cx="34" cy="198" rx="54" ry="13" fill="rgba(94,67,45,.22)"/>
+    <rect x="24" y="36" width="20" height="164" rx="8" fill="#b58a6a"/>
+    <rect x="24" y="36" width="8" height="164" fill="#c9a384"/>
+    <rect x="-8" y="186" width="84" height="16" rx="7" fill="#9c6f42"/>
+    <rect x="-14" y="112" width="96" height="15" rx="7" fill="#9c6f42"/>
+    <ellipse cx="34" cy="108" rx="40" ry="11" fill="#e9d6a8"/>
+    <rect x="-6" y="24" width="80" height="16" rx="8" fill="#9c6f42"/>
+    <ellipse cx="34" cy="22" rx="38" ry="12" fill="#f0dcb4"/>
+    <path d="M12 22 a22 14 0 0 1 44 0" fill="none" stroke="#d8c49b" stroke-width="3"/>
+    <!-- balle suspendue -->
+    <line x1="68" y1="30" x2="68" y2="66" stroke="#8d6a44" stroke-width="2"/>
+    <circle cx="68" cy="72" r="8" fill="#c9664a"/>
+  </g>
+
+  <!-- COUSSINS -->
+  <g>
+    <ellipse cx="132" cy="612" rx="52" ry="22" fill="#c9664a" opacity=".92"/>
+    <ellipse cx="132" cy="606" rx="44" ry="17" fill="#e07a5c" opacity=".9"/>
+    <ellipse cx="612" cy="628" rx="50" ry="21" fill="#7f9e86"/>
+    <ellipse cx="612" cy="622" rx="42" ry="16" fill="#97b59c"/>
+    <ellipse cx="868" cy="596" rx="46" ry="19" fill="#a98fc9" opacity=".85"/>
+    <ellipse cx="868" cy="590" rx="38" ry="15" fill="#bda6d8" opacity=".9"/>
+  </g>
+
+  <!-- GAMELLES + litière -->
+  <g transform="translate(40,500)">
+    <ellipse cx="22" cy="12" rx="20" ry="7" fill="#b9834d"/><ellipse cx="22" cy="10" rx="15" ry="5" fill="#e9d6a8"/>
+    <ellipse cx="62" cy="14" rx="20" ry="7" fill="#b9834d"/><ellipse cx="62" cy="12" rx="15" ry="5" fill="#bfe4e2"/>
+  </g>
+
+  <!-- ENTRÉE / tapis + rideau -->
+  <g transform="translate(16,286)">
+    <rect x="0" y="0" width="112" height="40" rx="9" fill="#9c6f42" opacity=".75"/>
+    <text x="56" y="25" text-anchor="middle" font-family="Caveat, cursive" font-size="19" fill="#fdf4e0">Entrée</text>
+  </g>
+
+  <!-- vignette chaude -->
+  <rect x="0" y="0" width="1000" height="660" fill="none"/>
+  <radialGradient id="vig" cx=".5" cy=".45" r=".78">
+    <stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#5b3c1e" stop-opacity=".30"/>
+  </radialGradient>
+  <rect x="0" y="0" width="1000" height="660" fill="url(#vig)"/>
+</svg>`;
+}
+
+/* ============================================================
+   3. PERSONNAGES & CHATS  (SVG dessinés, style film d'animation)
+   ============================================================ */
+
+/* ------------------------------------------------------------------
+   PERSONNAGES — chara-design anime
+   Repère interne : 60 × 96 unités, ≈ 5,5 têtes.
+   Tête y 2→20, cou 20→24, épaules 25, taille 40, hanches 48, pieds 92.
+   Rendu cel : aplat + une ombre franche calculée, line art brun foncé,
+   yeux larges à iris dégradé et double reflet, mèches pointues.
+   ------------------------------------------------------------------ */
+
+const ENCRE  = '#4a3328';        // line art
+const LINE   = .62;              // épaisseur du trait
+
+function teinte(hex, k){
+  const n = parseInt(hex.slice(1), 16);
+  const f = v => Math.max(0, Math.min(255, Math.round(k > 0 ? v + (255-v)*k : v*(1+k))));
+  return '#' + [f((n>>16)&255), f((n>>8)&255), f(n&255)].map(v => v.toString(16).padStart(2,'0')).join('');
+}
+
+/* membre « tube » : trait d'encre dessous, aplat par-dessus */
+function membre(d, couleur, ep){
+  return `<path d="${d}" fill="none" stroke="${ENCRE}" stroke-width="${ep + LINE*2}" stroke-linecap="round"/>
+          <path d="${d}" fill="none" stroke="${couleur}" stroke-width="${ep}" stroke-linecap="round"/>`;
+}
+
+/* ---------------- chevelure : masse arrière + mèches pointues ---------------- */
+function cheveux(p){
+  const c   = p.cheveux;
+  const cl  = teinte(c,  .30);                       // bande de lumière
+  const co  = teinte(c, -.32);                       // creux
+  const ink = `stroke="${ENCRE}" stroke-width="${LINE}" stroke-linejoin="round"`;
+
+  // frange en dents : chaque pointe retombe devant le front
+  const frange = `
+    <path d="M30 .6 C37.4 .6 40.2 5 39.8 11.6 L38.2 8.4 L36.6 12.4 L34.8 7.8 L32.4 12.2 L30.6 7.4
+             L28 12.4 L26.2 7.8 L24.2 12.6 L22.6 8.6 L20.6 11.8 C20 5 23 .6 30 .6 Z" fill="${c}" ${ink}/>`;
+  const brillance = `
+    <path d="M24.8 5 C27.3 3.3 32.3 2.9 35.6 4.4 L34.8 5.7 L32.2 4.9 L29.2 6 L26.8 5 Z" fill="${cl}" opacity=".9"/>`;
+
+  switch(p.coiffe){
+    case 'carre': return `
+      <path d="M30 .4 C39 .4 41.4 6.4 41 13 L40.4 19.6 L38.6 23.4 L37.4 19 L37.6 13 C34.8 10.4 25.2 10.4 22.4 13
+               L22.6 19 L21.4 23.4 L19.6 19.6 L19 13 C18.6 6.4 21 .4 30 .4 Z" fill="${c}" ${ink}/>
+      ${frange}
+      <path d="M20.8 11.8 C19.8 15.2 20 19.4 21.4 23.4 L22.6 18.4 L22.4 13 Z" fill="${co}"/>
+      ${brillance}`;
+    case 'chignon': return `
+      <ellipse cx="30" cy="-2.8" rx="5.6" ry="4.2" fill="${c}" ${ink}/>
+      <path d="M26 -5 C28.6 -6.4 32.6 -5.8 34.4 -3.6 C31.8 -4.8 28.4 -5.2 26 -5 Z" fill="${cl}"/>
+      <path d="M30 .4 C38.6 .4 41 5.8 40.6 12.4 C39.6 9.2 38.4 7.4 37 6.4 C34 8.2 26 8.2 23 6.6
+               C21.6 7.6 20.4 9.4 19.4 12.4 C19 5.8 21.4 .4 30 .4 Z" fill="${c}" ${ink}/>
+      ${frange}
+      <path d="M20.4 10.4 C19 15 19.6 20 21.2 24 L23 20.2 L22 13 Z" fill="${c}" ${ink}/>
+      <path d="M39.6 10.4 C41 15 40.4 20 38.8 24 L37 20.2 L38 13 Z" fill="${co}" ${ink}/>
+      ${brillance}`;
+    case 'queue': return `
+      <path d="M38.4 5.4 C46.4 7.6 49 17 45.2 26.6 L43.6 21.4 L42.2 25 L41.4 19.2 L39.6 22.2
+               C40.4 15.6 39.4 10.6 36.8 7.8 Z" fill="${c}" ${ink}/>
+      <path d="M40.4 9 C44.2 12.4 45.2 18.4 43.8 23.8 C44.2 18 42.8 13 40 10 Z" fill="${co}"/>
+      <path d="M30 .4 C38.8 .4 41.2 5.6 40.6 12.4 C39.6 9.2 38.4 7.5 37 6.5 C34 8.4 26 8.4 23 6.8
+               C21.6 7.8 20.3 9.6 19.4 12.4 C18.8 5.6 21.2 .4 30 .4 Z" fill="${c}" ${ink}/>
+      ${frange}
+      <path d="M21 11.4 C20 14.6 20.2 18 21.2 21 L22.6 17 L22.4 12.6 Z" fill="${c}" ${ink}/>
+      ${brillance}`;
+    default: return `
+      ${frange}
+      <path d="M21 11 C20.2 14.2 20.4 17.2 21.4 19.8 L22.8 15.6 L22.6 11.8 Z" fill="${c}" ${ink}/>
+      <path d="M39 11 C39.8 14.2 39.6 17.2 38.6 19.8 L37.2 15.6 L37.4 11.8 Z" fill="${co}" ${ink}/>
+      ${brillance}`;
+  }
+}
+
+/* ---------------- visage : grands yeux anime ---------------- */
+function oeil(cx, iris, sens, peau){
+  const haut = teinte(iris, -.40), bas = teinte(iris, .38);
+  const f = sens;                                   // 1 = œil gauche du spectateur
+  const id  = 'o' + Math.round(cx*10) + (f > 0 ? 'g' : 'd');
+  // contour supérieur : sert à la fois de bord de l'œil et de ligne de cils
+  const haut_d = `M${cx - 2.15*f} 13.8 C${cx - 2.05*f} 11.1 ${cx - 1.2*f} 9.7 ${cx + .2*f} 9.7
+                  C${cx + 1.6*f} 9.7 ${cx + 2.25*f} 11.3 ${cx + 2.25*f} 13.8`;
+  const forme  = `${haut_d} C${cx + 2.25*f} 16 ${cx + 1.2*f} 16.9 ${cx - .1*f} 16.9
+                  C${cx - 1.4*f} 16.9 ${cx - 2.15*f} 16 ${cx - 2.15*f} 13.8 Z`;
+  return `
+    <clipPath id="${id}"><path d="${forme}"/></clipPath>
+    <path d="${forme}" fill="#fbf7f2"/>
+    <g clip-path="url(#${id})">
+      <ellipse cx="${cx}" cy="13.4" rx="1.85" ry="3.3" fill="${iris}"/>
+      <ellipse cx="${cx}" cy="11.4" rx="1.85" ry="1.9" fill="${haut}"/>
+      <ellipse cx="${cx}" cy="15.4" rx="1.5" ry="1.3" fill="${bas}"/>
+      <ellipse cx="${cx}" cy="13.7" rx=".8" ry="1.8" fill="#241a18"/>
+      <circle cx="${cx - .8*f}" cy="11.8" r="1.05" fill="#fff"/>
+      <circle cx="${cx + .95*f}" cy="15.4" r=".48" fill="#fff" opacity=".9"/>
+    </g>
+    <path d="${haut_d}" fill="none" stroke="${ENCRE}" stroke-width="1.25" stroke-linecap="round"/>
+    <path d="M${cx - 2.15*f} 13.8 L${cx - 3.2*f} 12.7" stroke="${ENCRE}" stroke-width="1.15" stroke-linecap="round"/>
+    <path d="M${cx - 1.2*f} 17.1 C${cx + .1*f} 17.5 ${cx + 1.3*f} 17.3 ${cx + 2*f} 16.6"
+          fill="none" stroke="${teinte(peau,-.3)}" stroke-width=".5" stroke-linecap="round"/>`;
+}
+
+function visage(p){
+  const iris  = p.yeux || '#6b4a33';
+  const peauO = teinte(p.peau, -.12);
+  return `
+    <!-- ombre cel : tempe gauche + sous la frange + menton -->
+    <path d="M23 9 C22.4 13.6 24 17.4 27 19.8 C24.6 19 22.8 16.4 22.4 13 C22.2 11.4 22.4 10 23 9 Z" fill="${peauO}"/>
+    <path d="M22.6 8.4 C26 10.6 34 10.6 37.4 8.4 C36.6 11 33.6 12.2 30 12.2 C26.4 12.2 23.4 11 22.6 8.4 Z" fill="${peauO}"/>
+    <!-- sourcils fins, légèrement couverts par la frange -->
+    <path d="M24.2 8.2 C25.4 7.3 27.2 7.4 28.4 8.1" fill="none" stroke="${teinte(p.cheveux,-.12)}" stroke-width=".8" stroke-linecap="round"/>
+    <path d="M31.6 8.1 C32.8 7.4 34.6 7.3 35.8 8.2" fill="none" stroke="${teinte(p.cheveux,-.12)}" stroke-width=".8" stroke-linecap="round"/>
+    ${oeil(26.4, iris, 1, p.peau)}
+    ${oeil(33.6, iris, -1, p.peau)}
+    <!-- nez : un simple accent -->
+    <path d="M30.2 16 L30.8 16.9" fill="none" stroke="${teinte(p.peau,-.34)}" stroke-width=".7" stroke-linecap="round"/>
+    <!-- bouche -->
+    <path d="M28.9 18.6 C29.6 19.5 30.4 19.5 31.1 18.6" fill="none" stroke="#9a5a4e" stroke-width=".85" stroke-linecap="round"/>
+    <!-- rougeur des joues : aplat doux + hachures, comme dans les animes -->
+    <ellipse cx="24.6" cy="16.9" rx="2.1" ry="1.3" fill="#e8857e" opacity=".3"/>
+    <ellipse cx="35.4" cy="16.9" rx="2.1" ry="1.3" fill="#e8857e" opacity=".3"/>
+    <path d="M23.7 16.1 h1.9 M23.5 17 h2.2 M23.8 17.9 h1.8" stroke="#d9655e" stroke-width=".4" stroke-linecap="round" opacity=".6"/>
+    <path d="M34.4 16.1 h1.9 M34.3 17 h2.2 M34.4 17.9 h1.8" stroke="#d9655e" stroke-width=".4" stroke-linecap="round" opacity=".6"/>`;
+}
+
+/* ---------------- personnage complet ---------------- */
+function personneSVG(p, opts){
+  opts = opts || {};
+  const assis  = !!opts.assis;
+  const bas    = p.bas   || '#3f4552';
+  const chaus  = p.chaus || '#3a2d26';
+  const habitO = teinte(p.habit, -.18);
+  const basO   = teinte(bas,     -.18);
+  const ink    = `stroke="${ENCRE}" stroke-width="${LINE}" stroke-linejoin="round"`;
+
+  const jambes = p.jupe ? `
+      <path d="M21 44 H39 L42.6 63 Q30 67.6 17.4 63 Z" fill="${bas}" ${ink}/>
+      <path d="M21 44 H25.6 L22.2 64.6 Q19.8 64 17.4 63 Z" fill="${basO}"/>
+      <path d="M27.6 45 L26 63.4 M32.4 45 L34 63.4" stroke="${basO}" stroke-width=".6" fill="none" opacity=".7"/>
+      ${membre('M26.4 64 L26 86', p.peau, 3.8)}
+      ${membre('M33.6 64 L34 86', p.peau, 3.8)}
+      <path d="M22.9 85.4 h5.6 q1.9 0 1.9 2.6 v2.8 h-9.4 v-2.8 q0 -2.6 1.9 -2.6 Z" fill="${chaus}" ${ink}/>
+      <path d="M31.5 85.4 h5.6 q1.9 0 1.9 2.6 v2.8 h-9.4 v-2.8 q0 -2.6 1.9 -2.6 Z" fill="${chaus}" ${ink}/>`
+    : `
+      <path d="M21 44 H39 L38.4 54 Q30 57.6 21.6 54 Z" fill="${bas}" ${ink}/>
+      ${membre('M26.2 52 L25.6 85', bas, 5.6)}
+      ${membre('M33.8 52 L34.4 85', bas, 5.6)}
+      <path d="M21 44 H25.4 L24.4 55.2 L21.6 54 Z" fill="${basO}"/>
+      <path d="M22.9 85.4 h5.6 q1.9 0 1.9 2.6 v2.8 h-9.4 v-2.8 q0 -2.6 1.9 -2.6 Z" fill="${chaus}" ${ink}/>
+      <path d="M31.5 85.4 h5.6 q1.9 0 1.9 2.6 v2.8 h-9.4 v-2.8 q0 -2.6 1.9 -2.6 Z" fill="${chaus}" ${ink}/>`;
+
+  const brasG = 'M23.2 26.6 C20.4 29 19.2 33.6 19.4 40.4';
+  const brasD = p.plateau ? 'M36.8 26.6 C39.6 27.8 40.8 30.4 40.4 33.2'
+                          : 'M36.8 26.6 C39.6 29 40.8 33.6 40.6 40.4';
+  const mainG = { x:19.4, y:42.4 }, mainD = p.plateau ? { x:40.5, y:35 } : { x:40.6, y:42.4 };
+
+  const corps = `
+    <!-- cou fin + ombre portée de la tête -->
+    <path d="M28.2 17.6 h3.6 v5.8 h-3.6 Z" fill="${p.peau}" ${ink}/>
+    <path d="M28.2 17.6 h3.6 v2.8 q-1.8 1.4 -3.6 0 Z" fill="${teinte(p.peau,-.3)}"/>
+    <!-- buste élancé : épaules marquées, taille fine, bas évasé -->
+    <path d="M30 22.4 C33 22.4 35.4 23.2 37 24.8 C38.8 26.6 39.2 29.8 38.6 33.6 L37.4 40 L39 48 L21 48
+             L22.6 40 L21.4 33.6 C20.8 29.8 21.2 26.6 23 24.8 C24.6 23.2 27 22.4 30 22.4 Z" fill="${p.habit}" ${ink}/>
+    <path d="M30 22.4 C27 22.4 24.6 23.2 23 24.8 C21.2 26.6 20.8 29.8 21.4 33.6 L22.6 40 L21 48 H25.8
+             L24.6 40 C23.8 34 24.6 27.4 27.2 22.8 Z" fill="${habitO}"/>
+    <path d="M27.4 22.8 C28.4 25.4 31.6 25.4 32.6 22.8 C32.4 26.4 27.6 26.4 27.4 22.8 Z" fill="${teinte(p.habit,.34)}" stroke="${ENCRE}" stroke-width=".5"/>
+    ${p.col ? `<path d="M30 25.2 l-2.4 1.6 l2.4 1.2 l2.4 -1.2 Z" fill="${p.col}" ${ink}/>` : ''}
+    <path d="M25.6 34 C25.2 38 25.4 43.4 26 47.6 M34.4 34 C34.8 38 34.6 43.4 34 47.6" stroke="${habitO}" stroke-width=".7" fill="none"/>
+    ${membre(brasG, p.habit, 5)}
+    ${membre(brasD, p.habit, 5)}
+    <circle cx="${mainG.x}" cy="${mainG.y}" r="2.1" fill="${p.peau}" ${ink}/>
+    <circle cx="${mainD.x}" cy="${mainD.y}" r="2.1" fill="${p.peau}" ${ink}/>`;
+
+  const tablier = p.tablier ? `
+      <path d="M24.4 27.6 H35.6 L37.4 48.4 Q30 51.4 22.6 48.4 Z" fill="${p.tablier}" ${ink}/>
+      <path d="M24.4 27.6 H27.8 L26.2 49.6 Q24.3 49.2 22.6 48.4 Z" fill="${teinte(p.tablier,-.15)}"/>
+      <path d="M26.6 27.6 L27.2 24 M33.4 27.6 L32.8 24" stroke="${p.tablier}" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+      <rect x="26.4" y="37" width="7.2" height="5.4" rx="1.4" fill="none" stroke="${teinte(p.tablier,-.24)}" stroke-width=".7"/>` : '';
+
+  const plateau = p.plateau ? `
+      <g transform="translate(33.2,23.4)">
+        <ellipse cx="7.4" cy="8.2" rx="9.6" ry="3.1" fill="${ENCRE}"/>
+        <ellipse cx="7.4" cy="7.5" rx="9" ry="2.8" fill="#b9834d"/>
+        <ellipse cx="7.4" cy="6.5" rx="8.6" ry="2.6" fill="#d8a96f"/>
+        <ellipse cx="7.4" cy="6.2" rx="6.6" ry="1.9" fill="#e8c295"/>
+        <path d="M4.6 .6 H10.2 L9.4 6.3 H5.4 Z" fill="#fdf4e0" stroke="${ENCRE}" stroke-width=".55"/>
+        <path d="M4.6 .6 H6 L5.7 6.3 H5.4 Z" fill="#e2cfae"/>
+        <ellipse cx="7.4" cy=".7" rx="2.8" ry=".8" fill="#c9a06a"/>
+        <path class="vapeur" d="M7.4 -1.8 c1.5 -2.3 -1.5 -3.4 0 -5.9" fill="none" stroke="#fff6e2" stroke-width="1.3" stroke-linecap="round"/>
+      </g>` : '';
+
+  const graine = (p.nom || '').split('').reduce((a,c) => a + c.charCodeAt(0), 0);
+  const inclin = ((graine % 5) - 2) * 1.6;
+
+  const tete = `
+   <g transform="rotate(${inclin} 30 21)">
+    <path d="M30 2.2 C34.9 2.2 37.8 5.6 37.8 10.4 C37.8 12.8 37.4 14.6 36.4 16.2
+             C35.4 18.2 31.8 20.9 30 21.4 C28.2 20.9 24.6 18.2 23.6 16.2
+             C22.6 14.6 22.2 12.8 22.2 10.4 C22.2 5.6 25.1 2.2 30 2.2 Z" fill="${p.peau}" ${ink}/>
+    <path d="M22.5 11 C21.4 10.8 21 12.2 21.5 13.5 C21.9 14.5 22.5 14.9 23.1 14.7 Z" fill="${p.peau}" stroke="${ENCRE}" stroke-width=".45"/>
+    <path d="M37.5 11 C38.6 10.8 39 12.2 38.5 13.5 C38.1 14.5 37.5 14.9 36.9 14.7 Z" fill="${p.peau}" stroke="${ENCRE}" stroke-width=".45"/>
+    ${visage(p)}
+    ${cheveux(p)}
+   </g>`;
+
+  if(assis){
+    return `
+    <svg width="54" height="56" viewBox="0 -8 60 62">
+      ${corps}${tablier}${tete}${plateau}
+    </svg>`;
+  }
+  return `
+    <svg width="58" height="102" viewBox="0 -8 60 108">
+      <ellipse cx="30" cy="91.4" rx="14" ry="3.8" fill="rgba(70,48,32,.24)"/>
+      ${jambes}${corps}${tablier}${tete}${plateau}
+    </svg>`;
+}
+
+/* Chat de profil — debout/assis, ~70x48 */
+function chatSVG(c, etat){
+  const motif = (() => {
+    if(c.motif === 'tigre') return `
+      <g opacity=".75" stroke="${c.robe2}" stroke-width="3" stroke-linecap="round">
+        <path d="M24 20 q3 5 0 10"/><path d="M32 19 q3 6 0 12"/><path d="M40 20 q3 5 0 10"/>
+      </g>`;
+    if(c.motif === 'bicolore') return `<path d="M44 18 q14 2 16 12 q-10 4 -17 -1 Z" fill="${c.robe2}" opacity=".85"/><path d="M14 30 q6 6 14 5 q-5 5 -14 2 Z" fill="${c.robe2}" opacity=".6"/>`;
+    if(c.motif === 'colourpoint') return `<path d="M50 10 q12 3 13 13 q-9 4 -15 -2 Z" fill="${c.robe2}" opacity=".75"/><ellipse cx="18" cy="33" rx="7" ry="5" fill="${c.robe2}" opacity=".55"/>`;
+    if(c.motif === 'rosette') return `
+      <g fill="${c.robe2}" opacity=".7">
+        <ellipse cx="25" cy="22" rx="3" ry="2.2"/><ellipse cx="34" cy="20" rx="3" ry="2.2"/>
+        <ellipse cx="42" cy="23" rx="3" ry="2.2"/><ellipse cx="30" cy="29" rx="3" ry="2.2"/><ellipse cx="39" cy="30" rx="3" ry="2.2"/>
+      </g>`;
+    return '';
+  })();
+
+  if(etat === 'dort'){
+    return `
+    <svg width="76" height="52" viewBox="-4 -14 76 56">
+      <ellipse cx="34" cy="38" rx="27" ry="6" fill="rgba(94,67,45,.20)"/>
+      <ellipse cx="34" cy="26" rx="26" ry="14" fill="${c.robe}"/>
+      <path d="M8 26 q-8 4 -2 10 q6 4 10 -2" fill="none" stroke="${c.robe}" stroke-width="7" stroke-linecap="round"/>
+      ${motif}
+      <circle cx="49" cy="22" r="11" fill="${c.robe}"/>
+      <path d="M41 14 l-2 -8 l8 4 Z" fill="${c.robe}"/>
+      <path d="M41.5 13 l-1 -5 l5 2.5 Z" fill="${'#e79a93'}" opacity=".6"/>
+      <path d="M55 14 l3 -8 l-8 4 Z" fill="${c.robe}"/>
+      <path d="M46 23 q3 2 6 0" fill="none" stroke="#4e3b2c" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M53 23 q2.5 2 5 0" fill="none" stroke="#4e3b2c" stroke-width="1.5" stroke-linecap="round"/>
+      <ellipse cx="44.5" cy="26" rx="2.4" ry="1.6" fill="${'#e79a93'}" opacity=".5"/>
+      <path d="M50 27 l1.6 1.6 l1.6 -1.6" fill="none" stroke="#8a5a4a" stroke-width="1.2" stroke-linecap="round"/>
+      <g class="zzz"><text x="60" y="6" font-family="Caveat, cursive" font-size="17" fill="#8a6a45">z</text></g>
+    </svg>`;
+  }
+
+  const pattes = etat === 'marche'
+    ? `<g stroke="${c.robe}" stroke-width="5.5" stroke-linecap="round">
+         <path d="M23 32 l-2 8"/><path d="M30 32 l3 8"/><path d="M41 32 l-3 8"/><path d="M47 32 l2 8"/>
+       </g>`
+    : `<g stroke="${c.robe}" stroke-width="5.5" stroke-linecap="round">
+         <path d="M24 32 v8"/><path d="M31 32 v8"/><path d="M41 32 v8"/><path d="M47 32 v8"/>
+       </g>`;
+
+  return `
+  <svg width="76" height="56" viewBox="-4 -14 76 60">
+    <ellipse cx="36" cy="42" rx="24" ry="5" fill="rgba(94,67,45,.20)"/>
+    <g class="queue"><path d="M18 26 C6 24 2 14 8 6" fill="none" stroke="${c.robe}" stroke-width="6.5" stroke-linecap="round"/></g>
+    ${pattes}
+    <ellipse cx="34" cy="24" rx="20" ry="11" fill="${c.robe}"/>
+    ${motif}
+    <circle cx="52" cy="17" r="10.5" fill="${c.robe}"/>
+    <path d="M44 10 l-2 -9 l8 5 Z" fill="${c.robe}"/>
+    <path d="M44.6 9 l-1 -5.5 l4.6 3 Z" fill="${'#e79a93'}" opacity=".6"/>
+    <path d="M59 10 l3 -9 l-8 5 Z" fill="${c.robe}"/>
+    <path d="M58.6 9 l1.6 -5.5 l-4.6 3 Z" fill="${'#e79a93'}" opacity=".6"/>
+    ${[48.6, 55.6].map(ox => `
+      <ellipse cx="${ox}" cy="17" rx="2.4" ry="3" fill="${c.oeil || '#7fae63'}" stroke="#3b2a21" stroke-width=".7"/>
+      <ellipse cx="${ox}" cy="15.6" rx="2.4" ry="1.5" fill="${teinte(c.oeil || '#7fae63', -.3)}" opacity=".8"/>
+      <ellipse cx="${ox}" cy="17.3" rx=".78" ry="2.2" fill="#241a18"/>
+      <circle cx="${ox - .85}" cy="15.5" r=".85" fill="#fff"/>
+      <circle cx="${ox + .9}" cy="18.4" r=".42" fill="#fff" opacity=".85"/>`).join('')}
+    <path d="M51 20.5 l1.2 1.2 l1.2 -1.2" fill="none" stroke="#8a5a4a" stroke-width="1.3" stroke-linecap="round"/>
+    <ellipse cx="46" cy="21" rx="2.4" ry="1.5" fill="${'#e79a93'}" opacity=".5"/>
+    <g stroke="#8a6a45" stroke-width=".9" opacity=".65" stroke-linecap="round">
+      <path d="M53 20 l9 -2"/><path d="M53 21.5 l9 1"/><path d="M50 20 l-8 -2"/><path d="M50 21.5 l-8 1"/>
+    </g>
+  </svg>`;
+}
+
+/* Table ronde en bois + chaises + tasses */
+function tableSVG(t){
+  const d = 54 + t.places * 9;              // diamètre du plateau
+  const rx = d/2, ry = d/2 * 0.42;          // perspective légère
+  const pad = 46;
+  const w = d + pad*2, h = d + 70;
+  const cx = w/2, cy = h/2;
+  const chaises = [];
+  for(let i=0;i<t.places;i++){
+    const a = -Math.PI/2 + i * (2*Math.PI / t.places);
+    const chx = cx + Math.cos(a) * (rx + 26);
+    const chy = cy + Math.sin(a) * (ry + 20);
+    chaises.push(`<g transform="translate(${chx},${chy})">
+      <ellipse cx="0" cy="8" rx="15" ry="5" fill="rgba(94,67,45,.18)"/>
+      <ellipse cx="0" cy="0" rx="14" ry="7" fill="#a97745"/>
+      <ellipse cx="0" cy="-3" rx="14" ry="7" fill="#c99a62"/>
+      <path d="M-11 -4 q11 -7 22 0" fill="none" stroke="#8f6338" stroke-width="2.5"/>
+    </g>`);
+  }
+  const tasses = [];
+  for(let i=0;i<Math.min(t.places,4);i++){
+    const a = -Math.PI/2 + i * (2*Math.PI/Math.min(t.places,4)) + .4;
+    const tx = cx + Math.cos(a)*rx*.55, ty = cy + Math.sin(a)*ry*.55;
+    tasses.push(`<g transform="translate(${tx-6},${ty-10})">
+      <ellipse cx="6" cy="11" rx="8" ry="2.6" fill="#cbac7d"/>
+      <path d="M0 4 h12 l-1.5 7 h-9 Z" fill="#fdf4e0"/>
+      <path class="vapeur" d="M6 2 c2 -3 -2 -4 0 -7" fill="none" stroke="#fff6e2" stroke-width="1.5" stroke-linecap="round"/>
+    </g>`);
+  }
+  return `
+  <svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+    ${chaises.join('')}
+    <ellipse cx="${cx}" cy="${cy+30}" rx="${rx*0.9}" ry="${ry*0.6}" fill="rgba(94,67,45,.22)"/>
+    <rect x="${cx-7}" y="${cy}" width="14" height="30" rx="5" fill="#8f6338"/>
+    <ellipse cx="${cx}" cy="${cy+4}" rx="${rx}" ry="${ry}" fill="#a97745"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#c99a62"/>
+    <ellipse cx="${cx}" cy="${cy-1}" rx="${rx*.84}" ry="${ry*.78}" fill="#d8a96f"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#8f6338" stroke-width="2" opacity=".6"/>
+    <!-- petit vase -->
+    <g transform="translate(${cx-5},${cy-22})">
+      <path d="M0 10 h10 l-1.5 10 h-7 Z" fill="#bfe4e2"/>
+      <path d="M5 10 c-1 -8 -5 -10 -7 -14 c5 1 8 4 9 9" fill="#6f9e59"/>
+      <circle cx="7" cy="-2" r="3" fill="#e79a93"/><circle cx="2" cy="-4" r="2.4" fill="#f8e3a6"/>
+    </g>
+    ${tasses.join('')}
+    <text x="${cx}" y="${cy+5}" text-anchor="middle" font-family="Caveat, cursive" font-size="17" fill="#7a5533" opacity=".85">${t.nom.replace('Table ','T')}</text>
+  </svg>`;
+}
+
+/* ============================================================
+   4. CONSTRUCTION DE LA SCÈNE
+   ============================================================ */
+
+const salon = document.getElementById('salon');
+const panneau = document.getElementById('panneau');
+const commandes = [];
+let selection = null;     // { type:'chat'|'employe'|'table', id }
+let brouillon = null;     // commande en cours de saisie
+
+salon.innerHTML = decor();
+
+// rayons de lumière depuis les deux fenêtres
+[[9,160,30],[76,170,26]].forEach(([left,w,h])=>{
+  const d = document.createElement('div');
+  d.className = 'rayon';
+  d.style.left = left + '%'; d.style.width = w + 'px'; d.style.height = h + '%';
+  d.style.animationDelay = (Math.random()*4).toFixed(1)+'s';
+  salon.appendChild(d);
+});
+// poussières dans la lumière
+for(let i=0;i<34;i++){
+  const d = document.createElement('div');
+  d.className = 'poussiere';
+  d.style.left = (Math.random()*100).toFixed(1)+'%';
+  d.style.top = (18 + Math.random()*62).toFixed(1)+'%';
+  d.style.animationDuration = (7 + Math.random()*9).toFixed(1)+'s';
+  d.style.animationDelay = (-Math.random()*10).toFixed(1)+'s';
+  d.style.opacity = .5 + Math.random()*.5;
+  salon.appendChild(d);
+}
+
+function entite(cls, x, y, html, onClick, titre){
+  const el = document.createElement('div');
+  el.className = 'ent ' + cls + (onClick ? ' cliquable' : '');
+  el.style.left = pc(x, W);
+  el.style.top  = pc(y, H);
+  el.style.zIndex = Math.round(y);
+  el.innerHTML = html + (titre ? `<span class="etiquette">${titre}</span>` : '');
+  if(onClick){
+    el.addEventListener('click', e => { e.stopPropagation(); onClick(); });
+  }
+  salon.appendChild(el);
+  return el;
+}
+
+/* --- Tables + sièges --- */
+const siegesMonde = {};        // tableId -> [{x,y}]
+TABLES.forEach(t => {
+  const d = 54 + t.places*9, rx = d/2, ry = d/2*0.42;
+  const el = entite('table', t.x, t.y + (d+70)/2, tableSVG(t), () => choisir('table', t.id), `${t.nom} · ${t.places} places`);
+  el.dataset.table = t.id;
+  // profondeur : on se base sur le centre du plateau, pas sur le bas du dessin,
+  // pour que les clients assis « devant » passent bien par-dessus la table
+  el.style.zIndex = Math.round(t.y);
+  // position monde de chaque siège (pour y asseoir les clients)
+  siegesMonde[t.id] = [];
+  for(let i=0;i<t.places;i++){
+    const a = -Math.PI/2 + i*(2*Math.PI/t.places);
+    siegesMonde[t.id].push({
+      x: t.x + Math.cos(a)*(rx+26),
+      y: t.y + Math.sin(a)*(ry+20)
+    });
+  }
+});
+
+/* --- Clients assis --- */
+CLIENTS.forEach(c => {
+  const s = siegesMonde[c.tableId] && siegesMonde[c.tableId][c.siege];
+  if(!s) return;
+  const el = entite('client', s.x, s.y + 10, `<div class="respire-doux">${personneSVG(c, {assis:true})}</div>`,
+    null, `${c.nom} — ${c.boisson}`);
+  el.style.zIndex = Math.round(s.y) + 1;
+});
+
+/* --- Employés --- */
+EMPLOYES.forEach(p => {
+  const el = entite('employe', p.x, p.y, `<div class="respire-doux">${personneSVG(p)}</div>`,
+    () => choisir('employe', p.id), `${p.nom} — ${p.role}`);
+  el.dataset.employe = p.id;
+});
+
+/* --- Chats qui se baladent --- */
+const ZONE = { x0: 60, x1: 950, y0: 300, y1: 636 };
+const SPOTS = [ {x:132,y:606},{x:612,y:622},{x:868,y:590},{x:918,y:378},{x:918,y:290} ]; // coussins + arbre à chat
+const OBSTACLES = TABLES.map(t => {
+  const d = 54 + t.places*9;
+  return { x0:t.x-d/2-10, x1:t.x+d/2+10, y0:t.y-d*0.28, y1:t.y+d*0.28 };
+});
+
+const chatsVivants = CHATS.map((c, i) => {
+  const el = document.createElement('div');
+  el.className = 'ent chat cliquable';
+  el.innerHTML = `<div class="corps">${chatSVG(c, 'assis')}</div><span class="etiquette">${c.nom}</span>`;
+  el.addEventListener('click', e => { e.stopPropagation(); choisir('chat', c.id); });
+  salon.appendChild(el);
+
+  const depart = SPOTS[i % SPOTS.length];
+  return {
+    data:c, el,
+    x: depart.x + (Math.random()*60-30),
+    y: ZONE.y0 + Math.random()*(ZONE.y1-ZONE.y0),
+    tx:0, ty:0, dir:1, etat:'assis', attente: 400 + Math.random()*2200,
+    vitesse: 22 + Math.random()*18,
+    rendu:''
+  };
+});
+
+function dansObstacle(x,y){
+  return OBSTACLES.some(o => x>o.x0 && x<o.x1 && y>o.y0 && y<o.y1);
+}
+function nouvelleCible(c){
+  for(let essai=0; essai<24; essai++){
+    let x, y;
+    if(Math.random() < .42){                       // aller vers un coin douillet
+      const s = SPOTS[(Math.random()*SPOTS.length)|0];
+      x = s.x + (Math.random()*44-22); y = s.y + (Math.random()*22-11);
+    }else{
+      x = ZONE.x0 + Math.random()*(ZONE.x1-ZONE.x0);
+      y = ZONE.y0 + Math.random()*(ZONE.y1-ZONE.y0);
+    }
+    if(!dansObstacle(x,y)){ c.tx = x; c.ty = y; return; }
+  }
+  c.tx = c.x; c.ty = c.y;
+}
+chatsVivants.forEach(nouvelleCible);
+
+function dessinerChat(c){
+  const etat = c.etat === 'marche' ? 'marche' : (c.etat === 'dort' ? 'dort' : 'assis');
+  if(c.rendu !== etat){
+    c.el.querySelector('.corps').innerHTML = chatSVG(c.data, etat);
+    c.el.querySelector('.corps').className = 'corps' + (etat==='marche' ? ' marche' : '');
+    c.rendu = etat;
+  }
+}
+
+let dernier = performance.now();
+function boucle(maintenant){
+  const dt = Math.min((maintenant - dernier)/1000, .05);
+  dernier = maintenant;
+
+  chatsVivants.forEach(c => {
+    if(c.etat === 'marche'){
+      const dx = c.tx - c.x, dy = c.ty - c.y;
+      const dist = Math.hypot(dx,dy);
+      if(dist < 4){
+        const surSpot = SPOTS.some(s => Math.hypot(s.x-c.x, s.y-c.y) < 40);
+        if(surSpot && Math.random() < .62){ c.etat='dort'; c.attente = 5000 + Math.random()*9000; }
+        else { c.etat='assis'; c.attente = 900 + Math.random()*3200; }
+      }else{
+        if(Math.abs(dx) > 2) c.dir = dx > 0 ? 1 : -1;
+        c.x += dx/dist * c.vitesse * dt;
+        c.y += dy/dist * c.vitesse * dt;
+      }
+    }else{
+      c.attente -= dt*1000;
+      if(c.attente <= 0){ nouvelleCible(c); c.etat='marche'; }
+    }
+    dessinerChat(c);
+    c.el.style.left = pc(c.x, W);
+    c.el.style.top  = pc(c.y, H);
+    c.el.style.zIndex = Math.round(c.y) + 8;
+    c.el.querySelector('.corps').style.transform = `scale(${c.dir < 0 ? -.8 : .8}, .8)`;
+  });
+
+  requestAnimationFrame(boucle);
+}
+requestAnimationFrame(boucle);
+
+/* ============================================================
+   5. PANNEAU : fiches chat / employé / table + prise de commande
+   ============================================================ */
+
+const euro = n => n.toFixed(2).replace('.', ',') + ' €';
+const placesTotal = TABLES.reduce((s,t)=>s+t.places,0);
+const occupees = tableId => CLIENTS.filter(c=>c.tableId===tableId).length;
+
+function choisir(type, id){
+  selection = { type, id };
+  if(type === 'employe'){
+    const e = EMPLOYES.find(x=>x.id===id);
+    brouillon = (e.role === 'Serveur' || e.role === 'Serveuse')
+      ? { employeId:id, tableId:null, lignes:{} } : null;
+  }else{
+    brouillon = null;
+  }
+  majSurbrillance();
+  rendrePanneau();
+}
+
+function majSurbrillance(){
+  salon.querySelectorAll('.ent').forEach(el => el.classList.remove('actif'));
+  if(!selection) return;
+  if(selection.type === 'chat'){
+    const c = chatsVivants.find(c=>c.data.id===selection.id);
+    if(c) c.el.classList.add('actif');
+  }else if(selection.type === 'employe'){
+    const el = salon.querySelector(`.ent[data-employe="${selection.id}"]`);
+    if(el) el.classList.add('actif');
+  }else if(selection.type === 'table'){
+    const el = salon.querySelector(`.ent[data-table="${selection.id}"]`);
+    if(el) el.classList.add('actif');
+  }
+}
+
+function rendrePanneau(){
+  if(!selection){
+    panneau.innerHTML = `
+      <h2>Le salon</h2>
+      <p class="sous">Choisis quelqu'un dans la salle.</p>
+      <div class="vide">
+        <span class="patte">🐾</span>
+        Clique sur un <b>chat</b> pour voir sa fiche,<br>
+        sur un <b>serveur</b> pour prendre une commande,<br>
+        sur une <b>table</b> pour son occupation.
+      </div>`;
+    return;
+  }
+  if(selection.type === 'chat')    return ficheChat(CHATS.find(c=>c.id===selection.id));
+  if(selection.type === 'employe') return ficheEmploye(EMPLOYES.find(e=>e.id===selection.id));
+  if(selection.type === 'table')   return ficheTable(TABLES.find(t=>t.id===selection.id));
+}
+
+function ficheChat(c){
+  panneau.innerHTML = `
+    <h2>${c.nom}</h2>
+    <p class="sous">${c.race} · ${c.sexe}</p>
+    <div class="fiche-haut">
+      <div class="portrait">${chatSVG(c,'assis')}</div>
+      <div>
+        <span class="badge ${c.adoptable ? '' : 'rouge'}">${c.adoptable ? 'Adoptable' : 'Résident'}</span>
+        <dl class="infos" style="margin-top:8px">
+          <dt>Âge</dt><dd>${c.age} ans</dd>
+          <dt>Poids</dt><dd>${c.poids}</dd>
+        </dl>
+      </div>
+    </div>
+    <dl class="infos">
+      <dt>Robe</dt><dd>${c.motif}</dd>
+      <dt>Caractère</dt><dd style="font-weight:600">${c.caractere}</dd>
+      <dt>Vaccins</dt><dd>À jour</dd>
+      <dt>Stérilisé</dt><dd>Oui</dd>
+    </dl>
+    <div class="humeur">« ${c.consigne} »</div>
+    ${c.adoptable ? `<button class="btn" id="btn-adopt">Demander un dossier d'adoption</button>` : ''}`;
+  const b = document.getElementById('btn-adopt');
+  if(b) b.addEventListener('click', ()=> toast(`Dossier d'adoption de ${c.nom} transmis à l'accueil`));
+}
+
+function ficheTable(t){
+  const occ = CLIENTS.filter(c=>c.tableId===t.id);
+  panneau.innerHTML = `
+    <h2>${t.nom}</h2>
+    <p class="sous">${t.theme}</p>
+    <dl class="infos">
+      <dt>Capacité</dt><dd>${t.places} places</dd>
+      <dt>Occupées</dt><dd>${occ.length}</dd>
+      <dt>Libres</dt><dd>${t.places - occ.length}</dd>
+      <dt>État</dt><dd>${occ.length===0 ? 'Libre' : (occ.length===t.places ? 'Complète' : 'Partiellement occupée')}</dd>
+    </dl>
+    <div class="bloc">
+      <h3>Clients à table</h3>
+      ${occ.length ? occ.map(c=>`<div class="ligne"><span class="nom">${c.nom}</span><span class="prix">${c.boisson}</span></div>`).join('')
+                   : `<p class="sous">Table vide, prête à être dressée.</p>`}
+    </div>
+    <div class="bloc">
+      <h3>Commandes de la table</h3>
+      ${commandes.filter(c=>c.tableId===t.id).length
+        ? commandes.filter(c=>c.tableId===t.id).map(c=>`<div class="ligne"><span class="nom">${c.resume}</span><span class="prix">${euro(c.total)}</span></div>`).join('')
+        : `<p class="sous">Aucune commande.</p>`}
+    </div>`;
+}
+
+function ficheEmploye(e){
+  const sert = e.role === 'Serveur' || e.role === 'Serveuse';
+  const roleBadge = sert ? '' : (e.role === 'Barista' ? 'bleu' : 'rouge');
+  let html = `
+    <h2>${e.nom}</h2>
+    <p class="sous">${e.role} · ${e.anciennete} dans la maison</p>
+    <div class="fiche-haut">
+      <div class="portrait">${personneSVG(e,{assis:true})}</div>
+      <div>
+        <span class="badge ${roleBadge}">${e.role}</span>
+        <div class="humeur" style="margin-top:8px;font-size:16px">« ${e.note} »</div>
+      </div>
+    </div>`;
+
+  if(!sert){
+    html += `<div class="bloc"><h3>Info</h3><p class="sous">
+      ${e.role === 'Barista' ? 'Prépare les boissons au comptoir. Les commandes lui arrivent par les serveurs.'
+                             : 'S\'occupe des chats : repas, litières, temps de repos. Ne prend pas les commandes.'}
+    </p></div>`;
+    panneau.innerHTML = html;
+    return;
+  }
+
+  // --- prise de commande ---
+  const b = brouillon;
+  const totaux = () => CARTE.flatMap(g=>g.items)
+    .reduce((s,it)=> s + (b.lignes[it.id]||0) * it.prix, 0);
+  const nbArticles = CARTE.flatMap(g=>g.items).reduce((s,it)=> s + (b.lignes[it.id]||0), 0);
+
+  html += `
+    <div class="bloc">
+      <h3>1 · Table à servir</h3>
+      <div class="choix-tables">
+        ${TABLES.map(t=>`<button class="pastille ${b.tableId===t.id?'on':''}" data-t="${t.id}">
+            ${t.nom.replace('Table ','T')} <small style="font-weight:600;opacity:.75">${occupees(t.id)}/${t.places}</small>
+          </button>`).join('')}
+      </div>
+    </div>
+    <div class="bloc">
+      <h3>2 · Carte</h3>
+      <div class="carte">
+        ${CARTE.map(g=>`
+          <p class="cat">${g.cat}</p>
+          ${g.items.map(it=>`
+            <div class="ligne">
+              <span class="nom">${it.nom}</span>
+              <span class="prix">${euro(it.prix)}</span>
+              <span class="qte">
+                <button data-m="${it.id}">−</button>
+                <span>${b.lignes[it.id]||0}</span>
+                <button data-p="${it.id}">+</button>
+              </span>
+            </div>`).join('')}
+        `).join('')}
+      </div>
+      <div class="total"><span>${nbArticles} article${nbArticles>1?'s':''}</span><b>${euro(totaux())}</b></div>
+      <button class="btn" id="envoyer" ${(!b.tableId || nbArticles===0) ? 'disabled' : ''}>
+        ${!b.tableId ? 'Choisis une table' : (nbArticles===0 ? 'Carte vide' : `Envoyer à ${e.nom}`)}
+      </button>
+    </div>`;
+
+  panneau.innerHTML = html;
+
+  panneau.querySelectorAll('[data-t]').forEach(btn =>
+    btn.addEventListener('click', ()=>{ b.tableId = +btn.dataset.t; rendrePanneau(); }));
+  panneau.querySelectorAll('[data-p]').forEach(btn =>
+    btn.addEventListener('click', ()=>{ const k=btn.dataset.p; b.lignes[k]=(b.lignes[k]||0)+1; rendrePanneau(); }));
+  panneau.querySelectorAll('[data-m]').forEach(btn =>
+    btn.addEventListener('click', ()=>{ const k=btn.dataset.m; b.lignes[k]=Math.max(0,(b.lignes[k]||0)-1); rendrePanneau(); }));
+
+  const env = document.getElementById('envoyer');
+  if(env) env.addEventListener('click', ()=> envoyerCommande(e));
+}
+
+function envoyerCommande(e){
+  const b = brouillon;
+  const items = CARTE.flatMap(g=>g.items).filter(it => b.lignes[it.id] > 0);
+  const total = items.reduce((s,it)=> s + b.lignes[it.id]*it.prix, 0);
+  const resume = items.map(it=> `${b.lignes[it.id]}× ${it.nom}`).join(', ');
+  const cmd = {
+    id: commandes.length + 1,
+    tableId: b.tableId,
+    employe: e.nom,
+    resume, total,
+    statut: 'préparation'
+  };
+  commandes.push(cmd);
+  brouillon = { employeId:e.id, tableId:null, lignes:{} };
+  rendrePanneau();
+  rendreCommandes();
+  majCompteurs();
+  toast(`Commande ${TABLES.find(t=>t.id===cmd.tableId).nom} transmise au comptoir`);
+  setTimeout(()=>{ cmd.statut = 'servie'; rendreCommandes(); majCompteurs(); }, 7000);
+}
+
+function rendreCommandes(){
+  const z = document.getElementById('liste-cmd');
+  if(!commandes.length){
+    z.innerHTML = `<p class="vide2">Aucune commande. Clique sur un serveur pour en prendre une.</p>`;
+    return;
+  }
+  z.innerHTML = commandes.slice().reverse().map(c=>`
+    <div class="cmd">
+      <span class="t">${TABLES.find(t=>t.id===c.tableId).nom.replace('Table ','T')}</span>
+      <span class="d">${c.resume}<br><small style="opacity:.6">${c.employe} · ${euro(c.total)}</small></span>
+      <span class="s ${c.statut==='servie'?'servie':''}">${c.statut}</span>
+    </div>`).join('');
+}
+
+function majCompteurs(){
+  document.getElementById('cpt-places').textContent = (placesTotal - CLIENTS.length) + '/' + placesTotal;
+  document.getElementById('cpt-clients').textContent = CLIENTS.length;
+  document.getElementById('cpt-chats').textContent = CHATS.length;
+  document.getElementById('cpt-cmd').textContent = commandes.filter(c=>c.statut!=='servie').length;
+}
+
+let timerToast;
+function toast(txt){
+  const t = document.getElementById('toast');
+  document.getElementById('toast-txt').textContent = txt;
+  t.classList.add('on');
+  clearTimeout(timerToast);
+  timerToast = setTimeout(()=> t.classList.remove('on'), 3200);
+}
+
+salon.addEventListener('click', ()=>{ selection=null; brouillon=null; majSurbrillance(); rendrePanneau(); });
+
+majCompteurs();
+rendreCommandes();
+rendrePanneau();
+</script>
+
+<!--
+================================================================
+ PORTAGE ANGULAR — découpage conseillé
+================================================================
+ Composants
+  app-salon                 → <div class="salon">, orchestre le plan de salle
+  app-decor                 → le SVG de fond (statique, presentational)
+  app-table  [table]        → plateau + chaises, @Output select
+  app-personnage [personne] → le SVG de personnage (client / employé)
+  app-chat-sprite [chat]    → le SVG de chat + état (assis/marche/dort)
+  app-fiche-chat  [chat]    → panneau d'info
+  app-fiche-employe         → formulaire de commande (ReactiveForms)
+  app-ardoise-commandes     → liste des commandes en cours
+
+ Animation des chats
+  Un CatMovementService (requestAnimationFrame ou interval + NgZone.runOutsideAngular)
+  qui publie un signal/BehaviorSubject<CatPosition[]> ; le composant se lie
+  avec [style.left.%] / [style.top.%] pour éviter les cycles de change detection.
+
+ Modèle REST attendu du back Spring (JPA)
+  GET    /api/tables                 → Table{ id, nom, nbPlaces, zone }
+  GET    /api/tables/{id}/occupation  → places libres / clients assis
+  GET    /api/chats                  → Chat{ id, nom, race, age, sexe, poids,
+                                             robe, caractere, adoptable, consigne }
+  GET    /api/employes               → Employe{ id, nom, role, anciennete }
+  GET    /api/carte                  → CategorieCarte{ nom, articles[] }
+  POST   /api/commandes              → { tableId, employeId, lignes:[{articleId, qte}] }
+  PATCH  /api/commandes/{id}/statut  → EN_PREPARATION | SERVIE | PAYEE
+  POST   /api/adoptions              → { chatId, clientId }
+
+ Entités JPA : Table, Chaise(optionnel), Client, Employe, Chat, Article,
+ Commande, LigneCommande, Adoption, Visite(ticket d'entrée horodaté).
+================================================================
+-->
+</body>
+</html>
