@@ -1,0 +1,74 @@
+name: Catcafe
+
+services:
+  db:
+    image: mysql:8.4.13
+    container_name: catcafe-db
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: projet_final
+
+    volumes:
+      - db-data:/var/lib/mysql
+
+    networks:
+      - cafeChat
+
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 3s
+      retries: 10
+      interval: 5s
+
+  pma:
+    image: phpmyadmin
+    container_name: catcafe-pma
+
+    environment:
+      PMA_HOST: db
+
+    networks:
+      - cafeChat
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+  java:
+    image: catCafe:boot
+    build: ./CatCafe
+    container_name: catCafe-boot
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db/projet_final
+
+    networks:
+      - cafeChat
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+  angular:
+    image: catcafe:angular
+    build: ./CatCafeAngular
+    container_name: catcafe-angular
+
+    networks:
+      - cafeChat
+
+    ports:
+      - 83:80
+
+    depends_on:
+      - java
+      - pma
+
+networks:
+  cafeChat:
+    name: cafeChat
+
+volumes:
+  db-data:
+    name: catCafe-db-data
