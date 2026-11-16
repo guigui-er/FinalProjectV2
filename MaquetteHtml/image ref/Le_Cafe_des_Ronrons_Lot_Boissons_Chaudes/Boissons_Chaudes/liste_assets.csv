@@ -1,0 +1,8 @@
+﻿nom,libelle,description,principal,miniature,sur_table
+cafe_noir,Café noir,Tasse de café noir avec soucoupe et motif de chat,principal/cafe_noir.png,miniatures/cafe_noir.png,sur_table/cafe_noir.png
+cappuccino_coeur,Cappuccino cœur,Cappuccino avec cœur en mousse,principal/cappuccino_coeur.png,miniatures/cappuccino_coeur.png,sur_table/cappuccino_coeur.png
+latte_fleur,Latte fleur,Latte art floral et petite fleur sur la tasse,principal/latte_fleur.png,miniatures/latte_fleur.png,sur_table/latte_fleur.png
+chocolat_chaud,Chocolat chaud,"Chocolat chaud, chantilly et guimauves",principal/chocolat_chaud.png,miniatures/chocolat_chaud.png,sur_table/chocolat_chaud.png
+theiere_tasse,Théière + tasse,Service à thé avec théière fleurie et tasse,principal/theiere_tasse.png,miniatures/theiere_tasse.png,sur_table/theiere_tasse.png
+matcha_latte,Matcha latte,Matcha latte au cœur avec petit macaron,principal/matcha_latte.png,miniatures/matcha_latte.png,sur_table/matcha_latte.png
+chai_latte,Chai latte,Chai latte aux épices et cannelle,principal/chai_latte.png,miniatures/chai_latte.png,sur_table/chai_latte.png

@@ -1,0 +1,7 @@
+﻿Boisson;Principal (640x640);Miniature menu (256x256);Sur table (384x384)
+Café glacé;principaux/cafe_glace.png;miniatures_menu/cafe_glace_mini.png;poses_sur_table/cafe_glace_table.png
+Thé glacé au citron;principaux/the_glace_citron.png;miniatures_menu/the_glace_citron_mini.png;poses_sur_table/the_glace_citron_table.png
+Limonade à la fraise;principaux/limonade_fraise.png;miniatures_menu/limonade_fraise_mini.png;poses_sur_table/limonade_fraise_table.png
+Smoothie fruits rouges;principaux/smoothie_fruits_rouges.png;miniatures_menu/smoothie_fruits_rouges_mini.png;poses_sur_table/smoothie_fruits_rouges_table.png
+Milkshake chantilly-cerise;principaux/milkshake_chantilly_cerise.png;miniatures_menu/milkshake_chantilly_cerise_mini.png;poses_sur_table/milkshake_chantilly_cerise_table.png
+Bubble tea;principaux/bubble_tea.png;miniatures_menu/bubble_tea_mini.png;poses_sur_table/bubble_tea_table.png

@@ -1,0 +1,86 @@
+[
+  {
+    "fichier": "assets_decor/table_2_places.png",
+    "nom": "Table ronde 2 places",
+    "usage": "Mobilier : table 2 places",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  },
+  {
+    "fichier": "assets_decor/table_4_places.png",
+    "nom": "Table ronde 4 places",
+    "usage": "Mobilier : table 4 places",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  },
+  {
+    "fichier": "assets_decor/table_6_places.png",
+    "nom": "Table ronde 6 places",
+    "usage": "Mobilier : table 6 places",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  },
+  {
+    "fichier": "assets_decor/table_basse_gris_bleu.png",
+    "nom": "Table basse gris-bleu",
+    "usage": "Mobilier : table basse",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  },
+  {
+    "fichier": "assets_decor/etagere_tasses.png",
+    "nom": "Étagère et tasses",
+    "usage": "Décor : vaisselle et étagère",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  },
+  {
+    "fichier": "assets_decor/etagere_livres.png",
+    "nom": "Étagère à livres",
+    "usage": "Décor : livres, chat, plantes",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  },
+  {
+    "fichier": "assets_decor/plante_en_pot.png",
+    "nom": "Plante en pot",
+    "usage": "Décor : plante au sol",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  },
+  {
+    "fichier": "assets_decor/plante_suspendue.png",
+    "nom": "Plante suspendue",
+    "usage": "Décor : plafond",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  },
+  {
+    "fichier": "assets_decor/suspension_lampe.png",
+    "nom": "Suspension lumineuse",
+    "usage": "Décor : lampe au plafond",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  },
+  {
+    "fichier": "assets_decor/guirlande_lumineuse.png",
+    "nom": "Guirlande lumineuse",
+    "usage": "Décor : guirlande",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  },
+  {
+    "fichier": "assets_decor/ardoise_menu.png",
+    "nom": "Ardoise du menu",
+    "usage": "Décor : tableau mural",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  },
+  {
+    "fichier": "assets_decor/enseigne_bois.png",
+    "nom": "Enseigne en bois",
+    "usage": "Décor : enseigne du café",
+    "dimensions": "640 × 640 px",
+    "fond": "transparent"
+  }
+]
