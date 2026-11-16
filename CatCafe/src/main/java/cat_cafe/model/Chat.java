@@ -39,7 +39,7 @@ public class Chat  {
 	@Column(name="sexe",nullable = false)
     protected ChatMF sexe; // Faire un enum plutôt ?
 
-    @Column(length = 25,nullable = false)
+    @Column(name = "adopté",nullable = false)
     protected boolean adopted;
    
 	@DateTimeFormat(pattern="yyyy-MM-dd")
@@ -49,7 +49,38 @@ public class Chat  {
     @OneToOne
     @JoinColumn(name="proprietaire")
     protected Client proprietaire; 
-     
+
+    // Ajouts 16/11 pour la méthode caresser_chat dans le service ChatService
+
+    /* Idée de base : 
+    
+    - Pas de caresse sur chat endormi
+
+    - Niveau de satisfaction d'un chat évalué par le nombre de caresses 
+      reçues et la bouffe plus tard (possibilité de lâcher une petite 
+      caresse après manger quand-même).
+
+    - Caractère des chats faisant varier le nombre de caresses avant satisfaction
+      (en gros on laisse le chat s'il a déjà été caressé et qu'il est content)
+
+    - Caresses en auto-incrément qui se reset si le chat va dormir ou manger (?)
+      et qui permet de gérer la notion de satisfaction du chat (en fonction du caractère)
+      (-> un chat réservé prend 3 caresses et est satisfait, un chat sociable en prend 6)
+      Une fois que le chat est satisfait on ne peut plus accéder à la méthode caresser pour ne pas le déranger
+    */ 
+
+    @Column(nullable = false)
+    protected boolean endormi;
+
+    @Column(nullable = false)
+    protected boolean satisfait;
+
+    @Column(name = "caresses")
+    protected int caresses;
+
+    @Column(name = "caractère", nullable = false)
+    protected String caractère;
+
     public Chat() {
     }
 
@@ -128,8 +159,46 @@ public class Chat  {
         this.proprietaire = proprietaire;
     }
 
+    public boolean isEndormi() {
+        return endormi;
+    }
+
+    public void setEndormi(boolean endormi) {
+        this.endormi = endormi;
+    }
+
+    public boolean isSatisfait() {
+        return satisfait;
+    }
+
+    public void setSatisfait(boolean satisfait) {
+        this.satisfait = satisfait;
+    }
+
+    public int getCaresses() {
+        return caresses;
+    }
+
+    /* // setCaresses de base, modifié pour fitter la méthode caresse
+    public void setCaresses(int caresses) {
+        this.caresses = caresses;
+    }
+    */
+
+    public int setCaresses(int caresses) {
+        this.caresses = caresses;
+        return this.caresses;
+    }
+
+    public String getCaractère() {
+        return caractère;
+    }
+
+    public void setCaractère(String caractère) {
+        this.caractère = caractère;
+    }
+
 }
-    // Faire un toString avec des paramètres évolutifs (age, sexe)
 /* 
 - id : Integer
 - nom : String
