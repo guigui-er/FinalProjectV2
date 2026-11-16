@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity 
@@ -19,6 +20,10 @@ public class Reservation {
     private LocalDateTime dateTime;
     @Column(name="nombre_client")
     private int nbClient;
+
+    @ManyToOne
+    @JoinColumn(name="client_id")
+    private Client client;
 
     @OneToOne
     @JoinColumn(name="assise_id",unique=true)
