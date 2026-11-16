@@ -35,9 +35,10 @@ public class Chat  {
     @Column(name="age (mois)",nullable = false)
     protected int age; // Mettre l'âge en mois et faire une conversion en années avec une division euclidienne
 
-    @Column(name="age (années)",nullable = false)
-    protected long age_années = age / 12;
-    
+    @Column(name = "age_annees", nullable = false)
+    @GeneratedColumn("age_mois DIV 12") 
+    protected int ageAnnees;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name="sexe",nullable = false)
     protected ChatMF sexe; // Faire un enum plutôt ?
@@ -122,11 +123,11 @@ public class Chat  {
         this.race = race;
     }
 
-    public long getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(long age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
