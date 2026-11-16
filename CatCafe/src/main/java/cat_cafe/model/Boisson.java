@@ -19,6 +19,7 @@ public class Boisson extends Article{
 	public Boisson(Integer id, double prix, String description, boolean chaud, FormatBoisson format) {
 		super(id, prix, description);
 		this.format = format;
+		this.chaud= chaud; 
 	}
 	public boolean isChaud() {
 		return chaud;
