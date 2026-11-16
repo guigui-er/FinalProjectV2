@@ -32,9 +32,12 @@ public class Chat  {
     @Column(length = 35,nullable = false)
     protected String race;
 
-    @Column(length = 25,nullable = false)
-    protected long age; // Mettre l'âge en mois et faire une conversion en années avec une division euclidienne
+    @Column(name="age (mois)",nullable = false)
+    protected int age; // Mettre l'âge en mois et faire une conversion en années avec une division euclidienne
 
+    @Column(name="age (années)",nullable = false)
+    protected long age_années = age / 12;
+    
 	@Enumerated(EnumType.STRING)
 	@Column(name="sexe",nullable = false)
     protected ChatMF sexe; // Faire un enum plutôt ?

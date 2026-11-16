@@ -27,12 +27,11 @@ public class ChatService {
         String caresser   = chat.isEndormi() ? "Le chat est endormi, vous ne pouvez pas le caresser." : "Vous caressez le chat, il ronronne joyeusement.";
 
         chat.setCaresses(caresses_chat + caresse);
-        
+
 
         // Passer par un switch avec en case le caractère du chat ?
         return daoChat.save(chat);
     }
-
 
 
 
