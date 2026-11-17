@@ -5,9 +5,9 @@ import cat_cafe.model.Genre;
 
 public class Test {
 public static void main(String[] args) {
-    Client client1= new Client(1, "yolo", "eh", "fred", "meid", Genre.Femme);
+    Client client1= new Client(1, "fred", "meid", Genre.Femme);
 
-Client client2= new Client(2, "yala", "oh", "Abid", "jordan", Genre.Homme);
+Client client2= new Client(2, "Abid", "jordan", Genre.Homme);
 
     System.out.println(client1);
 
