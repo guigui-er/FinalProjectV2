@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import cat_cafe.dao.IDAOCommande;
 import cat_cafe.dto.response.CommandeResponse;
 import cat_cafe.model.Commande;
+import cat_cafe.model.StatutCommande;
+import cat_cafe.service.CommandeService;
 import jakarta.transaction.Transactional;
 
 @RestController 
@@ -24,12 +26,18 @@ public class CommandeRestController {
     @Autowired 
     IDAOCommande daoCommande;
 
+	@Autowired
+	CommandeService commandeService;
+
     @GetMapping
 	@Transactional 
 	public List<CommandeResponse> afficherTous() 
 	{
 	  return this.daoCommande.findAll().stream()
-	  .map(CommandeResponse::convert)
+	  .map(commande -> CommandeResponse.convert(
+    	commande,
+    	commandeService.calculerPrixTotal(commande)
+		))
 	  .toList();
 	}
 
@@ -38,9 +46,27 @@ public class CommandeRestController {
 	public CommandeResponse afficherParId(@PathVariable Integer id)
 	{
 		return daoCommande.findById(id)
-		.map(CommandeResponse::convert)
+		.map(commande -> CommandeResponse.convert(
+    	commande,
+    	commandeService.calculerPrixTotal(commande)
+		))
 		.orElse(null);
 	}
+
+	@GetMapping("/statut/{statut}")
+	@Transactional
+	public List<CommandeResponse> afficherParStatut(
+    @PathVariable StatutCommande statut
+	) {
+    	return daoCommande.findAllByStatutCommande(statut)
+        	.stream()
+        	.map(commande -> CommandeResponse.convert(
+    		commande,
+    		commandeService.calculerPrixTotal(commande)
+			))
+        	.toList();
+	}
+
 
     @DeleteMapping("/{id}")
 	public void supprimer(@PathVariable Integer id)

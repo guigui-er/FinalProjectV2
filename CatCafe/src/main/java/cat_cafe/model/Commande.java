@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Commande {
@@ -32,16 +33,23 @@ public class Commande {
 	@JoinColumn (name = "serveur_id")
 	private Serveur serveur;
 
+	@OneToOne
+	@JoinColumn(name = "reservation_id", unique = true)
+	private Reservation reservation;
+
 	@OneToMany (mappedBy = "commande")
 	private List<DetailCommande> details = new ArrayList();
 	
 	public Commande() {}
 	
-	public Commande(Integer id, LocalDateTime date, boolean accepter_paiement, StatutCommande statutCommande) {
+
+	public Commande(Integer id, LocalDateTime date, boolean accepter_paiement, StatutCommande statutCommande, Serveur serveur, Reservation reservation) {
 		this.id = id;
 		this.date = date;
 		this.accepter_paiement = accepter_paiement;
 		this.statutCommande = statutCommande;
+		this.serveur = serveur;
+		this.reservation = reservation;
 	}
 
 	public Integer getId() {
@@ -94,13 +102,18 @@ public class Commande {
 		this.serveur = serveur;
 	}
 
-	
+	public Reservation getReservation() {
+		return reservation;
+	}
+
+	public void setReservation(Reservation reservation) {
+		this.reservation = reservation;
+	}
+
 	@Override
 	public String toString() {
 		return "Commande [id=" + id + ", date=" + date + ", accepter_paiement=" + accepter_paiement
-				+ ", statutCommande=" + statutCommande + "]";
+				+ ", statutCommande=" + statutCommande + ", serveur=" + serveur + ", reservation=" + reservation + "]";
 	}
-
-	
 	
 }
