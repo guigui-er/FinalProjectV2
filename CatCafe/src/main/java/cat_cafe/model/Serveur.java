@@ -16,8 +16,8 @@ public class Serveur extends Employe{
     public Serveur() {
     }
 
-    public Serveur(Integer id, String login, String password, String nom, String prenom, Genre genre, double salaire) {
-        super(id, login, password, nom, prenom, genre, salaire);
+    public Serveur(Integer id, String nom, String prenom, Genre genre, String login, String password, double salaire) {
+        super(id, nom, prenom, genre, login, password, salaire);
     }
 
 

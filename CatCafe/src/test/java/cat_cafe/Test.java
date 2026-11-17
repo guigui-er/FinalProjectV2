@@ -13,15 +13,11 @@ Client client2= new Client(2, "yala", "oh", "Abid", "jordan", Genre.Homme);
 
     
     System.out.println(client2.getId());
-    System.out.println(client2.getLogin());
-    System.out.println(client2.getPassword());
     System.out.println(client2.getNom());
     System.out.println(client2.getPrenom());
     System.out.println(client2.getGenre());
 
     client1.setId(2);
-    client1.setLogin("caca");
-    client1.setPassword("pipi");
     client1.setNom("aaaaa");
     client1.setPrenom("bbb");
     client1.setGenre(Genre.NB);

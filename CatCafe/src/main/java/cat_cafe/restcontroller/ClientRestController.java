@@ -64,8 +64,6 @@ public class ClientRestController {
 
       Client clientBdd=  (Client) dao.findById(id).orElse(null);
 
-      clientBdd.setLogin((client.getLogin()!=null) ? client.getLogin() : clientBdd.getLogin());
-      clientBdd.setPassword((client.getPassword()!=null) ? client.getPassword() : clientBdd.getPassword());
       clientBdd.setNom((client.getNom()!=null) ? client.getNom() : clientBdd.getNom());
       clientBdd.setPrenom((client.getPrenom()!=null) ? client.getPrenom() : clientBdd.getPrenom());
       clientBdd.setGenre((client.getGenre()!=null) ? client.getGenre() : clientBdd.getGenre());
