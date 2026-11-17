@@ -22,10 +22,10 @@ public abstract class Compte {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
-    @Column(length = 30,nullable = false,unique = true)
+    @Column(length = 30,unique = true)
 	protected String login;
 
-    @Column(length = 60,nullable = false)
+    @Column(length = 60)
 	protected String password;
 
     @Column(length = 25,nullable = false)
