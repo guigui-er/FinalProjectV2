@@ -33,11 +33,11 @@ public class Chat  {
     @Column(length = 35,nullable = false)
     protected String race;
 
-    @Column(name="age_mois",nullable = false)
+    @Column(name="age (mois)",nullable = false)
     protected int age; // Mettre l'âge en mois et faire une conversion en années avec une division euclidienne
 
-    @Column(name = "age_annees", nullable = false)
-    @GeneratedColumn ("age_mois DIV 12") 
+    @Column(name = "age (annees)", nullable = false)
+    @GeneratedColumn ("age DIV 12") 
     protected int ageAnnees;
 
 	@Enumerated(EnumType.STRING)
@@ -90,13 +90,13 @@ public class Chat  {
     }
 
     public Chat(Integer id, String nom, String race, ChatMF sexe, int age, boolean adopted, LocalDate date_veto, Client proprietaire) {
-        this.adopted = adopted;
-        this.age = age;
-        this.date_veto = date_veto;
-        this.id = id;
-        this.nom = nom;
-        this.race = race;
-        this.sexe = sexe;
+        this.adopted      = adopted;
+        this.age          = age;
+        this.date_veto    = date_veto;
+        this.id           = id;
+        this.nom          = nom;
+        this.race         = race;
+        this.sexe         = sexe;
         this.proprietaire = proprietaire; // Le chat n'a pas de propriétaire par défaut
     }
 
