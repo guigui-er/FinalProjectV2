@@ -10,4 +10,5 @@ public interface IDAOCommande extends JpaRepository<Commande, Integer> {
 
     List<Commande> findAllByStatutCommande(StatutCommande statutCommande);
 
+    int countByStatutCommande(StatutCommande statutCommande);
 }

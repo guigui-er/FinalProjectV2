@@ -12,49 +12,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cat_cafe.dao.IDAOAssise;
+import cat_cafe.dao.IDAOChat;
 import cat_cafe.dao.IDAOCompte;
+import cat_cafe.dao.IDAOReservation;
 import cat_cafe.dto.response.GerantResponse;
+import cat_cafe.dto.response.StatsGerantResponse;
+import cat_cafe.model.Chat;
 import cat_cafe.model.Gerant;
+import cat_cafe.model.Reservation;
+import cat_cafe.service.GerantService;
+import cat_cafe.service.ReservationService;
+
+import org.springframework.web.bind.annotation.RequestParam;
+
 
     
 @RestController 
 @RequestMapping("/api/gerant")
 public class GerantRestController {
 
-    @Autowired
-	IDAOCompte dao;
+    private GerantService gerantService;
 
-    
-    @GetMapping
-    public List<GerantResponse> findAll(){
-        return this.dao.findAllGerants().stream()
-        //.map(gerant -> GerantResponse.convert(gerant))
-        .map(GerantResponse::convert)
-        .toList();
-    }
-
-    @GetMapping("/{id}")
-    public GerantResponse findById(@PathVariable Integer id){
-        Gerant gerant = (Gerant)this.dao.findById(id).orElse(null);
-        return GerantResponse.convert(gerant); 
-    }
-
-    @PostMapping
-    public GerantResponse add(@RequestBody Gerant gerant){
-        return GerantResponse.convert(this.dao.save(gerant));
-    }
-
-    @PutMapping ("/{id}")
-    public GerantResponse save(@PathVariable Integer id, @RequestBody Gerant gerant){
-        gerant.setId(id);
-        return GerantResponse.convert(this.dao.save(gerant));
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id){
-        this.dao.deleteById(id);
+    public GerantRestController(GerantService gerantService){
+        this.gerantService=gerantService;
     }
     
+    @GetMapping("/stats")
+    public StatsGerantResponse stats() {
+        return gerantService.stats();
+
+    }
 
 }
 
