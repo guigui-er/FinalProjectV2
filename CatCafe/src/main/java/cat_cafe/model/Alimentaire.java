@@ -9,7 +9,7 @@ import jakarta.persistence.Enumerated;
 public class Alimentaire extends Article{
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="type",nullable = false)
+	@Column(name="type")
 	protected TypeAliment type;
 
 
