@@ -33,7 +33,7 @@ public class Chat  {
     @Column(length = 35,nullable = false)
     protected String race;
 
-    @Column(name="age (mois)",nullable = false)
+    @Column(name="age_mois",nullable = false)
     protected int age; // Mettre l'âge en mois et faire une conversion en années avec une division euclidienne
 
     @Column(name = "age_annees", nullable = false)
