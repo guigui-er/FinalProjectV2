@@ -11,7 +11,7 @@ public class Boisson extends Article{
 	private boolean chaud ;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="format",nullable = false)
+	@Column(name="format")
 	protected FormatBoisson format;
 
 	public Boisson() {}
