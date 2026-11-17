@@ -22,12 +22,6 @@ public abstract class Compte {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
-    @Column(length = 30,unique = true)
-	protected String login;
-
-    @Column(length = 60)
-	protected String password;
-
     @Column(length = 25,nullable = false)
 	protected String nom;
 
@@ -39,10 +33,8 @@ public abstract class Compte {
 	protected Genre genre;
 	
 
-	public Compte(Integer id, String login, String password, String nom, String prenom, Genre genre) {
+	public Compte(Integer id, String nom, String prenom, Genre genre) {
 		this.id = id;
-		this.login = login;
-		this.password = password;
 		this.nom = nom;
 		this.prenom = prenom;
 		this.genre = genre;
@@ -56,22 +48,6 @@ public abstract class Compte {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getNom() {
@@ -103,7 +79,7 @@ public abstract class Compte {
 
 	@Override
 	public String toString() {
-		return "Compte [id=" + id + ", login=" + login + ", password=" + password + ", nom=" + nom + ", prenom="
+		return "Compte [id=" + id + ", nom=" + nom + ", prenom="
 				+ prenom + ", genre=" + genre + "]";
 	}
 
