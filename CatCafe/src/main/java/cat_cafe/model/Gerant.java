@@ -5,12 +5,10 @@ import jakarta.persistence.Entity;
 
 @Entity 
 public class Gerant extends Employe{
-
-    public Gerant(Integer id, String login, String password, String nom, String prenom, Genre civilite,
-            Double salaire) {
-        super(id, login, password, nom, prenom, civilite, salaire);
-    }
     
+    public Gerant(Integer id, String nom, String prenom, Genre genre, String login, String password, double salaire) {
+        super(id, nom, prenom, genre, login, password, salaire);
+    }
 
     public Gerant() {
     }
