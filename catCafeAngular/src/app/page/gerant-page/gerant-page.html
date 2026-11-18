@@ -1,0 +1,65 @@
+<header>
+  <div>
+    <h1>Tableau de bord</h1>
+    <button>Retour au salon</button>
+    <button>Déconnexion</button>
+  </div>
+</header>
+
+<main>
+  <div *ngIf="statsData$ | async as stats">
+    <table>
+        <thead>
+        </thead>
+        <tbody>
+            <tr>
+            <td>{{ stats.nbTablesOccupees}}/4 Tables occupées</td>
+            <td>{{ stats.nbClientsPresents}} Clients présents</td>
+            <td>{{ stats.nbCommandesEnCours }} Commandes en cours</td>
+            <td>{{ stats.montantEnCaisse }} Encaissé aujourd'hui</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
+  <div>
+    <h3>Réservations</h3>
+    <table>
+        <thead>
+          <tr>
+            <td>N°</td>
+            <td>Arrivée</td>
+            <td>Pers</td>
+          </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let reservation of reservations$ | async">
+            <td>{{ reservation.id }}</td>
+            <td>{{ reservation.dateTime }}</td>
+            <td>{{ reservation.nbClient }}</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
+<!--
+  <div>
+    <h3>Chat</h3>
+    <table>
+        <thead>
+        </thead>
+        <tbody>
+            <tr *ngFor="let chat of chats$ | async">
+            <td>{{ chat.nom }}</td>
+            <td>{{ chat.age }}</td>
+            <td>{{ chat.adopted }}</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+-->
+</main>
+
+<footer>
+</footer>

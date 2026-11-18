@@ -3,6 +3,7 @@ package cat_cafe.restcontroller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import cat_cafe.dao.IDAOAssise;
 import cat_cafe.model.Assise;
 
 @RestController 
+@CrossOrigin("*")
 @RequestMapping ("/api/assise")
 public class AssiseRestController {
     @Autowired

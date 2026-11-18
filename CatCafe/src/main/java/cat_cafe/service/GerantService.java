@@ -1,23 +1,16 @@
 package cat_cafe.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cat_cafe.dao.IDAOArticle;
 import cat_cafe.dao.IDAOAssise;
-import cat_cafe.dao.IDAOChat;
 import cat_cafe.dao.IDAOCommande;
 import cat_cafe.dao.IDAOCompte;
 import cat_cafe.dao.IDAODetailCommande;
 import cat_cafe.dao.IDAOReservation;
 import cat_cafe.dto.response.StatsGerantResponse;
-import cat_cafe.model.Article;
-import cat_cafe.model.Assise;
-import cat_cafe.model.Chat;
 import cat_cafe.model.Commande;
 import cat_cafe.model.DetailCommande;
 import cat_cafe.model.Reservation;
@@ -30,25 +23,17 @@ import jakarta.transaction.Transactional;
 public class GerantService {
 
     IDAOReservation daoReservation;
-    IDAOChat daoChat;
     IDAOAssise daoAssise;
     IDAOArticle daoArticle;
-    
-    IDAOCompte daoCompte;
     IDAOCommande daoCommande;
-    IDAODetailCommande daoDetail;
 
-    public GerantService(IDAOCompte daoCompte,IDAOCommande daoCommande,IDAODetailCommande daoDetail,
-        IDAOReservation daoReservation,IDAOChat daoChat,IDAOAssise daoAssise,IDAOArticle daoArticle)
+    public GerantService(IDAOCommande daoCommande,
+        IDAOReservation daoReservation,IDAOAssise daoAssise,IDAOArticle daoArticle)
     {
         this.daoReservation=daoReservation;
-        this.daoChat=daoChat;
         this.daoAssise=daoAssise;
         this.daoArticle=daoArticle;
-
-        this.daoCompte=daoCompte;
         this.daoCommande=daoCommande;
-        this.daoDetail = daoDetail;
     }
 
     public StatsGerantResponse stats() {
