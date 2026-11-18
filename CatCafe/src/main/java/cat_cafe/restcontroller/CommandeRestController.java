@@ -89,4 +89,11 @@ public class CommandeRestController {
       return commande;
 	}
 
+	@PutMapping("/{id}/statut/{statut}")
+	@Transactional
+	public CommandeResponse changerStatut(@PathVariable Integer id, @PathVariable StatutCommande statut) {
+		Commande commande = commandeService.changerStatut(id, statut);
+		return CommandeResponse.convert(commande, commandeService.calculerPrixTotal(commande));
+	}
+
 }
