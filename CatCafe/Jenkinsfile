@@ -28,8 +28,8 @@ pipeline {
 
             steps {
                 //dir('BOOT-SECURITY/quest-boot') {
-                    withSonarQubeEnv('sonar') {
-                        sh 'mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quest-boot'
+                    withSonarQubeEnv('sonar-id') {
+                        sh './node_modules/.bin/sonar-scanner-npm -Dsonar.projectKey=cle-projet-angular'
                     }
                 }
             //} // A voir si ça fonctionne !!
