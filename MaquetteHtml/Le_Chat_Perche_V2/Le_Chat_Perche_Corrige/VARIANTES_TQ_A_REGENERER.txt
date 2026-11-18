@@ -1,0 +1,40 @@
+Le Chat Perché — variantes trois-quarts désactivées dans bar-a-chats.html
+Ces fichiers sont conservés mais ne sont plus utilisés par le code.
+À régénérer : un seul visage / un seul contour / 2 yeux / 1 bouche.
+
+assets/persos/barista-akiko-tq-assis.webp
+assets/persos/barista-akiko-tq-buste.webp
+assets/persos/barista-akiko-tq-pas.webp
+assets/persos/barista-akiko-tq.webp
+assets/persos/client-casquette-tq-assis.webp
+assets/persos/client-casquette-tq-buste.webp
+assets/persos/client-casquette-tq-pas.webp
+assets/persos/client-casquette-tq.webp
+assets/persos/client-lunettes-tq-assis.webp
+assets/persos/client-lunettes-tq-buste.webp
+assets/persos/client-lunettes-tq-pas.webp
+assets/persos/client-lunettes-tq.webp
+assets/persos/client-violet-tq-assis.webp
+assets/persos/client-violet-tq-buste.webp
+assets/persos/client-violet-tq-pas.webp
+assets/persos/client-violet-tq.webp
+assets/persos/cliente-chapeau-tq-assis.webp
+assets/persos/cliente-chapeau-tq-buste.webp
+assets/persos/cliente-chapeau-tq-pas.webp
+assets/persos/cliente-chapeau-tq.webp
+assets/persos/cliente-mamie-tq-assis.webp
+assets/persos/cliente-mamie-tq-buste.webp
+assets/persos/cliente-mamie-tq-pas.webp
+assets/persos/cliente-mamie-tq.webp
+assets/persos/cliente-noeud-tq-assis.webp
+assets/persos/cliente-noeud-tq-buste.webp
+assets/persos/cliente-noeud-tq-pas.webp
+assets/persos/cliente-noeud-tq.webp
+assets/persos/serveur-teo-tq-assis.webp
+assets/persos/serveur-teo-tq-buste.webp
+assets/persos/serveur-teo-tq-pas.webp
+assets/persos/serveur-teo-tq.webp
+assets/persos/serveuse-lila-tq-assis.webp
+assets/persos/serveuse-lila-tq-buste.webp
+assets/persos/serveuse-lila-tq-pas.webp
+assets/persos/serveuse-lila-tq.webp
