@@ -15,9 +15,9 @@ public interface IDAOChat extends JpaRepository<Chat,Integer>{
 	public List<Chat> findAllByOrderByLibelleDesc();
 	public Integer countByGonades(String recherche); // Compter le nombre de mâles et de femelles ?
 	public Integer countByAge(String recherche); // Compter le nombre de chatons/chats ?*/
-	public Optional<Chat> findByNom(String nom);
+	public List<Chat> findByNom(String nom); // Optional = nom unique pour les chats, mettre en List plutôt
 	public List<Chat> findBySexe(ChatMF sexe);
-	public List<Chat> findByEndormi(Boolean endormi);
+	public List<Chat> findByEndormiTrue();
 	public List<Chat> findByAge(int age);
 	public List<Chat> findByAdoptedFalse();
 	public Integer countByAdoptedFalse();
