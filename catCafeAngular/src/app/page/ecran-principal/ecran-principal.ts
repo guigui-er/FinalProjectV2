@@ -42,9 +42,6 @@ export class EcranPrincipal {
       }
 
 
-
-      //this.LivreService.addObs(livre).subscribe(() => {
-          //this.refresh$.next();})
       this.clientService.save(client).subscribe(customer => {
 
         console.log(customer.id);
@@ -60,12 +57,15 @@ export class EcranPrincipal {
 
         this.reservationService.save(reserv).subscribe(() => {
 
-
-
         });
 
         }
         );
 
   }
+
+    protected EntreeClient(): void {
+    this.router.navigate([ '/client' ]);
+  }
+
 }
