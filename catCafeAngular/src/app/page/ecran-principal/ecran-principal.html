@@ -1,0 +1,20 @@
+<p>ecran-principal works!</p>
+
+<p>{{reservation.client.nom}}</p>
+<p>{{reservation.client.prenom}}</p>
+<p>{{reservation.client.genre}}</p>
+<p>{{reservation.nbClient}}</p>
+<p>{{reservation.dateTime| date:'dd/MM/yyyy HH:mm'}}</p>
+
+
+<p>Tables dispo</p>
+@for (t of tabledispo; track t.id) {
+
+<div>
+    <button type="button" (click)="SelectionTable(t)">{{`table id : ${t.id} avec ${t.capacite} places !`}}</button>
+</div>
+
+
+}
+
+

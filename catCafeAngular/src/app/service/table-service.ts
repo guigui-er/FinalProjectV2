@@ -33,6 +33,6 @@ export class TableService {
 
 
   public deleteById(id: string): Observable<void> {
-    return this.http.delete<void>(`${ this.apiUrl }/${ id }`);
+    return this.http.delete<void>(`http://localhost:8080/api${ this.apiUrl }/${ id }`);
   }
 }

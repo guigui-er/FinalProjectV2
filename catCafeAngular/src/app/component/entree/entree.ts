@@ -1,5 +1,4 @@
-
-
+import { Reservation } from './../../model/reservation';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, startWith, Subject, switchMap } from 'rxjs';
 import { Component, inject, OnInit } from '@angular/core';
@@ -8,8 +7,10 @@ import { ClientService } from '../../service/client-service';
 import { ReservationService } from '../../service/reservation-service';
 import { TableService } from '../../service/table-service';
 import { Client } from '../../model/client';
-import { Reservation } from '../../model/reservation';
+
 import { Table } from '../../model/table';
+import { Router } from '@angular/router';
+import { Genre } from '../../model/genre';
 
 @Component({
   imports: [CommonModule,ReactiveFormsModule],
@@ -23,6 +24,7 @@ export class Entree implements OnInit {
   private reservationService: ReservationService = inject(ReservationService);
   private tableService: TableService = inject(TableService);
   private formBuilder: FormBuilder = inject(FormBuilder);
+  private router: Router = inject(Router);
 
   protected clientForm!: FormGroup;
   protected prenomCtrl!: FormControl;
@@ -61,7 +63,10 @@ export class Entree implements OnInit {
         id: this.editingClientId,
         nom:this.nomCtrl.value,
         prenom:this.prenomCtrl.value,
+        genre:Genre.Femme
       };
+
+
 
 
 
@@ -73,10 +78,24 @@ export class Entree implements OnInit {
         this.tables=tables;
         console.log(tables);
 
+        if (tables.length!=0)
+        {
+          const reservation: Reservation = {
+            id:this.editingReservationId,
+            dateTime: new Date(),
+            nbClient: this.nbClientCtrl.value,
+            client:client
+            };
+          this.reservationService.ReservationForm=reservation;
+          this.reservationService.Table=this.tables;
+          this.router.navigate([ '/ecranPrincipal' ]);
+        }
+
         this.editingClientId = undefined;
+        this.editingReservationId = undefined;
+
 
         //this.tables=undefined;
-
         this.nbClient=this.nbClientCtrl.value;
 
         this.clientForm.reset();

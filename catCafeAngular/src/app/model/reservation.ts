@@ -3,9 +3,9 @@ import { Table } from "./table";
 
 export interface Reservation {
     id?: number,
-    dateTime: string,
+    dateTime: Date,
     nbClient: number,
     client:Client,
-    assise:Table
+    assise?:Table
 
 }

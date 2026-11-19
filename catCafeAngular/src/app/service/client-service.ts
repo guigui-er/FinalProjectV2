@@ -7,26 +7,28 @@ import { Client } from '../model/client';
   providedIn: 'root',
 })
 export class ClientService {
+
   private http: HttpClient = inject(HttpClient);
   private apiUrl: string = '/client';
 
+
   public findAll(): Observable<Client[]> {
-      return this.http.get<Client[]>(this.apiUrl);
+      return this.http.get<Client[]>(`http://localhost:8080/api${this.apiUrl}`);
   }
 
   public findById(id: number): Observable<Client> {
-    return this.http.get<Client>(`${ this.apiUrl }/${ id }`);
+    return this.http.get<Client>(`http://localhost:8080/api${this.apiUrl}/${ id }`);
   }
 
   public save(client: Client): Observable<Client> {
     if (!client.id) {
-      return this.http.post<Client>(this.apiUrl, client);
+      return this.http.post<Client>(`http://localhost:8080/api${this.apiUrl}`, client);
     }
 
-    return this.http.put<Client>(`${ this.apiUrl }/${ client.id }`, client);
+    return this.http.put<Client>(`http://localhost:8080/api${this.apiUrl}/${ client.id }`, client);
   }
 
   public deleteById(id: string): Observable<void> {
-    return this.http.delete<void>(`${ this.apiUrl }/${ id }`);
+    return this.http.delete<void>(`http://localhost:8080/api${this.apiUrl}/${ id }`);
   }
 }
