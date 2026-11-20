@@ -16,7 +16,33 @@
             <td>{{ stats.nbTablesOccupees}}/4 Tables occupées</td>
             <td>{{ stats.nbClientsPresents}} Clients présents</td>
             <td>{{ stats.nbCommandesEnCours }} Commandes en cours</td>
-            <td>{{ stats.montantEnCaisse }} Encaissé aujourd'hui</td>
+            <td>{{ stats.montantEnCaisse }} € Encaissé aujourd'hui</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
+  <div>
+    <h3>État des tables</h3>
+    <table>
+        <thead>
+          <tr>
+            <td>N°</td>
+            <td>Capacité</td>
+            <td>Statut</td>
+          </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let assise of assises$ | async">
+            <td>{{ assise.id }}</td>
+            <td>{{ assise.capacite }}</td>
+            <td>
+              <span *ngIf="assise.complet; else nonComplet">Occupée</span>
+              <ng-template #nonComplet> 
+                <span>Libre</span>
+              </ng-template>
+            </td>
             </tr>
         </tbody>
     </table>
@@ -43,22 +69,27 @@
     </table>
   </div>
 
-<!--
+
   <div>
-    <h3>Chat</h3>
+    <h3>Nos chats</h3>
     <table>
         <thead>
         </thead>
         <tbody>
             <tr *ngFor="let chat of chats$ | async">
             <td>{{ chat.nom }}</td>
-            <td>{{ chat.age }}</td>
-            <td>{{ chat.adopted }}</td>
+            <td>{{ chat.age }} mois</td>
+            <td>
+            <span *ngIf="chat.adopted; else nonAdopte">Adoptable</span>
+              <ng-template #nonAdopte> 
+                <span>Adopté</span>
+              </ng-template>
+            </td>
             </tr>
         </tbody>
     </table>
   </div>
--->
+
 </main>
 
 <footer>
