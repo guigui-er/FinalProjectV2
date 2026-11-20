@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cat_cafe.dao.IDAOAssise;
 import cat_cafe.dao.IDAOChat;
+import cat_cafe.dao.IDAOCommande;
 import cat_cafe.dao.IDAOCompte;
 import cat_cafe.dao.IDAOReservation;
 import cat_cafe.dto.response.GerantResponse;
 import cat_cafe.dto.response.StatsGerantResponse;
+import cat_cafe.dto.response.TableAssisesResponse;
 import cat_cafe.model.Chat;
+import cat_cafe.model.Commande;
 import cat_cafe.model.Gerant;
 import cat_cafe.model.Reservation;
 import cat_cafe.service.GerantService;
@@ -35,15 +38,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class GerantRestController {
 
     private GerantService gerantService;
+    private IDAOAssise daoAssise;
+    private IDAOReservation daoReservation;
+    private IDAOCommande daoCommande;
 
-    public GerantRestController(GerantService gerantService){
+    public GerantRestController(GerantService gerantService, IDAOAssise daoAssise, IDAOReservation daoReservation, IDAOCommande daoCommande){
         this.gerantService=gerantService;
+        this.daoAssise= daoAssise;
+        this.daoReservation = daoReservation;
+        this.daoCommande = daoCommande;
     }
     
     @GetMapping("/stats")
     public StatsGerantResponse stats() {
         return gerantService.stats();
 
+    }
+
+    @GetMapping("/etattable")
+    public List<TableAssisesResponse> findAllAssisesResponse(){
+        return this.daoAssise.findAll()
+        .stream()
+        .map(assise -> {
+            Reservation reservation = gerantService.trouverReservation(assise);
+            Commande commande = gerantService.trouverCommande(reservation);
+            if (commande == null) {
+                reservation = null;
+            }
+            return TableAssisesResponse.convert(assise, reservation, commande);
+        })
+        .toList();
     }
 
 }

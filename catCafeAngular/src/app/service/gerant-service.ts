@@ -9,6 +9,7 @@ import { Assise } from '../model/assise';
 import { Article } from '../model/article';
 import { Boisson } from '../model/boisson';
 import { Alimentaire } from '../model/alimentaire';
+import { TableAssisesResponse } from '../model/table-assise';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,10 @@ export class GerantService {
         return this.http.get<StatsGerantResponse>(this.apiUrl);
     }
 
+    public findAllAssisesResponse(): Observable<TableAssisesResponse[]>{
+        return this.http.get<TableAssisesResponse[]>("http://localhost:8080/api/gerant/etattable");
+    }
+
     public findAllReservations(): Observable<Reservation[]>{
         return this.http.get<Reservation[]>("http://localhost:8080/api/reservation");
     }
@@ -29,7 +34,7 @@ export class GerantService {
         return this.http.get<Chat[]>("http://localhost:8080/api/chat");
     }
 
-    public findAllAssise(): Observable<Assise[]>{
+    public findAllAssises(): Observable<Assise[]>{
         return this.http.get<Assise[]>("http://localhost:8080/api/assise");
     }
 

@@ -11,6 +11,7 @@ import cat_cafe.dao.IDAOCompte;
 import cat_cafe.dao.IDAODetailCommande;
 import cat_cafe.dao.IDAOReservation;
 import cat_cafe.dto.response.StatsGerantResponse;
+import cat_cafe.model.Assise;
 import cat_cafe.model.Commande;
 import cat_cafe.model.DetailCommande;
 import cat_cafe.model.Reservation;
@@ -85,5 +86,22 @@ public class GerantService {
         }return nb;
     }
     */
+
+    public Reservation trouverReservation(Assise assise){
+        return this.daoReservation.findByAssiseIdOrderByDateTimeDesc(assise.getId()).orElse(null);
+    }
+
+    public Commande trouverCommande(Reservation reservation){
+        if (reservation == null) {
+            return null;
+        }
+        Commande commande = this.daoCommande.findByReservationId(reservation.getId()).orElse(null);
+        if (commande == null){
+            return null;
+        }
+        if(commande.getStatutCommande() != StatutCommande.Terminee && commande.getStatutCommande() != StatutCommande.Annulee){
+            return commande;
+        }return null;
+    }
 
 }

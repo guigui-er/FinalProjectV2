@@ -29,14 +29,26 @@
           <tr>
             <td>N°</td>
             <td>Capacité</td>
+            <td>Clients</td>
+            <td>Commande en cours</td>
             <td>Statut</td>
           </tr>
         </thead>
 
         <tbody>
-            <tr *ngFor="let assise of assises$ | async">
-            <td>{{ assise.id }}</td>
-            <td>{{ assise.capacite }}</td>
+            <tr *ngFor="let assise of assisesEtat$ | async">
+            <td>T{{ assise.id }}</td>
+            <td>{{ assise.capacite }} places</td>
+            <td>{{ assise.clientNom }}</td>
+            <td>
+              <ng-container *ngIf="assise.commandeStatut; else pasDeCommande">
+                <span *ngIf="assise.commandeStatut === 'En_cours'">En cours</span>
+                <span *ngIf="assise.commandeStatut === 'Servie'">Servie</span>
+              </ng-container>
+              <ng-template #pasDeCommande> 
+                <span>-</span>
+              </ng-template>
+              </td>
             <td>
               <span *ngIf="assise.complet; else nonComplet">Occupée</span>
               <ng-template #nonComplet> 
