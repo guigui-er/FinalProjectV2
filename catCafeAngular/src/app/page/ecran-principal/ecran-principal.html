@@ -6,8 +6,11 @@
 <p>{{reservation.nbClient}}</p>
 <p>{{reservation.dateTime| date:'dd/MM/yyyy HH:mm'}}</p>
 
+<div>
+    <button type="button" (click)="commande()">decclencher lecture commande </button>
+</div>
 
-<p>Tables dispo</p>
+<p>liste des Tables dispo</p>
 @for (t of tabledispo; track t.id) {
 
 <div>
@@ -18,3 +21,28 @@
 <div>
     <button type="button" (click)="EntreeClient()">Client</button>
 </div>
+
+<div>
+    <button type="button" (click)="EntreeClient()">Caisse</button>
+</div>
+
+<div>
+    <button type="button" (click)="EntreeClient()">Espace gérant </button>
+</div>
+
+<p>liste table </p>
+ @for (t of (Tables$ | async) ; track t.id){
+    <div>
+      <button [disabled]="!t.complet" type="button" (click)="commander(t)">{{`table id : ${t.id} avec ${t.capacite} places !`}}</button>
+    </div>
+  }
+
+
+  <p>En ce moment </p>
+ @for (c of (Commandes$ | async) ; track c.id){
+
+  <p>{{`table id : ${c.reservation.assise?.id}  client : ${c.reservation.client.nom}- ${c.reservation.assise?.capacite} places statut commande : ${c.statutCommande}  !`}}</p>
+
+  }
+
+

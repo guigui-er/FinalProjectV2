@@ -3,12 +3,14 @@ package cat_cafe.dto.response;
 import java.util.List;
 
 import cat_cafe.model.Commande;
+import cat_cafe.model.StatutCommande;
 
 public record CommandeResponse(
     Integer commandeId, 
     Integer idReservation,
     List <DetailCommandeResponse> details,
-    double prixTotal
+    double prixTotal,
+    StatutCommande statutCommande
 ) {
 
      public static CommandeResponse convert(Commande commande, double prixTotal) {
@@ -27,7 +29,8 @@ public record CommandeResponse(
             commande.getId(),
             idReservation,
             details,
-            prixTotal
+            prixTotal,
+            commande.getStatutCommande()
         );
      }
 }
