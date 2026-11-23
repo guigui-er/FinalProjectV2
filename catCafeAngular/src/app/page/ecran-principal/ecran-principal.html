@@ -1,4 +1,56 @@
 
+<header class="barre">
+  <div class="logo">Le Chat Perché</div>
+  <div class="actions">
+    <button class="btn" id="btn-accueil" (click)="EntreeClient()">🚪 Accueillir des clients</button>
+    <button class="btn" id="btn-caisse" (click)="EntreeClient()">💶 Caisse</button>
+    <button class="btn" id="btn-gerant" (click)="EntreeClient()">🔒 Espace gérant</button>
+  </div>
+</header>
+<div class="zone-salon">
+  @if(reservation?.id==undefined)
+  {
+    <div class="bandeau" id="bandeau">
+      <span class="pastille-jaune"></span>
+      <span id="bandeau-texte">{{`Bienvenue ${reservation?.client.nom} ${reservation?.client.prenom} ! Choisissez une table pour ${reservation.nbClient} personne`}}</span>
+    </div>
+  }
+</div>
+
+ <div class="salon-et-panneau">
+      <div>
+        <div class="cadre-salon" id="cadre-salon"><div class="scene" id="scene"></div></div>
+        <div class="legende">
+          <span><i style="background:#f5c443"></i>Table disponible pour votre groupe</span>
+          <span><i style="background:#f6b8c0"></i>Table occupée — cliquez pour commander</span>
+          <span><i style="background:#a8cf8e"></i>Chats — cliquez pour faire connaissance</span>
+          <span><i style="background:#e8b46a"></i>Comptoir / caisse — pour régler l'addition</span>
+        </div>
+      </div>
+      <!-- panneau de droite : le carnet du café, toujours visible -->
+      <aside class="panneau-droit" id="panneau-droit" aria-label="Carnet du café">
+        <section class="boite carnet-jardin" id="panneau-accueil">
+          <h2>Carnet du café</h2>
+          <p class="sous">Ce qui se passe au café, en direct.</p>
+          <ul class="astuces">
+            <li><span>🚪</span><span><b>Porte d'entrée</b> — accueillir un groupe</span></li>
+            <li><span>🍵</span><span><b>Table occupée</b> — passer commande</span></li>
+            <li><span>🐾</span><span><b>Chat</b> — sa fiche, l'adopter</span></li>
+            <li><span>💶</span><span><b>Comptoir</b> — régler l'addition</span></li>
+            <li><span>🔒</span><span><b>Porte « Privé »</b> — espace gérant</span></li>
+          </ul>
+          <div class="menu-cat">En ce moment</div>
+            @for (c of (Commandes$ | async) ; track c.id){
+
+              <div class="resume-ligne"><b>{{`T${c.reservation.assise?.id}`}}</b><span>{{`client : ${c.reservation.client.nom}- ${c.reservation.assise?.capacite}`}}</span><span > {{`${c.statutCommande}`}}</span></div>
+            }
+            @if (statsChats$ | async; as s) {
+              <div class="resume-ligne"><b>🐾</b><span>{{`${s.aAdopter} chats à adopter sur ${s.total}`}}</span></div>
+                }
+        </section>
+      </aside>
+    </div>
+
 
 <div>
     <button type="button" (click)="commande()">decclencher lecture commande </button>
@@ -12,17 +64,6 @@
 </div>
 }
 
-<div>
-    <button type="button" (click)="EntreeClient()">Client</button>
-</div>
-
-<div>
-    <button type="button" (click)="EntreeClient()">Caisse</button>
-</div>
-
-<div>
-    <button type="button" (click)="EntreeClient()">Espace gérant </button>
-</div>
 
 <p>liste table </p>
  @for (t of (Tables$ | async) ; track t.id){
@@ -39,14 +80,3 @@
     </div>
   }
 
-  <p>En ce moment </p>
- @for (c of (Commandes$ | async) ; track c.id){
-
-  <p>{{`table id : ${c.reservation.assise?.id}  client : ${c.reservation.client.nom}- ${c.reservation.assise?.capacite} places statut commande : ${c.statutCommande}  !`}}</p>
-
-  }
-<!--<div class="resume-ligne"><b>🐾</b><span>{{`${nombree de chat adopte } chats à adopter sur ${nombree de chat adopte total  }`}}</span></div>-->
-
-@if (statsChats$ | async; as s) {
-  <div class="resume-ligne"><b>🐾</b><span>{{`${s.aAdopter} chats à adopter sur ${s.total}`}}</span></div>
-}

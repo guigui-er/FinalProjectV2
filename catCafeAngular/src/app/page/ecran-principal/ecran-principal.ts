@@ -40,7 +40,7 @@ export class EcranPrincipal implements OnInit{
   protected Chats$!: Observable<Chat[]>;
   protected statsChats$!: Observable<{ aAdopter: number; total: number }>;
 
-  protected reservation:Reservation=this.reservationService.ReservationForm;
+  protected reservation!:Reservation;
 
 
   protected commandes?: Commande[];
@@ -49,6 +49,8 @@ export class EcranPrincipal implements OnInit{
   protected tabledispo:Table[]=this.reservationService.Table;
 
     ngOnInit(): void {
+
+       this.reservation=this.reservationService.ReservationForm;
 
       this.Commandes$ = this.refresh$.pipe(
         // On initialise notre Observable
@@ -101,6 +103,8 @@ export class EcranPrincipal implements OnInit{
       aAdopter: chats.filter(c => !c.adopted).length,
       total: chats.length
       }))
+
+
 );
 
 
@@ -109,7 +113,7 @@ export class EcranPrincipal implements OnInit{
 
   protected SelectionTable(tableSelect:Table): void {
 
-      const client: Client = this.reservationService.ReservationForm.client;
+      const client: Client = this.reservation.client;
       const table:Table={
         id: tableSelect.id,
         complet:true,
@@ -130,9 +134,13 @@ export class EcranPrincipal implements OnInit{
           assise:table
         }
 
-        this.reservationService.save(reserv).subscribe(() => {
-          this.refresh$.next();
+        this.reservationService.save(reserv).subscribe(reservation => {
 
+          console.log(`Avant affectation reservation bdd ${this.reservation.id}`);
+          this.reservation=reservation;
+          console.log(`Après affectation reservation bdd ${this.reservation.id}`);
+          console.log(`Après affectation reservation bdd ${this.reservation.id}`);
+          this.refresh$.next();
         });
 
         }
