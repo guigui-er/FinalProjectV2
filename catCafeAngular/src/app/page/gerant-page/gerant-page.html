@@ -55,9 +55,9 @@
                     </ng-template>
                     </td>
                   <td>
-                    <span *ngIf="assise.complet; else nonComplet">Occupée</span>
+                    <span class="statut occupee" *ngIf="assise.complet; else nonComplet">Occupée</span>
                     <ng-template #nonComplet> 
-                      <span>Libre</span>
+                      <span class="statut libre">Libre</span>
                     </ng-template>
                   </td>
                   </tr>
@@ -96,9 +96,9 @@
                   <td>{{ reservation.prixTotal }} €</td>
                   <td>
                     <ng-container *ngIf="reservation.commandeStatut; else pasDeCommande">
-                      <span *ngIf="reservation.accepterPaiement && reservation.commandeStatut === 'Terminee'">Payée</span>
-                      <span *ngIf="reservation.commandeStatut === 'En_cours'">En cours</span>
-                      <span *ngIf="reservation.commandeStatut === 'Servie'">Servie</span>
+                      <span class="statut payee" *ngIf="reservation.accepterPaiement && reservation.commandeStatut === 'Terminee'">Payée</span>
+                      <span class="statut encours" *ngIf="reservation.commandeStatut === 'En_cours'">En cours</span>
+                      <span lass="statut servie" *ngIf="reservation.commandeStatut === 'Servie'">Servie</span>
                     </ng-container>
                     <ng-template #pasDeCommande> 
                       <span>-</span>

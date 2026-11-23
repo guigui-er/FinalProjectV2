@@ -83,7 +83,7 @@ header{
     font-size:12px;
     text-transform:uppercase;
     letter-spacing:.08em;
-    color:var(--terracotta-fonce);}
+    color:var(--encre-doux);}
 
 .kpi h3{
     font-size: 30px;
@@ -128,7 +128,7 @@ table thead td{
     font-size:12px;
     text-transform:uppercase;
     letter-spacing:.08em;
-    color:var(--terracotta-fonce);
+    color:var(--encre-doux);
     border-bottom: 3px solid var(--brun);
     
 }
@@ -137,4 +137,26 @@ table thead td{
 table tbody td{
     padding: 10px 12px;
     border-bottom: 1px dotted var(--bois);
+}
+
+.statut{
+    border-radius: 10px;
+    padding: 3px 6px;
+}
+
+
+
+.libre{
+    background:rgba(130, 220, 130, 0.349);
+    border:1.5px solid rgba(15, 177, 15, 0.415);
+}
+
+.payee{
+    background:rgba(113, 201, 239, 0.284);
+    border:1.5px solid rgba(32, 78, 125, 0.571);
+}
+
+.encours, .occupee{
+    background:rgba(240, 197, 240, 0.461);
+    border:1.5px solid rgba(163, 55, 163, 0.56);
 }
