@@ -67,15 +67,36 @@
           <tr>
             <td>N°</td>
             <td>Arrivée</td>
-            <td>Pers</td>
+            <td>Table</td>
+            <td>Client</td>
+            <td>Pers.</td>
+            <td>Commandes</td>
+            <td>Total</td>
+            <td>Statut</td>
           </tr>
         </thead>
 
         <tbody>
-            <tr *ngFor="let reservation of reservations$ | async">
-            <td>{{ reservation.id }}</td>
+            <tr *ngFor="let reservation of reservationsEtat$ | async">
+            <td>R{{ reservation.id }}</td>
             <td>{{ reservation.dateTime }}</td>
+            <td>T{{ reservation.assiseId}}</td>
+            <td>{{ reservation.clientPrenom }} {{ reservation.clientNom }}</td>
             <td>{{ reservation.nbClient }}</td>
+            <td>
+              <span *ngFor="let detail of reservation.commandeResponse?.details">{{ detail.qte }}x {{ detail.article?.description }} </span>
+            </td>
+            <td>{{ reservation.prixTotal }} €</td>
+            <td>
+              <ng-container *ngIf="reservation.commandeStatut; else pasDeCommande">
+                <span *ngIf="reservation.accepterPaiement && reservation.commandeStatut === 'Terminee'">Payée</span>
+                <span *ngIf="reservation.commandeStatut === 'En_cours'">En cours</span>
+                <span *ngIf="reservation.commandeStatut === 'Servie'">Servie</span>
+              </ng-container>
+              <ng-template #pasDeCommande> 
+                <span>-</span>
+              </ng-template>
+            </td>
             </tr>
         </tbody>
     </table>

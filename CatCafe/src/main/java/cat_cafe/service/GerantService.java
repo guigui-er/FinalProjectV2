@@ -91,7 +91,7 @@ public class GerantService {
         return this.daoReservation.findByAssiseIdOrderByDateTimeDesc(assise.getId()).orElse(null);
     }
 
-    public Commande trouverCommande(Reservation reservation){
+    public Commande trouverCommandeTable(Reservation reservation){
         if (reservation == null) {
             return null;
         }
@@ -100,6 +100,19 @@ public class GerantService {
             return null;
         }
         if(commande.getStatutCommande() != StatutCommande.Terminee && commande.getStatutCommande() != StatutCommande.Annulee){
+            return commande;
+        }return null;
+    }
+
+    public Commande trouverCommandeReservation(Reservation reservation){
+        if (reservation == null) {
+            return null;
+        }
+        Commande commande = this.daoCommande.findByReservationId(reservation.getId()).orElse(null);
+        if (commande == null){
+            return null;
+        }
+        if(commande.getStatutCommande() != StatutCommande.Annulee){
             return commande;
         }return null;
     }

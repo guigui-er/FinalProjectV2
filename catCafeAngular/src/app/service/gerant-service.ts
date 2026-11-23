@@ -10,6 +10,7 @@ import { Article } from '../model/article';
 import { Boisson } from '../model/boisson';
 import { Alimentaire } from '../model/alimentaire';
 import { TableAssisesResponse } from '../model/table-assise';
+import { TableReservationsResponse } from '../model/table-reservation';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,10 @@ export class GerantService {
 
     public findAllAssisesResponse(): Observable<TableAssisesResponse[]>{
         return this.http.get<TableAssisesResponse[]>("http://localhost:8080/api/gerant/etattable");
+    }
+
+    public findAllReservationsResponse(): Observable<TableReservationsResponse[]>{
+        return this.http.get<TableReservationsResponse[]>("http://localhost:8080/api/gerant/etatreservation");
     }
 
     public findAllReservations(): Observable<Reservation[]>{

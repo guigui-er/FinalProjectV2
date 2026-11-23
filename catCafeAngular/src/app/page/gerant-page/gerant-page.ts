@@ -10,6 +10,7 @@ import { Article } from '../../model/article';
 import { StatsGerantResponse } from '../../model/stats-gerant';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { TableAssisesResponse } from '../../model/table-assise';
+import { TableReservationsResponse } from '../../model/table-reservation';
 
 @Component({
   imports: [RouterLink,CommonModule,AsyncPipe],
@@ -30,6 +31,8 @@ export class GerantPage {
   protected statsData$?: Observable<StatsGerantResponse>;
 
   protected assisesEtat$!: Observable<TableAssisesResponse[]>;
+
+  protected reservationsEtat$!: Observable<TableReservationsResponse[]>;
   
   ngOnInit(): void {
     this.title.setTitle("Page du gérant");
@@ -41,6 +44,7 @@ export class GerantPage {
 
     this.statsData$ = this.gerantService.stats();
     this.assisesEtat$ = this.gerantService.findAllAssisesResponse();
+    this.reservationsEtat$ = this.gerantService.findAllReservationsResponse();
   }
 
 
