@@ -28,9 +28,9 @@
           <span class="prix">{{ boisson.prix }} €</span>
             
           <div class="qte">
-            <button type="button">−</button>
-            <span>0</span>
-            <button type="button">+</button>
+            <button type="button" (click)="retirer(boisson,'chaude')">−</button>
+            <span>{{ getQuantite(boisson, 'chaude') }}</span>
+            <button type="button" (click)="ajouter(boisson,'chaude')">+</button>
           </div>
       </div>
         } @empty {
@@ -48,9 +48,9 @@
             <span class="prix">{{ boisson.prix }} €</span>
 
             <div class="qte">
-                <button type="button">−</button>
-                <span>0</span>
-                <button type="button">+</button>
+                <button type="button" (click)="retirer(boisson,'froide')">−</button>
+                <span>{{ getQuantite(boisson, 'froide') }}</span>
+                <button type="button" (click)="ajouter(boisson,'froide')">+</button>
             </div>
         </div>
             } @empty {
@@ -68,9 +68,9 @@
         <span class="prix">{{ gateau.prix }} €</span>
 
         <div class="qte">
-          <button type="button">−</button>
-          <span>0</span>
-          <button type="button">+</button>
+          <button type="button" (click)="retirer(gateau,'gateau')">−</button>
+          <span>{{ getQuantite(gateau, 'gateau') }}</span>
+          <button type="button" (click)="ajouter(gateau,'gateau')">+</button>
         </div>
       </div>
         } @empty {
@@ -88,9 +88,9 @@
         <span class="prix">{{ glace.prix }} €</span>
 
         <div class="qte">
-          <button type="button">−</button>
-          <span>0</span>
-          <button type="button">+</button>
+          <button type="button" (click)="retirer(glace,'glace')">−</button>
+          <span>{{ getQuantite(glace, 'glace') }}</span>
+          <button type="button" (click)="ajouter(glace,'glace')">+</button>
         </div>
       </div>
         } @empty {
@@ -108,9 +108,9 @@
         <span class="prix">{{ plat.prix }} €</span>
 
         <div class="qte">
-          <button type="button">−</button>
-          <span>0</span>
-          <button type="button">+</button>
+          <button type="button" (click)="retirer(plat,'plat')">−</button>
+          <span>{{ getQuantite(plat, 'plat') }}</span>
+          <button type="button" (click)="ajouter(plat,'plat')">+</button>
         </div>
       </div>
         } @empty {
@@ -128,9 +128,9 @@
         <span class="prix">{{ recette.prix }} €</span>
 
         <div class="qte">
-          <button type="button">−</button>
-          <span>0</span>
-          <button type="button">+</button>
+          <button type="button" (click)="retirer(recette,'recettesSpeciale')">−</button>
+          <span>{{ getQuantite(recette, 'recettesSpeciale') }}</span>
+          <button type="button" (click)="ajouter(recette,'recettesSpeciale')">+</button>
         </div>
       </div>
         } @empty {
@@ -142,12 +142,12 @@
 
   <hr>
 
-  <!-- Pied de la commande -->
+  <!-- Footer de la commande -->
   <div class="footer">
 
-    <span>Total : <b>0,00 €</b></span>
+    <span>Total : <b>{{ getTotal() | number:'1.2-2' }} €</b></span> <!-- Avec DecimalPipe pour afficher seulement 2 chiffres max après le point  -->
 
-    <button class="btn-commander" disabled>Commander</button>
+    <button class="btn-commander" type="bouton" (click)="commander()" [disabled]="getTotal() === 0">Commander</button>
 
   </div>
 
