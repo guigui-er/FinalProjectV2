@@ -4,7 +4,7 @@
   <!-- En-tête de la commande -->
   <div class="header">
 
-    <button class="btn-fermer" aria-label="Fermer">×</button>
+    <button class="btn-fermer">×</button>
 
     <h2>Menu du Café</h2>
 
@@ -15,54 +15,63 @@
 
   </div>
 
+  <hr>
+
   <!-- Contenu du menu -->
   <div class="contenu">
 
-    <!-- Boissons chaudes -->
+    <!-- BOISSONS CHAUDES -->
     <section class="categorie">
-      <h4>Boissons chaudes</h4>
+        <h4>Boissons chaudes</h4>
 
-      <!-- Les boissons chaudes seront affichées ici -->
-      <div class="ligne-menu">
-        <span class="ico">☕</span>
-        <span class="nom">Café expresso</span>
-        <span class="prix">2,20 €</span>
-
-        <div class="qte">
-          <button type="button">−</button>
-          <span>0</span>
-          <button type="button">+</button>
-        </div>
+      @for (boisson of (boissonschaudes$ | async); track boisson.id) {
+        <div class="ligne-menu">
+          <span class="nom">{{ boisson.description }}</span>
+          <span class="prix">{{ boisson.prix }} €</span>
+            
+          <div class="qte">
+            <button type="button">−</button>
+            <span>0</span>
+            <button type="button">+</button>
+          </div>
       </div>
+        } @empty {
+        <p class="vide">Aucune boisson chaude disponible.</p>
+        }
     </section>
 
-    <!-- Boissons fraîches -->
+    <hr>
+
+    <!-- BOISSONS FROIDES -->
     <section class="categorie">
-      <h4>Boissons fraîches</h4>
+      <h4>Boissons froides</h4>
+      
+      @for (boisson of (boissonsfroides$ | async); track boisson.id) {
+        <div class="ligne-menu">
+            <span class="nom">{{ boisson.description }}</span>
+            <span class="prix">{{ boisson.prix }} €</span>
 
-      <!-- Les boissons froides seront affichées ici -->
-      <div class="ligne-menu">
-        <span class="ico">🧃</span>
-        <span class="nom">Jus de fruits</span>
-        <span class="prix">3,00 €</span>
-
-        <div class="qte">
-          <button type="button">−</button>
-          <span>0</span>
-          <button type="button">+</button>
+            <div class="qte">
+                <button type="button">−</button>
+                <span>0</span>
+                <button type="button">+</button>
+            </div>
         </div>
-      </div>
+            } @empty {
+            <p class="vide">Aucune boisson froide disponible.</p>
+            }
     </section>
 
-    <!-- Pâtisseries -->
-    <section class="categorie">
-      <h4>Pâtisseries</h4>
+    <hr>
 
-      <!-- Les aliments seront affichés ici -->
+    <!-- GATEAUX -->
+    <section class="categorie">
+      <h4>Gâteaux</h4>
+      
+      @for (gateau of (gateaux$ | async); track gateau.id) {
       <div class="ligne-menu">
-        <span class="ico">🍰</span>
-        <span class="nom">Part de gâteau</span>
-        <span class="prix">4,50 €</span>
+        <span class="nom">{{ gateau.description }}</span>
+        <span class="prix">{{ gateau.prix }} €</span>
 
         <div class="qte">
           <button type="button">−</button>
@@ -70,9 +79,80 @@
           <button type="button">+</button>
         </div>
       </div>
+        } @empty {
+        <p class="vide">Aucun gâteau disponible.</p>
+        }
+    </section>
+
+    <hr>
+
+    <!-- GLACES -->
+    <section class="categorie">
+      <h4>Glaces</h4>
+      
+      @for (glace of (glaces$ | async); track glace.id) {
+      <div class="ligne-menu">
+        <span class="nom">{{ glace.description }}</span>
+        <span class="prix">{{ glace.prix }} €</span>
+
+        <div class="qte">
+          <button type="button">−</button>
+          <span>0</span>
+          <button type="button">+</button>
+        </div>
+      </div>
+        } @empty {
+        <p class="vide">Aucune glace disponible.</p>
+        }
+    </section>
+
+    <hr>
+
+    <!-- PLATS -->
+    <section class="categorie">
+      <h4>Plats</h4>
+      
+      @for (plat of (plats$ | async); track plat.id) {
+      <div class="ligne-menu">
+        <span class="nom">{{ plat.description }}</span>
+        <span class="prix">{{ plat.prix }} €</span>
+
+        <div class="qte">
+          <button type="button">−</button>
+          <span>0</span>
+          <button type="button">+</button>
+        </div>
+      </div>
+        } @empty {
+        <p class="vide">Aucun plat disponible.</p>
+        }
+    </section>
+
+    <hr>
+
+    <!-- RECETTES SPECIALES -->
+    <section class="categorie">
+      <h4>Recettes spéciales</h4>
+      
+      @for (recette of (recettesSpeciales$ | async); track recette.id) {
+      <div class="ligne-menu">
+        <span class="nom">{{ recette.description }}</span>
+        <span class="prix">{{ recette.prix }} €</span>
+
+        <div class="qte">
+          <button type="button">−</button>
+          <span>0</span>
+          <button type="button">+</button>
+        </div>
+      </div>
+        } @empty {
+        <p class="vide">Aucune recette spéciale disponible.</p>
+        }
     </section>
 
   </div>
+
+  <hr>
 
   <!-- Pied de la commande -->
   <div class="footer">

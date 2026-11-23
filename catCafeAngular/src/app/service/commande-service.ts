@@ -6,8 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class CommandeService {
+    private apiUrl: string = "http://localhost:8080/api";
     private http: HttpClient = inject(HttpClient);
-    private apiUrl: string = "/commande";
+    
 
     //Récupérer les boissons chaudes
     public findAllBoissonsChaudes(): Observable<any[]> {
@@ -19,14 +20,29 @@ export class CommandeService {
         return this.http.get<any[]>(`${this.apiUrl}/boissons/froides`);
     }
 
-
     // Récupérer les aliments
     public findAllAlimentaires(): Observable<any[]> {
         return this.http.get<any[]>(`${this.apiUrl}/alimentaires`);
     }
 
-    // Récupérer les serveurs
-    public findAllServeurs(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.apiUrl}/serveur`);
+    // Récupérer les aliments de type Gateaux
+    public findAllGateaux(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/alimentaires/type/gateau`);
     }
+
+    // Récupérer les aliments de type Plats
+    public findAllPlats(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/alimentaires/type/plat`);
+    }
+
+    // Récupérer les aliments de type Glaces
+    public findAllGlaces(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/alimentaires/type/glace`);
+    }
+
+    // Récupérer les aliments de type RecettesSpeciales
+    public findAllRecettesSpeciales(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/alimentaires/type/recetteSpeciale`);
+    }
+
 }
