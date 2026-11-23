@@ -84,7 +84,7 @@ export class Entree implements OnInit {
             id:this.editingReservationId,
             dateTime: new Date(),
             nbClient: this.nbClientCtrl.value,
-            client:client
+            client:client,
             };
           this.reservationService.ReservationForm=reservation;
           this.reservationService.Table=this.tables;

@@ -10,9 +10,11 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 import { Table } from '../../model/table';
 import { TableService } from '../../service/table-service';
 import { Router } from '@angular/router';
-import { Observable, startWith, Subject, switchMap } from 'rxjs';
+import { map, Observable, startWith, Subject, switchMap } from 'rxjs';
 import { Commande } from '../../model/commande';
 import { CommandeService } from '../../service/commande-service';
+import { ChatService } from '../../service/chat-service';
+import { Chat } from '../../model/chat';
 
 @Component({
   imports: [DatePipe,AsyncPipe],
@@ -26,12 +28,17 @@ export class EcranPrincipal implements OnInit{
   private clientService: ClientService = inject(ClientService);
   private commandeService: CommandeService = inject(CommandeService);
   private tableService: TableService = inject(TableService);
+  private chatService: ChatService = inject(ChatService);
   private router: Router = inject(Router);
+
+
   private refresh$: Subject<void> = new Subject<void>();
   protected Commandes$!: Observable<Commande[]>;
   protected Reservations$!: Observable<Reservation[]>;
   protected Clients$!: Observable<Client[]>;
   protected Tables$!: Observable<Table[]>;
+  protected Chats$!: Observable<Chat[]>;
+  protected statsChats$!: Observable<{ aAdopter: number; total: number }>;
 
   protected reservation:Reservation=this.reservationService.ReservationForm;
 
@@ -80,6 +87,22 @@ export class EcranPrincipal implements OnInit{
         })
       );
 
+      this.Chats$ = this.refresh$.pipe(
+        // On initialise notre Observable
+        startWith(null),
+        // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
+        switchMap(() => {
+          return this.chatService.findAll();
+        })
+      );
+
+      this.statsChats$ = this.Chats$.pipe(
+      map(chats => ({
+      aAdopter: chats.filter(c => !c.adopted).length,
+      total: chats.length
+      }))
+);
+
 
 
   }
@@ -127,6 +150,11 @@ export class EcranPrincipal implements OnInit{
 
 
     protected commander(tableSelect:Table): void {
+
+
+  }
+
+      protected InfosChats(): void {
 
 
   }

@@ -1,10 +1,4 @@
-<p>ecran-principal works!</p>
 
-<p>{{reservation.client.nom}}</p>
-<p>{{reservation.client.prenom}}</p>
-<p>{{reservation.client.genre}}</p>
-<p>{{reservation.nbClient}}</p>
-<p>{{reservation.dateTime| date:'dd/MM/yyyy HH:mm'}}</p>
 
 <div>
     <button type="button" (click)="commande()">decclencher lecture commande </button>
@@ -38,11 +32,21 @@
   }
 
 
+  <p>liste chat </p>
+ @for (chat of (Chats$ | async) ; track chat.id){
+    <div>
+      <button  type="button" (click)="InfosChats()">{{`Chat id : ${chat.id} avec ${chat.nom} places statut adopte ${chat.adopted}   !`}}</button>
+    </div>
+  }
+
   <p>En ce moment </p>
  @for (c of (Commandes$ | async) ; track c.id){
 
   <p>{{`table id : ${c.reservation.assise?.id}  client : ${c.reservation.client.nom}- ${c.reservation.assise?.capacite} places statut commande : ${c.statutCommande}  !`}}</p>
 
   }
+<!--<div class="resume-ligne"><b>🐾</b><span>{{`${nombree de chat adopte } chats à adopter sur ${nombree de chat adopte total  }`}}</span></div>-->
 
-
+@if (statsChats$ | async; as s) {
+  <div class="resume-ligne"><b>🐾</b><span>{{`${s.aAdopter} chats à adopter sur ${s.total}`}}</span></div>
+}
