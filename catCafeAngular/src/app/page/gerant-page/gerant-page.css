@@ -3,7 +3,9 @@
 /* ecran ------------------------------------------------------*/
 .ecran{
     display: block;
-    min-height:100vh}
+    min-height:100vh;
+    margin-right: 15vw;
+    margin-left:15vw;}
 
 .ecran.entree-fondu{
     animation:fondu .6s ease both
@@ -95,7 +97,11 @@ header{
 
 /* ------------------------------------------------------*/
 
-.table{
+.defile {
+    overflow-x: auto;
+}
+
+.tableau{
     background:var(--creme);
     color:var(--brun);
     border:var(--trait);
@@ -104,8 +110,31 @@ header{
     padding: 9px 20px;
     box-shadow:0 4px 0 var(--brun)}
 
-.table h3{
+.tableau h3{
     margin: 0;
     font-size: 30px;
     font-family: 'Fredoka', sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    min-width: 720px;
+}
+
+table thead td{
+    padding: 10px 12px;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--terracotta-fonce);
+    border-bottom: 3px solid var(--brun);
+    
+}
+
+
+table tbody td{
+    padding: 10px 12px;
+    border-bottom: 1px dotted var(--bois);
 }

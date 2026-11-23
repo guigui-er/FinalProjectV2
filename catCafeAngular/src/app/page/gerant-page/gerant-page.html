@@ -26,88 +26,92 @@
           <p>Encaissé aujourd'hui</p></div>
       </div>
       
-      <div class="table">
+      <div class="tableau">
         <h3>État des tables</h3>
-        <table>
-            <thead>
-              <tr>
-                <td>N°</td>
-                <td>Capacité</td>
-                <td>Clients</td>
-                <td>Commande en cours</td>
-                <td>Statut</td>
-              </tr>
-            </thead>
+        <div class="defile">
+          <table>
+              <thead>
+                <tr>
+                  <td>N°</td>
+                  <td>Capacité</td>
+                  <td>Clients</td>
+                  <td>Commande en cours</td>
+                  <td>Statut</td>
+                </tr>
+              </thead>
 
-            <tbody>
-                <tr *ngFor="let assise of assisesEtat$ | async">
-                <td>T{{ assise.id }}</td>
-                <td>{{ assise.capacite }} places</td>
-                <td>{{ assise.clientNom }}</td>
-                <td>
-                  <ng-container *ngIf="assise.commandeStatut; else pasDeCommande">
-                    <span *ngIf="assise.commandeStatut === 'En_cours'">En cours</span>
-                    <span *ngIf="assise.commandeStatut === 'Servie'">Servie</span>
-                  </ng-container>
-                  <ng-template #pasDeCommande> 
-                    <span>-</span>
-                  </ng-template>
+              <tbody>
+                  <tr *ngFor="let assise of assisesEtat$ | async">
+                  <td>T{{ assise.id }}</td>
+                  <td>{{ assise.capacite }} places</td>
+                  <td>{{ assise.clientNom }}</td>
+                  <td>
+                    <ng-container *ngIf="assise.commandeStatut; else pasDeCommande">
+                      <span *ngIf="assise.commandeStatut === 'En_cours'">En cours</span>
+                      <span *ngIf="assise.commandeStatut === 'Servie'">Servie</span>
+                    </ng-container>
+                    <ng-template #pasDeCommande> 
+                      <span>-</span>
+                    </ng-template>
+                    </td>
+                  <td>
+                    <span *ngIf="assise.complet; else nonComplet">Occupée</span>
+                    <ng-template #nonComplet> 
+                      <span>Libre</span>
+                    </ng-template>
                   </td>
-                <td>
-                  <span *ngIf="assise.complet; else nonComplet">Occupée</span>
-                  <ng-template #nonComplet> 
-                    <span>Libre</span>
-                  </ng-template>
-                </td>
-                </tr>
-            </tbody>
-        </table>
+                  </tr>
+              </tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="table">
+      <div class="tableau">
         <h3>Réservations</h3>
-        <table>
-            <thead>
-              <tr>
-                <td>N°</td>
-                <td>Arrivée</td>
-                <td>Table</td>
-                <td>Client</td>
-                <td>Pers.</td>
-                <td>Commandes</td>
-                <td>Total</td>
-                <td>Statut</td>
-              </tr>
-            </thead>
-
-            <tbody>
-                <tr *ngFor="let reservation of reservationsEtat$ | async">
-                <td>R{{ reservation.id }}</td>
-                <td>{{ reservation.dateTime }}</td>
-                <td>T{{ reservation.assiseId}}</td>
-                <td>{{ reservation.clientPrenom }} {{ reservation.clientNom }}</td>
-                <td>{{ reservation.nbClient }}</td>
-                <td>
-                  <span *ngFor="let detail of reservation.commandeResponse?.details">{{ detail.qte }}x {{ detail.article?.description }} </span>
-                </td>
-                <td>{{ reservation.prixTotal }} €</td>
-                <td>
-                  <ng-container *ngIf="reservation.commandeStatut; else pasDeCommande">
-                    <span *ngIf="reservation.accepterPaiement && reservation.commandeStatut === 'Terminee'">Payée</span>
-                    <span *ngIf="reservation.commandeStatut === 'En_cours'">En cours</span>
-                    <span *ngIf="reservation.commandeStatut === 'Servie'">Servie</span>
-                  </ng-container>
-                  <ng-template #pasDeCommande> 
-                    <span>-</span>
-                  </ng-template>
-                </td>
+        <div class="defile">
+          <table>
+              <thead>
+                <tr>
+                  <td>N°</td>
+                  <td>Arrivée</td>
+                  <td>Table</td>
+                  <td>Client</td>
+                  <td>Pers.</td>
+                  <td>Commandes</td>
+                  <td>Total</td>
+                  <td>Statut</td>
                 </tr>
-            </tbody>
-        </table>
+              </thead>
+
+              <tbody>
+                  <tr *ngFor="let reservation of reservationsEtat$ | async">
+                  <td>R{{ reservation.id }}</td>
+                  <td>{{ reservation.dateTime }}</td>
+                  <td>T{{ reservation.assiseId}}</td>
+                  <td>{{ reservation.clientPrenom }} {{ reservation.clientNom }}</td>
+                  <td>{{ reservation.nbClient }}</td>
+                  <td>
+                    <span *ngFor="let detail of reservation.commandeResponse?.details">{{ detail.qte }}x {{ detail.article?.description }} </span>
+                  </td>
+                  <td>{{ reservation.prixTotal }} €</td>
+                  <td>
+                    <ng-container *ngIf="reservation.commandeStatut; else pasDeCommande">
+                      <span *ngIf="reservation.accepterPaiement && reservation.commandeStatut === 'Terminee'">Payée</span>
+                      <span *ngIf="reservation.commandeStatut === 'En_cours'">En cours</span>
+                      <span *ngIf="reservation.commandeStatut === 'Servie'">Servie</span>
+                    </ng-container>
+                    <ng-template #pasDeCommande> 
+                      <span>-</span>
+                    </ng-template>
+                  </td>
+                  </tr>
+              </tbody>
+          </table>
+        </div>
       </div>
 
-
-      <div class="table">
+<!-- PAS EN TABLEAU ! -> en div plutot
+      <div class="tableau">
         <h3>Nos chats</h3>
         <table>
             <thead>
@@ -126,7 +130,7 @@
             </tbody>
         </table>
       </div>
-
+-->
     </main>
 
     <footer>
