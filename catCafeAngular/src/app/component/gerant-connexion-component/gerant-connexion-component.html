@@ -1,1 +1,34 @@
-<p>gerant-connexion-component works!</p>
+<h1>Connexion gérant</h1>
+
+<form (submit)="login()" [formGroup]="formLoginGroup">
+    <div>
+        <input type="text" [formControl]="formLoginUsernameCtrl"/>
+    </div>
+
+    <div>
+        <input type="password" [formControl]="formLoginPasswordCtrl"/>
+    </div>
+
+    @if (formLoginUsernameCtrl.dirty && formLoginUsernameCtrl.hasError('required')) {
+    <div>
+        Le nom d'utilisateur est obligatoire
+    </div>
+    }
+
+    @if (formLoginPasswordCtrl.dirty && formLoginPasswordCtrl.hasError('required')) {
+    <div>
+        Le mot de passe est obligatoire
+    </div>
+    }
+
+     @if (formLoginPasswordCtrl.dirty && formLoginPasswordCtrl.hasError('minlength')) {
+    <div>
+        Le mot de passe doit être de 8 caractère minimum
+    </div>
+    }
+
+    <div>
+        <button [disabled]="formLoginGroup.invalid" type="submit">Entrer</button>
+    </div>
+    
+</form>

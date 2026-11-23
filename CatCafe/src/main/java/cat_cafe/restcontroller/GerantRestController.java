@@ -2,7 +2,11 @@ package cat_cafe.restcontroller;
 
 import java.util.List;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,16 +17,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cat_cafe.dao.IDAOCompte;
+import cat_cafe.dto.request.AuthRequest;
+import cat_cafe.dto.response.AuthResponse;
 import cat_cafe.dto.response.GerantResponse;
 import cat_cafe.model.Gerant;
 
     
 @RestController 
 @RequestMapping("/api/gerant")
+@CrossOrigin (origins = "http://localhost:4200")
 public class GerantRestController {
 
     @Autowired
 	IDAOCompte dao;
+
+    private final AuthenticationManager authenticationManager; 
+
+    public GerantRestController(AuthenticationManager authenticationManager){
+        this.authenticationManager = authenticationManager;
+    }
 
     
     @GetMapping
@@ -43,6 +56,17 @@ public class GerantRestController {
     public GerantResponse add(@RequestBody Gerant gerant){
         return GerantResponse.convert(this.dao.save(gerant));
     }
+
+    @PostMapping("/auth")
+    public AuthResponse auth(@RequestBody AuthRequest request) {
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(request.username(), request.password());
+
+        auth = this.authenticationManager.authenticate(auth);
+               
+        return new AuthResponse(true);
+    }
+    
 
     @PutMapping ("/{id}")
     public GerantResponse save(@PathVariable Integer id, @RequestBody Gerant gerant){

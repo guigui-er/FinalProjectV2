@@ -23,7 +23,7 @@ export class GerantConnexionComponent implements OnInit{
 
   ngOnInit(): void {
     this.formLoginUsernameCtrl = this.formBuilder.control("", Validators.required);
-    this.formLoginPasswordCtrl = this.formBuilder.control("",[Validators.required, Validators.minLength(8)]); //voir pour rajouter caractére spéciaux et majuscule
+    this.formLoginPasswordCtrl = this.formBuilder.control("",[Validators.required, Validators.minLength(2)]); //voir pour rajouter caractére spéciaux et majuscule
 
     this.formLoginGroup = this.formBuilder.group({
       username: this.formLoginUsernameCtrl,
@@ -34,11 +34,8 @@ export class GerantConnexionComponent implements OnInit{
   protected login() {
     this.gerantConnexService.login(this.formLoginGroup.getRawValue()).subscribe(resp => {
 
-      this.router.navigate(['gerant'])//mettre le vrai nom de la page gérant 
+      this.router.navigate(['pageGerant'])//mettre le vrai nom de la page gérant 
     })
   }
-
-
-
 
 }
