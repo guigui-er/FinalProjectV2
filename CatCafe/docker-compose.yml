@@ -1,4 +1,4 @@
-
+### Utiliser 192.168.1.31 sur pc fixe (hostname -I dans terminal pour retrouver)
 services:
 
   # Serveur MySQL 8.4.7
@@ -16,11 +16,14 @@ services:
 
     # Pour relier le port local au port de la base de données se trouvant dans le conteneur
     ports:
-      - "127.0.0.1:3307:3306"
+      - "3307:3306"
 
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql/init:/docker-entrypoint-initdb.d:ro
+    
+    networks:
+      - catcafe_network
 
     # Vérification de l'état du service
     healthcheck:
@@ -49,8 +52,15 @@ services:
       UPLOAD_LIMIT: 256M
 
     ports:
-      - "127.0.0.1:8081:80"
+      - "8081:80"
+
+    networks:
+      - catcafe_network
 
 # Volume pour stocker les données liées à la bdd 
 volumes:
   mysql_data:
+
+networks:
+  catcafe_network:
+    driver: bridge
