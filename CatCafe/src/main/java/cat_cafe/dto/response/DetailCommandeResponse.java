@@ -3,7 +3,7 @@ package cat_cafe.dto.response;
 import cat_cafe.model.DetailCommande;
 
 public record DetailCommandeResponse(
-   
+    Integer id,
     int qte,
     double prix,
     Integer commandeId,
@@ -25,7 +25,7 @@ public record DetailCommandeResponse(
         }
 
         return new DetailCommandeResponse(
-        
+            detailCommande.getId(),
             detailCommande.getQte(),
             detailCommande.getPrix(),
             commandeId,
