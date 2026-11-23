@@ -1,0 +1,86 @@
+
+<div class="commande">
+
+  <!-- En-tête de la commande -->
+  <div class="header">
+
+    <button class="btn-fermer" aria-label="Fermer">×</button>
+
+    <h2>Menu du Café</h2>
+
+    <p class="infos">
+      Table 1 · Client · 2 pers.
+      <!-- Récupérer l'id de la table, le nom/prénom du client et le nombre de personnes -->
+    </p>
+
+  </div>
+
+  <!-- Contenu du menu -->
+  <div class="contenu">
+
+    <!-- Boissons chaudes -->
+    <section class="categorie">
+      <h4>Boissons chaudes</h4>
+
+      <!-- Les boissons chaudes seront affichées ici -->
+      <div class="ligne-menu">
+        <span class="ico">☕</span>
+        <span class="nom">Café expresso</span>
+        <span class="prix">2,20 €</span>
+
+        <div class="qte">
+          <button type="button">−</button>
+          <span>0</span>
+          <button type="button">+</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Boissons fraîches -->
+    <section class="categorie">
+      <h4>Boissons fraîches</h4>
+
+      <!-- Les boissons froides seront affichées ici -->
+      <div class="ligne-menu">
+        <span class="ico">🧃</span>
+        <span class="nom">Jus de fruits</span>
+        <span class="prix">3,00 €</span>
+
+        <div class="qte">
+          <button type="button">−</button>
+          <span>0</span>
+          <button type="button">+</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pâtisseries -->
+    <section class="categorie">
+      <h4>Pâtisseries</h4>
+
+      <!-- Les aliments seront affichés ici -->
+      <div class="ligne-menu">
+        <span class="ico">🍰</span>
+        <span class="nom">Part de gâteau</span>
+        <span class="prix">4,50 €</span>
+
+        <div class="qte">
+          <button type="button">−</button>
+          <span>0</span>
+          <button type="button">+</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Pied de la commande -->
+  <div class="footer">
+
+    <span>Total : <b>0,00 €</b></span>
+
+    <button class="btn-commander" disabled>Commander</button>
+
+  </div>
+
+</div>
