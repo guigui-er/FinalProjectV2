@@ -11,5 +11,11 @@ import { RouterLink } from '@angular/router';
   templateUrl: './page-chat.html',
 })
 export class PageChat {
+  protected title: Title = inject(Title);
+
+
+  ngOnInit(): void {
+    this.title.setTitle("${nom}");
+
   
 }
