@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { GerantConnexionService } from '../../service/gerant-connexion-service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   imports: [ReactiveFormsModule, CommonModule],
@@ -18,10 +19,12 @@ export class GerantConnexionComponent implements OnInit{
   constructor(
     private gerantConnexService: GerantConnexionService,
     private router:Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private titleService: Title
   ){}
 
   ngOnInit(): void {
+    this.titleService.setTitle('Connexion gérant — CatCafé');
     this.formLoginUsernameCtrl = this.formBuilder.control("", Validators.required);
     this.formLoginPasswordCtrl = this.formBuilder.control("",[Validators.required, Validators.minLength(2)]); //voir pour rajouter caractére spéciaux et majuscule
 

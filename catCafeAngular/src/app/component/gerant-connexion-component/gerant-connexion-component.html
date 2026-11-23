@@ -1,34 +1,44 @@
-<h1>Connexion gérant</h1>
+ 
+<div class="voile ouvert" id="voile" aria-hidden="false" >
+<div class="boite" id="boite" role="dialog" aria-modal="true" aria-labelledby="titre-gerant" >
+<div id="boite-contenu">
+    <button class="fermer" id="btn-fermer" type="button" aria-label="Fermer">x</button>
+    <h2 id="titre-gerant">Espace connexion gérant</h2>
+    <p class="sous">Connexion réservée à l'équipe du Chat Perché.</p>    
+        <form id="f-gerant" (submit)="login()" [formGroup]="formLoginGroup" novalidate>
+            <div class="champ" [class.invalide]="formLoginUsernameCtrl.dirty && formLoginUsernameCtrl.invalid">
+                <label for="fg-id">Identifiant</label>
+                <input id="fg-id" type="text" [formControl]="formLoginUsernameCtrl"/>
+                <span class="err">
+                @if (formLoginUsernameCtrl.dirty && formLoginUsernameCtrl.hasError('required')) {
+                    <div>
+                        Le nom d'utilisateur est obligatoire
+                    </div>
+                    }
+                </span>    
+            </div>
 
-<form (submit)="login()" [formGroup]="formLoginGroup">
-    <div>
-        <input type="text" [formControl]="formLoginUsernameCtrl"/>
-    </div>
+            <div class="champ">
+                <label for="fg-mdp">Mot de passe</label>
+                <input id="fg-mdp" type="password" [formControl]="formLoginPasswordCtrl"/>
+                <span class="err">
+                    @if (formLoginPasswordCtrl.dirty && formLoginPasswordCtrl.hasError('required')) {
+                        <div>
+                            Le mot de passe est obligatoire
+                        </div>
+                        }
 
-    <div>
-        <input type="password" [formControl]="formLoginPasswordCtrl"/>
-    </div>
-
-    @if (formLoginUsernameCtrl.dirty && formLoginUsernameCtrl.hasError('required')) {
-    <div>
-        Le nom d'utilisateur est obligatoire
-    </div>
-    }
-
-    @if (formLoginPasswordCtrl.dirty && formLoginPasswordCtrl.hasError('required')) {
-    <div>
-        Le mot de passe est obligatoire
-    </div>
-    }
-
-     @if (formLoginPasswordCtrl.dirty && formLoginPasswordCtrl.hasError('minlength')) {
-    <div>
-        Le mot de passe doit être de 8 caractère minimum
-    </div>
-    }
-
-    <div>
-        <button [disabled]="formLoginGroup.invalid" type="submit">Entrer</button>
-    </div>
-    
-</form>
+                    @if (formLoginPasswordCtrl.dirty && formLoginPasswordCtrl.hasError('minlength')) {
+                        <div>
+                            Le mot de passe doit être de 8 caractère minimum
+                        </div>
+                        }
+                </span>
+            </div>
+            <div>
+                <button class="btn large" [disabled]="formLoginGroup.invalid" type="submit">Entrer</button>
+            </div>       
+        </form>
+</div>
+</div>
+</div>

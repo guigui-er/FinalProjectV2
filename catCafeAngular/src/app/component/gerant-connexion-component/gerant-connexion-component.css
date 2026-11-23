@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap');
+
+:host{
+  --sauge:#a3b18a; --sauge-clair:#e3ead6; --sauge-fonce:#7f9469;
+  --mousse:#5f7f4a; --mousse-fonce:#3d5a33;
+  --creme:#fbf6ea; --terracotta:#c9714f; --terracotta-fonce:#a85636;
+  --encre:#3b3a2c; --encre-doux:#6b6a55;
+  font-family:'Nunito', system-ui, sans-serif; font-weight:500; color:var(--encre)
+}
+
+*{ box-sizing : border-box }
+
+button{ font-family:inherit }
+
+@keyframes fondu{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+
+.voile{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:18px;background:rgba(38,52,30,.42);backdrop-filter:blur(3px)}
+.voile.ouvert{display:grid;animation:fondu .2s}
+
+.boite{position:relative;width:min(560px,94vw);max-height:90vh;overflow:auto;background:var(--creme);border-radius:26px;padding:24px 26px 22px;box-shadow:0 30px 60px -20px rgba(30,44,24,.6);border:3px solid #fffaf0;animation:pop .3s cubic-bezier(.3,1.5,.5,1)}
+.boite h2{font-family:'Fredoka',sans-serif;font-size:36px;line-height:1;margin:0 0 4px;color:var(--mousse-fonce)}
+.boite .sous{margin:0 0 16px;color:var(--encre-doux);font-size:14px}
+
+.fermer{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:2px solid var(--sauge-clair);background:#fffdf6;cursor:pointer;font-size:20px;line-height:1;color:var(--mousse-fonce)}
+.fermer:hover{background:var(--sauge-clair)}
+
+.btn{border:none;cursor:pointer;border-radius:14px;padding:10px 18px;font-weight:700;font-size:14.5px;background:var(--mousse);color:#fbf6ea;box-shadow:0 4px 0 var(--mousse-fonce);transition:transform .08s,filter .15s}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--mousse-fonce)}
+.btn.large{width:100%;padding:13px}
+
+.champ{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.champ label{font-weight:700;font-size:13.5px}
+.champ input,.champ select{font:inherit;font-weight:600;padding:10px 13px;border-radius:12px;border:2px solid #d9dcc8;background:#fffdf7;color:var(--encre);outline:none}
+.champ input:focus,.champ select:focus{border-color:var(--sauge-fonce);box-shadow:0 0 0 4px rgba(163,177,138,.3)}
+.champ.invalide input,.champ.invalide select{border-color:var(--terracotta)}
+.champ .err{color:var(--terracotta-fonce);font-size:12.5px;font-weight:700;min-height:16px}
+
+.message{border-radius:12px;padding:10px 13px;font-weight:700;font-size:13.5px;margin:10px 0}
+.message.erreur{background:#fbe3da;color:var(--terracotta-fonce);border:2px solid #f0c1ad}
+.message.info{background:var(--sauge-clair);color:var(--mousse-fonce);border:2px solid #c9d6b4}
+.message.ok{background:#e4f1d6;color:#3d6a2c;border:2px solid #bcd9a0}
+
+.indice{font-size:12px;color:var(--encre-doux);margin-top:10px;text-align:center}
