@@ -1,0 +1,180 @@
+/* Fond général de la commande */
+.commande {
+  background-color: #fffdf6;
+  color: #45483d;
+  max-width: 650px;
+  margin: 30px auto;
+  padding: 28px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(70, 60, 40, 0.12);
+  font-family: 'Caveat',cursive;
+}
+
+/* En-tête */
+.header {
+  position: relative;
+  text-align: center;
+  padding-bottom: 15px;
+}
+
+.header h2 {
+  color: #3d5a33;
+  font-size: 36px;
+  margin: 5px 0 10px;
+}
+
+.infos {
+  color: #817d70;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Bouton fermer */
+.btn-fermer {
+  position: absolute;
+  top: -10px;
+  right: -5px;
+  background: transparent;
+  border: none;
+  color: #a64f38;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* Séparateurs */
+hr {
+  border: none;
+  border-top: 1px solid #e8e1d2;
+  margin: 18px 0;
+}
+
+/* Contenu */
+.contenu {
+  padding: 5px 0;
+}
+
+/* Catégories */
+.categorie {
+  margin-bottom: 15px;
+}
+
+.categorie h4 {
+  color: #a64f38;
+  font-size: 21px;
+  margin: 12px 0;
+  font-weight: 600;
+}
+
+/* Ligne d'article */
+.ligne-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 5px;
+  border-bottom: 1px dotted #dcd4bd;
+}
+
+.nom {
+  flex: 1;
+  /* font-weight: 600; */
+}
+
+.prix {
+  color: #777467;
+  font-size: 14px;
+  min-width: 65px;
+  text-align: right;
+}
+
+/* Quantités */
+.qte {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qte button {
+  width: 29px;
+  height: 29px;
+  border-radius: 9px;
+  border: 1px solid #aebd9f;
+  background-color: #f0f3e9;
+  color: #52634b;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.qte button:hover {
+  background-color: #dce5d1;
+}
+
+.qte span {
+  min-width: 18px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Catégorie vide */
+.vide {
+  color: #999386;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* Pied de commande */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.footer b {
+  color: #52634b;
+  font-size: 25px;
+}
+
+/* Bouton commander */
+.btn-commander {
+  background-color: #a64f38;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-commander:hover:not(:disabled) {
+  background-color: #893e2c;
+}
+
+.btn-commander:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Adaptation mobile */
+@media (max-width: 500px) {
+  .commande {
+    margin: 10px;
+    padding: 18px;
+  }
+
+  .ligne-menu {
+    gap: 7px;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-commander {
+    width: 100%;
+  }
+}
