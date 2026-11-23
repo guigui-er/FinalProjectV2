@@ -1,0 +1,111 @@
+
+
+/* ecran ------------------------------------------------------*/
+.ecran{
+    display: block;
+    min-height:100vh}
+
+.ecran.entree-fondu{
+    animation:fondu .6s ease both
+}
+@keyframes fondu{from{opacity:0}to{opacity:1}}
+
+/* en-tete------------------------------------------------------*/
+
+header{
+    padding: 12px 0;
+}
+
+.tdb-tete{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:12px}
+
+.tdb-tete h1{
+    margin: 0;
+    font-size: 46px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    color: var(--brun);
+}
+
+.tdb-tete .actions{
+    margin-left:auto;
+    display:flex;
+    gap:8px}
+
+.btn {
+    border-radius: 999px;
+    color:var(--brun);
+    border:var(--trait);
+    font-size: 15.5px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    padding: 9px 20px;
+    box-shadow:0 4px 0 var(--brun);
+    transition: transform .08s, filter .15s;
+}
+.btn:active{
+
+}
+
+.btn:hover{
+    filter: brightness(1.20);
+}
+.btn.sec{
+    background:var(--creme);}
+
+.btn.terra{
+    background:var(--rose);}
+
+/* ------------------------------------------------------*/
+
+.kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.kpi{
+    background:var(--creme);
+    border:var(--trait);
+    border-radius:var(--rayon);
+    padding: 9px 20px;
+    box-shadow:0 4px 0 var(--brun);}
+
+.kpi p{    
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--terracotta-fonce);}
+
+.kpi h3{
+    font-size: 30px;
+    color:var(--brun);
+    font-family: 'Fredoka', sans-serif;
+}
+
+.kpi h3,p{
+    margin: 0;
+}
+
+/* ------------------------------------------------------*/
+
+.table{
+    background:var(--creme);
+    color:var(--brun);
+    border:var(--trait);
+    border-radius:var(--rayon);
+    margin-bottom:16px;
+    padding: 9px 20px;
+    box-shadow:0 4px 0 var(--brun)}
+
+.table h3{
+    margin: 0;
+    font-size: 30px;
+    font-family: 'Fredoka', sans-serif;
+}
