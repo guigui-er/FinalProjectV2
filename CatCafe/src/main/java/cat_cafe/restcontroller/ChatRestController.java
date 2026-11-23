@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cat_cafe.dao.IDAOChat;
@@ -19,9 +18,6 @@ import cat_cafe.dto.response.ChatResponse;
 import cat_cafe.dto.response.ChatResponse.AdoptableResponse;
 import cat_cafe.model.Chat;
 import cat_cafe.model.ChatMF;
-
-
-
 
 @RestController
 @RequestMapping("/api/chat")
@@ -95,6 +91,9 @@ public class ChatRestController {
 	@GetMapping("/nom/{nom}") // TESTÉ POSTMAN
 	public List<ChatResponse> findByNomIgnoreCase(@PathVariable String nom) {
 
+		if(this.daoChat.findByNomIgnoreCase(nom).isEmpty() == true){
+			throw new IllegalArgumentException("Aucun chat ne correspond à votre recherche.");
+		}
 		return daoChat.findByNomIgnoreCase(nom)
 			.stream()
 			.map(ChatResponse::convert)
@@ -111,7 +110,7 @@ public class ChatRestController {
 	}
 
 	@GetMapping("/age/{age}") // TESTÉ POSTMAN
-	public List<ChatResponse> findByAge(@RequestParam int age) {
+	public List<ChatResponse> findByAge(@PathVariable int age) {
 		return daoChat.findByAge(age)
 			.stream()
 			.map(ChatResponse::convert)
@@ -133,5 +132,3 @@ public class ChatRestController {
 	
 
 }
-
-

@@ -1,7 +1,7 @@
 import { ChatMF } from "./chat-mf";
 import { Client } from "./client";
 
-export interface Chat {
+export interface ChatDTO{
 
     id: number;
     nom: string;
