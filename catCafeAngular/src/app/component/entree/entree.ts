@@ -88,7 +88,7 @@ export class Entree implements OnInit {
             };
           this.reservationService.ReservationForm=reservation;
           this.reservationService.Table=this.tables;
-          this.router.navigate([ '/ecranPrincipal' ]);
+          this.router.navigate([ 'ecranPrincipal' ]);
         }
 
         this.editingClientId = undefined;
