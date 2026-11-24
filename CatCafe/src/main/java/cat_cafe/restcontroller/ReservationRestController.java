@@ -19,6 +19,7 @@ import cat_cafe.model.Reservation;
 import cat_cafe.service.ReservationService;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/reservation")
 @CrossOrigin ("*")
 public class ReservationRestController {

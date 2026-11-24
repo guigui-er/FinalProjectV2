@@ -3,6 +3,7 @@ package cat_cafe.restcontroller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import cat_cafe.model.Alimentaire;
 import cat_cafe.model.TypeAliment;
 
 @RestController 
+@CrossOrigin("*")
 @RequestMapping ("/api/alimentaires")
 public class AlimentaireRestController {
 
