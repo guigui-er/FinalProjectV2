@@ -3,6 +3,7 @@ package cat_cafe.restcontroller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,6 +25,7 @@ import cat_cafe.model.ChatMF;
 import cat_cafe.model.Client;
 import jakarta.transaction.Transactional;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/chat")
 public class ChatRestController {	
@@ -141,11 +143,11 @@ public class ChatRestController {
 	// POST mappingz
 
 	@PostMapping("/adopter") // TESTÉ POSTMAN
-	@Transactional
+	@Transactional // chatAdoptionRequest nécessite un idChat et un idClient
 	public ChatAdoptionResponse adopterChat(@RequestBody ChatAdoptionRequest chatAdoptionRequest) {
 
 		Chat chat = (Chat) daoChat.findById(chatAdoptionRequest.chatId()).orElse(null);
-		Client proprietaire = (Client) daoClient.findByIdClient(chatAdoptionRequest.proprietaireId()).orElse(null);
+		Client proprietaire = (Client) daoClient.findById(chatAdoptionRequest.proprietaireId()).orElse(null);
 		Chat chatAdoptéBdd = (Chat) daoChat.findAll() // Pour vérifier si un chat a déjà été adopté par le client/la cliente
 		.stream() 
 		.filter(c -> c.getProprietaire() != null && c.getProprietaire().getId().equals(proprietaire.getId())).findFirst().orElse(null);
@@ -166,7 +168,7 @@ public class ChatRestController {
 			chat.setProprietaire(proprietaire);
 			daoChat.save(chat);
    		    return new ChatAdoptionResponse(
-			"Félicitations ! Vous avez adopté " + chat.getNom() + " ! Amicalement, l'équipe du Cat Café :)", // partie message de la response
+			"Félicitations ! Vous avez adopté " + chat.getNom() + " ! Amicalement, l'équipe du Chat Perché :)", // partie message de la response
 			ChatResponse.convert(chat));		
 		}
 

@@ -8,6 +8,7 @@ import cat_cafe.model.ChatMF;
 
 public record ChatResponse(
 
+    Integer id,
     String nom,
     String race,
     int age,
@@ -23,6 +24,7 @@ public record ChatResponse(
 
     public static ChatResponse convert(Chat chat) {
         return new ChatResponse(
+            chat.getId(),
             chat.getNom(),
             chat.getRace(),
             chat.getAge(),

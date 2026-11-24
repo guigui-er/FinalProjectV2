@@ -3,7 +3,7 @@ import { Client } from "./client";
 
 export interface ChatDTO{
 
-    id: number;
+    id?: number;
     nom: string;
     race: string;
     age: number;
@@ -16,4 +16,5 @@ export interface ChatDTO{
     satisfait: boolean;
     caresses: number;
     caractère: string;
+    clientId:number
 }

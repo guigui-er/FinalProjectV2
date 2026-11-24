@@ -2,10 +2,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ChatMF } from '../model/chat-mf';
-
-export interface ChatDTO {
-    [key: string]: unknown;
-}
+import { ChatDTO } from '../model/chat';
+import { AdoptionChat } from '../model/adoption-chat';
+import { AdoptionResponse } from '../model/adoption-response';
 
 @Injectable({
   providedIn: 'root',
@@ -15,19 +14,49 @@ export class ChatService {
     private apiUrl: string = "http://localhost:8080/api/chat";
     private http: HttpClient = inject(HttpClient);
 
+    // Fonctionnalités CRUD
+
     public findAll(): Observable<ChatDTO[]> {
         return this.http.get<ChatDTO[]>(this.apiUrl);
-    // Requête standard correspondant à l'url de base pas besoin de modif
     }
 
-    public findByNom(nom: string): Observable<ChatDTO[]>{
+    public findById(id:number): Observable<ChatDTO>{
+        return this.http.get<ChatDTO>(`${this.apiUrl}/id/${ id }`)
+    }
+
+    public ajouterChat(chat:ChatDTO): Observable<ChatDTO>{
+        return this.http.post<ChatDTO>(this.apiUrl,chat);
+    }
+
+    public modifierChat(id:number, chat:ChatDTO): Observable<ChatDTO>{
+        return this.http.put<ChatDTO>(`${this.apiUrl}/id/${ id }`, chat)
+    }
+
+    public supprimerChat(id:number): Observable<void>{
+        return this.http.delete<void>(`${this.apiUrl}/id/${ id }`)
+    }
+
+    // Fonctionnalités CatCafe
+
+    public chatsParNom(nom: string): Observable<ChatDTO[]>{
         return this.http.get<ChatDTO[]>(`${ this.apiUrl }/nom/${ nom }`);
-    // Si je fais ma requête comme ça, il faut qu'elle apparaisse côté back
-    // Autrement il faut préciser les paramètres souhaités dans la def de la méthode
     }
 
-    public findBySexe(sexe: ChatMF): Observable<ChatDTO[]>{
+    public chatsParSexe(sexe: ChatMF): Observable<ChatDTO[]>{
         return this.http.get<ChatDTO[]>(`${ this.apiUrl }/sexe/${ sexe }`);
+    }
+
+    public chatsParAge(age: number): Observable<ChatDTO[]>{
+        return this.http.get<ChatDTO[]>(`${ this.apiUrl }/age/${ age }`);
+    }
+
+    public chatsAdoptables(): Observable<ChatDTO[]>{
+        return this.http.get<ChatDTO[]>(`${this.apiUrl}/adoptable`)
+    }
+
+    // Méthode potentiellement pas fonctionnelle, nécessite un objet chatAdoptionRequest en entrée
+    public adopterChat(chat:AdoptionChat): Observable<AdoptionResponse>{
+        return this.http.post<AdoptionResponse>(`${this.apiUrl}/adopter`, chat)
     }
 
     /*
@@ -36,17 +65,4 @@ export class ChatService {
         return this.http.get<ChatDTO[]>(this.apiUrl, { params });
     }
     */
-
-    public findByAge(age: number): Observable<ChatDTO[]>{
-        return this.http.get<ChatDTO[]>(`${ this.apiUrl }/age/${ age }`);
-    }
-
-    public findAdoptable(): Observable<ChatDTO[]>{
-        return this.http.get<ChatDTO[]>(`${ this.apiUrl }/adoptable`);
-    }
-
-    public saveChat(chat:ChatDTO): Observable<ChatDTO>{
-        return this.http.post<ChatDTO>(this.apiUrl,chat);
-    }
-
 }
