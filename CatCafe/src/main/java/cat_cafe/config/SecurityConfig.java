@@ -27,7 +27,7 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(authorize -> {
             authorize
-            .requestMatchers("/api/assise/**").permitAll()
+            .requestMatchers("/api/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/gerant/auth").permitAll().anyRequest().authenticated();
         });
         return httpSecurity.build();
