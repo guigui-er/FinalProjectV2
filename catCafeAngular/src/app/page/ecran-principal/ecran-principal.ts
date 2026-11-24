@@ -149,7 +149,10 @@ export class EcranPrincipal implements OnInit{
   }
 
     protected EntreeClient(): void {
-    this.router.navigate([ '/client' ]);
+    this.router.navigate([ 'client' ]);
+  }
+      protected EntreeGerant(): void {
+    this.router.navigate([ 'gerant' ]);
   }
 
     protected commande(): void {

@@ -37,13 +37,13 @@ export class GerantConnexionComponent implements OnInit{
   protected login() {
     this.gerantConnexService.login(this.formLoginGroup.getRawValue()).subscribe(resp => {
 
-      this.router.navigate(['pageGerant'])//mettre le vrai nom de la page gérant 
+      this.router.navigate(['ecranPrincipal'])//mettre le vrai nom de la page gérant
     })
   }
 
   protected fermerPage() {
 
-    this.router.navigate(['accueil'])
+    this.router.navigate(['ecranPrincipal'])
   }
 
 }

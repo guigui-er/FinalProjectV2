@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   templateUrl: './accueil-component.html',
 })
 export class AccueilComponent {
-  porteOuverte =  false; 
+  porteOuverte =  false;
   choixConnexOuvert = false;
 
  constructor(
@@ -25,7 +25,7 @@ export class AccueilComponent {
   }
 
   protected connexionClient(){
-    this.router.navigate(['entree'])
+    this.router.navigate(['client'])
   }
 
   protected connexionGerant(){
