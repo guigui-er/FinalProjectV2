@@ -102,7 +102,7 @@ export class Commande implements OnInit {
     }
   }
 
-  // Calculer le Total
+  // Calculer le montant Total
   protected getTotal(): number {
     let somme = 0;
     // On parcourt chaque article présent dans le panier
@@ -113,7 +113,7 @@ export class Commande implements OnInit {
     return somme;
   } 
 
-  // Calculer le nombre total d'articles sélectionnés
+  // ---- Calculer le nombre total d'articles sélectionnés -----
   protected getNombreArticles(): number {
     let nombre = 0;
     // On parcourt chaque article présent dans le panier
@@ -124,6 +124,64 @@ export class Commande implements OnInit {
     return nombre;
   }
 
+  // ------ Méthode COMMANDER, au clique du bouton commander ! 
+  protected commander(): void {
+    
+    const articles = Object.values(this.panier);
+    if (articles.length === 0) {
+      return;
+    }
 
+    // 1. Créer la commande
+    const nouvelleCommande = {
+      date: new Date().toISOString().slice(0, 19), //Format attendu par LocalDateTime en Java ! 
+      accepter_paiement: false,
+      statutCommande: 'En_cours'
+    };
 
+    this.commandeService.creerCommande(nouvelleCommande).subscribe({
+
+      next: (commandeCreee: any) => {
+        // Récupérer l'identifiant de la commande
+        const commandeId = commandeCreee.id;
+        let nombreDetailsCrees = 0;
+
+        // 2. Créer un détail pour chaque article
+        articles.forEach(article => {
+          const detail = {
+            qte: article.qte,
+            prix: article.prix,
+            commandeId: commandeId,
+            articleId: article.articleId
+          };
+
+          this.commandeService.creerDetailCommande(detail).subscribe({
+
+            next: () => {
+              nombreDetailsCrees++;
+
+              // Vérifier si tous les détails ont été créés
+              if (nombreDetailsCrees === articles.length) {
+
+                alert('Votre commande a bien été enregistrée !');
+
+                // Vider le panier
+                this.panier = {};
+              }
+            },
+
+            error: (erreur) => {
+              console.error('Erreur lors de la création du détail :', erreur);
+              alert('Erreur lors de l’enregistrement d’un article.');
+            }
+          });
+        });
+      },
+
+      error: (erreur) => {
+        console.error('Erreur lors de la création de la commande :', erreur);
+        alert('Impossible de créer la commande.');
+      }
+    });
+  }
 }

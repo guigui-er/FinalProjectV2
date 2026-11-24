@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, Service } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -43,6 +43,16 @@ export class CommandeService {
     // Récupérer les aliments de type RecettesSpeciales
     public findAllRecettesSpeciales(): Observable<any[]> {
         return this.http.get<any[]>(`${this.apiUrl}/alimentaires/type/recetteSpeciale`);
+    }
+
+    // Créer une nouvelle commande
+    public creerCommande(commande: any): Observable<any> {
+        return this.http.post<any>(`${this.apiUrl}/commande`,commande);
+    }
+
+    // Ajouter un détail à une commande
+    public creerDetailCommande(detail: any): Observable<any> {
+        return this.http.post<any>(`${this.apiUrl}/detailCommande`,detail);
     }
 
 }
