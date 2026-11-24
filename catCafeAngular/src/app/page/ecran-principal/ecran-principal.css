@@ -146,3 +146,110 @@
 .legende i { display:inline-block; width:14px; height:14px; border-radius:50%; border:2px solid #5a3a28; margin-right:6px; vertical-align:-1px }
 
 
+
+
+/* Le cadre devient une « boîte de référence » pour les tailles de texte (unité cqw = 1 % de sa largeur). */
+.cadre-salon { container-type: inline-size; }
+
+/* La scène remplit le cadre : tout est placé en pourcentage, donc plus besoin de mise à l'échelle. */
+.scene { width: 100%; height: 100%; }
+
+/* Plateau qui contient tous les objets du salon */
+.salon-plateau { position: absolute; inset: 0; }
+
+/* Placement d'un objet à partir de ses coordonnées dans le repère 880 × 576 de la maquette */
+.salon-objet {
+  position: absolute;
+  left:   calc(var(--x) * 100% / 880);
+  top:    calc(var(--y) * 100% / 576);
+  width:  calc(var(--w) * 100% / 880);
+  height: calc(var(--h) * 100% / 576);
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  user-select: none;
+}
+img.salon-objet { pointer-events: none; }            /* les images décoratives laissent passer les clics */
+
+/* Objets cliquables : un bouton invisible qui porte l'image */
+.salon-cliquable { cursor: pointer; }
+.salon-cliquable img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.salon-cliquable:hover img {                          /* halo doré de la maquette */
+  filter: drop-shadow(0 0 5px rgba(255, 214, 120, .95)) drop-shadow(0 0 1px #fff);
+}
+.salon-cliquable:focus-visible { outline: 3px solid #f5c443; outline-offset: 2px; }
+
+/* ---------- Tables ---------- */
+.salon-groupe-table {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  pointer-events: none;                               /* seul le bouton de la table reçoit les clics */
+}
+.salon-groupe-table .salon-table { pointer-events: auto; z-index: 1; }
+
+/* ellipse pointillée sous la table : (x, y) = son centre */
+.salon-zone {
+  position: absolute;
+  left:   calc(var(--x) * 100% / 880);
+  top:    calc(var(--y) * 100% / 576);
+  width:  calc(var(--w) * 100% / 880);
+  height: calc(var(--h) * 100% / 576);
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: calc(2cqw / 8.8) dashed #c6bba6;
+  background: rgba(250, 243, 228, .48);               /* libre */
+  pointer-events: none;
+  transition: background-color .2s ease;
+}
+.salon-groupe-table.occupee .salon-zone { background: rgba(246, 184, 192, .37); border-color: #d69299; }
+.placement .salon-groupe-table.elig .salon-zone { background: rgba(245, 196, 67, .32); border-color: #d7a527; }
+.placement .salon-groupe-table.inelig .salon-zone { background: rgba(219, 218, 214, .56); border-color: #99968f; }
+
+/* mode placement : table possible (halo jaune) ou impossible (grisée, avec cadenas) */
+.placement .salon-groupe-table.elig .salon-table img { filter: drop-shadow(0 0 5px rgba(245, 196, 67, .68)); }
+.placement .salon-groupe-table.inelig { filter: grayscale(1) brightness(1.04); opacity: .62; }
+.placement .salon-groupe-table.inelig .salon-table { cursor: not-allowed; }
+.placement .salon-groupe-table.inelig .salon-table:hover img { filter: none; }
+
+.salon-cadenas { display: none; z-index: 2; }
+.placement .salon-groupe-table.inelig .salon-cadenas { display: block; }
+
+/* plaque « T3 · 4 places » : (x, y) = milieu de son bord haut ; tailles proportionnelles au salon */
+.salon-plaque {
+  position: absolute;
+  left: calc(var(--x) * 100% / 880);
+  top:  calc(var(--y) * 100% / 576);
+  transform: translate(-50%, 0);
+  z-index: 1900;
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
+  font-size: calc(12cqw / 8.8);
+  line-height: 1.2;
+  padding: calc(1cqw / 8.8) calc(9cqw / 8.8);
+  color: #5a3a28;
+  background: #fff6e6;
+  border: calc(2.5cqw / 8.8) solid #5a3a28;
+  border-radius: 999px;
+  box-shadow: 0 calc(2cqw / 8.8) 0 #5a3a28;
+}
+.salon-plaque.occupee { background: #fde3e4; }
+.salon-plaque.inelig  { background: #edeae5; border-color: #8b857b; }
+
+/* ---------- Chats ---------- */
+.salon-chat { transition: transform .15s; transform-origin: 50% 100%; }
+.salon-chat:hover { transform: scale(1.08); }
+
+/* ---------- Premier plan ---------- */
+.salon-premier-plan { pointer-events: none; }

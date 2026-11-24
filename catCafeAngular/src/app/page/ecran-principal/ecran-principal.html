@@ -19,7 +19,104 @@
 
  <div class="salon-et-panneau">
       <div>
-        <div class="cadre-salon" id="cadre-salon"><div class="scene" id="scene"></div></div>
+        <div class="cadre-salon" id="cadre-salon"><div class="scene" id="scene">
+            @let tablesSalon = (Tables$ | async);
+
+          <div class="salon-plateau" [class.placement]="sceneEnPlacement()">
+
+            <!-- fond : mur, fenêtres, étagères, parquet -->
+            <img class="salon-objet" [src]="FOND_SALON.src" alt="" draggable="false"
+                [style.--x]="FOND_SALON.x" [style.--y]="FOND_SALON.y" [style.--w]="FOND_SALON.w" [style.--h]="FOND_SALON.h"
+                [style.z-index]="FOND_SALON.z">
+
+            <!-- décor non cliquable : barista, arbre à chat, coussins, plantes -->
+            @for (o of DECOR_SALON; track o.nom) {
+              <img class="salon-objet" [src]="o.src" alt="" draggable="false"
+                  [style.--x]="o.x" [style.--y]="o.y" [style.--w]="o.w" [style.--h]="o.h" [style.z-index]="o.z">
+            }
+
+            <!-- porte « Entrée » -->
+            <button type="button" class="salon-objet salon-cliquable"
+                    title="Porte d'entrée — accueillir des clients" aria-label="Porte d'entrée — accueillir des clients"
+                    [style.--x]="PORTE_ENTREE.x" [style.--y]="PORTE_ENTREE.y" [style.--w]="PORTE_ENTREE.w" [style.--h]="PORTE_ENTREE.h"
+                    [style.z-index]="PORTE_ENTREE.z" (click)="clicPorteEntree()">
+              <img [src]="PORTE_ENTREE.src" alt="" draggable="false">
+            </button>
+
+            <!-- porte « Privé » -->
+            <button type="button" class="salon-objet salon-cliquable"
+                    title="Privé — espace gérant" aria-label="Privé — espace gérant"
+                    [style.--x]="PORTE_PRIVEE.x" [style.--y]="PORTE_PRIVEE.y" [style.--w]="PORTE_PRIVEE.w" [style.--h]="PORTE_PRIVEE.h"
+                    [style.z-index]="PORTE_PRIVEE.z" (click)="clicPortePrivee()">
+              <img [src]="PORTE_PRIVEE.src" alt="" draggable="false">
+            </button>
+
+            <!-- comptoir -->
+            <button type="button" class="salon-objet salon-cliquable"
+                    title="Comptoir — régler l'addition" aria-label="Comptoir — régler l'addition"
+                    [style.--x]="COMPTOIR.x" [style.--y]="COMPTOIR.y" [style.--w]="COMPTOIR.w" [style.--h]="COMPTOIR.h"
+                    [style.z-index]="COMPTOIR.z" (click)="clicComptoir()">
+              <img [src]="COMPTOIR.src" alt="" draggable="false">
+            </button>
+
+            <!-- caisse -->
+            <button type="button" class="salon-objet salon-cliquable"
+                    title="Caisse — régler l'addition" aria-label="Caisse — régler l'addition"
+                    [style.--x]="CAISSE.x" [style.--y]="CAISSE.y" [style.--w]="CAISSE.w" [style.--h]="CAISSE.h"
+                    [style.z-index]="CAISSE.z" (click)="clicCaisse()">
+              <img [src]="CAISSE.src" alt="" draggable="false">
+            </button>
+
+            <!-- tables : ellipse + image (table et sièges) + cadenas, grisés ensemble ; plaque à part pour rester lisible -->
+            @for (st of TABLES_SALON; track st.id) {
+              @let tb = tableBdd(tablesSalon, st.id);
+
+              <div class="salon-groupe-table" [style.z-index]="st.z"
+                  [class.occupee]="sceneTableOccupee(st.id, tb)"
+                  [class.elig]="sceneEnPlacement() && sceneTableEligible(st.id, tb)"
+                  [class.inelig]="sceneEnPlacement() && !sceneTableEligible(st.id, tb)">
+
+                <div class="salon-zone"
+                    [style.--x]="st.zone.x" [style.--y]="st.zone.y" [style.--w]="st.zone.w" [style.--h]="st.zone.h"></div>
+
+                <button type="button" class="salon-objet salon-cliquable salon-table"
+                        [attr.title]="'Table ' + st.id + ' · ' + (tb?.capacite ?? st.capacite) + ' places'"
+                        [attr.aria-label]="'Table ' + st.id + ', ' + (tb?.capacite ?? st.capacite) + ' places'"
+                        [style.--x]="st.image.x" [style.--y]="st.image.y" [style.--w]="st.image.w" [style.--h]="st.image.h"
+                        (click)="clicTableSalon(st.id, tb)">
+                  <img [src]="st.image.src" alt="" draggable="false">
+                </button>
+
+                <img class="salon-objet salon-cadenas" [src]="CADENAS_SRC" alt="" draggable="false"
+                    [style.--x]="st.cadenas.x" [style.--y]="st.cadenas.y" [style.--w]="st.cadenas.w" [style.--h]="st.cadenas.h">
+              </div>
+
+              <span class="salon-plaque"
+                    [class.occupee]="sceneTableOccupee(st.id, tb)"
+                    [class.inelig]="sceneEnPlacement() && !sceneTableEligible(st.id, tb)"
+                    [style.--x]="st.plaque.x" [style.--y]="st.plaque.y">T{{ st.id }} · {{ tb?.capacite ?? st.capacite }} places</span>
+            }
+
+            <!-- chats (ceux de ta base, placés sur les emplacements de la maquette) -->
+            @for (chat of (Chats$ | async); track chat.id; let i = $index) {
+              @let pc = placeChat(i);
+              @let ic = imageChat(chat, i);
+              <button type="button" class="salon-objet salon-cliquable salon-chat"
+                      [attr.title]="chat.nom" [attr.aria-label]="'Chat ' + chat.nom"
+                      [style.--x]="pc.x + ic.dx" [style.--y]="pc.y + ic.dy" [style.--w]="ic.w" [style.--h]="ic.h"
+                      [style.z-index]="pc.y + 6" (click)="clicChatSalon(chat)">
+                <img [src]="ic.src" alt="" draggable="false">
+              </button>
+            }
+
+            <!-- feuillage au premier plan, devant tout -->
+            <img class="salon-objet salon-premier-plan" [src]="PREMIER_PLAN.src" alt="" draggable="false"
+                [style.--x]="PREMIER_PLAN.x" [style.--y]="PREMIER_PLAN.y" [style.--w]="PREMIER_PLAN.w" [style.--h]="PREMIER_PLAN.h"
+                [style.z-index]="PREMIER_PLAN.z">
+          </div>
+
+        </div></div>
+
         <div class="legende">
           <span><i style="background:#f5c443"></i>Table disponible pour votre groupe</span>
           <span><i style="background:#f6b8c0"></i>Table occupée — cliquez pour commander</span>
@@ -42,7 +139,7 @@
           <div class="menu-cat">En ce moment</div>
             @for (c of (Commandes$ | async) ; track c.id){
 
-              <div class="resume-ligne"><b>{{`T${c.reservation.assise?.id}`}}</b><span>{{`client : ${c.reservation.client.nom}- ${c.reservation.assise?.capacite}`}}</span><span > {{`${c.statutCommande}`}}</span></div>
+              <div class="resume-ligne"><b>{{`T${c.reservation.assise?.id}`}}</b><span>{{`client : ${c.reservation?.client.nom}- ${c.reservation.assise?.capacite}`}}</span><span > {{`${c.statutCommande}`}}</span></div>
             }
             @if (statsChats$ | async; as s) {
               <div class="resume-ligne"><b>🐾</b><span>{{`${s.aAdopter} chats à adopter sur ${s.total}`}}</span></div>

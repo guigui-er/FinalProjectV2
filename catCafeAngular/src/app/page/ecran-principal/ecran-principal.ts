@@ -16,6 +16,9 @@ import { CommandeService } from '../../service/commande-service';
 import { ChatService } from '../../service/chat-service';
 import { Chat } from '../../model/chat';
 
+import { FOND_SALON, PREMIER_PLAN, DECOR_SALON, PORTE_ENTREE, PORTE_PRIVEE, COMPTOIR, CAISSE, CADENAS_SRC,
+         TABLES_SALON, PLACES_CHATS, PELAGES_CHATS, IMAGES_CHATS, ImageChat, PlaceChat } from './scene-salon';
+
 @Component({
   imports: [DatePipe,AsyncPipe],
   selector: 'app-ecran-principal',
@@ -168,6 +171,90 @@ export class EcranPrincipal implements OnInit{
       protected InfosChats(): void {
 
 
+  }
+
+  protected readonly FOND_SALON = FOND_SALON;
+  protected readonly PREMIER_PLAN = PREMIER_PLAN;
+  protected readonly DECOR_SALON = DECOR_SALON;
+  protected readonly PORTE_ENTREE = PORTE_ENTREE;
+  protected readonly PORTE_PRIVEE = PORTE_PRIVEE;
+  protected readonly COMPTOIR = COMPTOIR;
+  protected readonly CAISSE = CAISSE;
+  protected readonly CADENAS_SRC = CADENAS_SRC;
+  protected readonly TABLES_SALON = TABLES_SALON;
+
+  /** la table de ta base qui correspond à une table du salon (même id), ou undefined */
+  protected tableBdd(tables: Table[] | null, idTable: number): Table | undefined {
+    return tables?.find(t => t.id === idTable);
+  }
+
+  /** l'emplacement du i-ème chat (les emplacements sont réutilisés au-delà du 5e chat) */
+  protected placeChat(i: number): PlaceChat {
+    return PLACES_CHATS[i % PLACES_CHATS.length];
+  }
+
+  /** l'image du i-ème chat : son pelage, assis ou endormi, sur un coussin ou au sol */
+  protected imageChat(chat: Chat, i: number): ImageChat {
+    const pelage = PELAGES_CHATS[i % PELAGES_CHATS.length];
+    const pose = this.sceneChatDort(chat) ? 'dort' : 'assis';
+    const support = this.placeChat(i).coussin ? 'coussin' : 'sol';
+    return IMAGES_CHATS[`chat-${pelage}-${pose}-${support}`];
+  }
+
+  /* ----- État de l'affichage : À REMPLIR selon ta logique ----- */
+
+  /** vrai quand un groupe choisit sa table : le salon passe en mode placement */
+  protected sceneEnPlacement(): boolean {
+    return false;
+  }
+
+  /** en mode placement : cette table convient-elle au groupe ? (jaune si oui, grisée avec cadenas sinon) */
+  protected sceneTableEligible(idTable: number, table: Table | undefined): boolean {
+
+
+    return false;
+  }
+
+  /** la table est-elle occupée ? (ellipse et plaque roses) */
+  protected sceneTableOccupee(idTable: number, table: Table | undefined): boolean {
+    return false;
+  }
+
+  /** le chat dort-il ? (image du chat couché) */
+  protected sceneChatDort(chat: Chat): boolean {
+    return false;
+  }
+
+  /* ----- Clics sur la scène : À REMPLIR ----- */
+
+  /** clic sur la porte « Entrée » */
+  protected clicPorteEntree(): void {
+    this.router.navigate([ '/client' ]);
+  }
+
+  /** clic sur la porte « Privé » */
+  protected clicPortePrivee(): void {
+    this.router.navigate([ '/client' ]);
+  }
+
+  /** clic sur le comptoir */
+  protected clicComptoir(): void {
+    this.router.navigate([ '/client' ]);
+  }
+
+  /** clic sur la caisse */
+  protected clicCaisse(): void {
+    this.router.navigate([ '/client' ]);
+  }
+
+  /** clic sur une table (ou ses sièges) ; table = la table de ta base, undefined si elle n'y est pas */
+  protected clicTableSalon(idTable: number, table: Table | undefined): void {
+    this.router.navigate([ '/client/' ]);
+  }
+
+  /** clic sur un chat */
+  protected clicChatSalon(chat: Chat): void {
+    this.router.navigate([ '/client' ]);
   }
 
 
