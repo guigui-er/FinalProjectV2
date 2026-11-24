@@ -1,63 +1,89 @@
 /* Fond général de la commande */
 .commande {
-  background-color: #fffdf6;
+  background-color: #fbf6ea;
   color: #45483d;
-  max-width: 650px;
-  margin: 30px auto;
+
+  /* Dimensions de la popup */
+  width: 600px;
+  max-width: 90vw;
+  max-height: 90vh;
+  box-sizing: border-box;
+
+  /* Barre de défilement vertical */
+  overflow-y: auto;
+
+  /* Apparence */
   padding: 28px;
-  border-radius: 20px;
+  border-radius: 26px;
   box-shadow: 0 8px 25px rgba(70, 60, 40, 0.12);
-  font-family: 'Caveat',cursive;
+
+  /* Police générale */
+  font-family: 'Caveat', cursive;
 }
 
-/* En-tête */
+/* En-tête de la commande */
 .header {
   position: relative;
   text-align: center;
   padding-bottom: 15px;
 }
 
+/* Titre principal "Menu du Café" */
 .header h2 {
   color: #3d5a33;
   font-size: 36px;
   margin: 5px 0 10px;
 }
 
+/* Informations table, client, réservation */
 .infos {
   color: #817d70;
   font-size: 14px;
   margin: 0;
+  font-family: Arial, sans-serif;
 }
 
-/* Bouton fermer */
+/* Bouton fermer de la popup */
 .btn-fermer {
+  /* positionnement par rapport à l'en-tête */
   position: absolute;
   top: -10px;
   right: -5px;
+
+  /* Apparence du bouton */
   background: transparent;
   border: none;
   color: #a64f38;
   font-size: 28px;
+
+  /* Curseur en forme de main */
   cursor: pointer;
 }
 
-/* Séparateurs */
+/* Changement d'apparence au survol */
+.btn-fermer:hover {
+  color: #893e2c;
+  transform: scale(1.1);
+}
+
+/* Séparateurs verticaux */
 hr {
   border: none;
   border-top: 1px solid #e8e1d2;
   margin: 18px 0;
 }
 
-/* Contenu */
+/* Contenu du menu */
 .contenu {
   padding: 5px 0;
 }
 
-/* Catégories */
+/* Catégories du menu */
 .categorie {
   margin-bottom: 15px;
 }
 
+/* Titres des catégories : boissons, gâteaux, plats... */
 .categorie h4 {
   color: #a64f38;
   font-size: 21px;
@@ -65,7 +91,7 @@ hr {
   font-weight: 600;
 }
 
-/* Ligne d'article */
+/* Ligne des articles */
 .ligne-menu {
   display: flex;
   align-items: center;
@@ -74,19 +100,21 @@ hr {
   border-bottom: 1px dotted #dcd4bd;
 }
 
+/* Nom de l'article */
 .nom {
   flex: 1;
-  /* font-weight: 600; */
 }
 
+/* Prix de l'article */
 .prix {
   color: #777467;
   font-size: 14px;
   min-width: 65px;
   text-align: right;
+  font-family: Arial, sans-serif;
 }
 
-/* Quantités */
+/* Boutons et Quantités des articles */
 .qte {
   display: flex;
   align-items: center;
@@ -115,7 +143,7 @@ hr {
   font-weight: bold;
 }
 
-/* Catégorie vide */
+/* Message lorsqu'une catégorie est vide */
 .vide {
   color: #999386;
   font-size: 13px;
@@ -125,13 +153,37 @@ hr {
 /* Pied de commande */
 .footer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 15px;
   margin-top: 20px;
   font-weight: bold;
 }
 
+/* Affichage de la ligne récapitulative (nombre articles et montant total) */
+.recap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+/* Affichage du nombre d'articles */
+.nombre-articles {
+  color: #3b3a2c
+;
+  font-size: 16px;
+}
+
+/* Affichage du montant total */
+.total {
+  color: #45483d;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Affichage du montant total */
 .footer b {
   color: #52634b;
   font-size: 25px;
@@ -139,6 +191,8 @@ hr {
 
 /* Bouton commander */
 .btn-commander {
+  width: 100%;
+  box-sizing: border-box;
   background-color: #a64f38;
   color: white;
   border: none;
@@ -149,32 +203,13 @@ hr {
   cursor: pointer;
 }
 
+/* Changement de couleur au survol, uniquement si le bouton n'est pas désactivé */
 .btn-commander:hover:not(:disabled) {
   background-color: #893e2c;
 }
 
+/* Apparence lorsque le panier est vide, bouton non cliquable */
 .btn-commander:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-/* Adaptation mobile */
-@media (max-width: 500px) {
-  .commande {
-    margin: 10px;
-    padding: 18px;
-  }
-
-  .ligne-menu {
-    gap: 7px;
-  }
-
-  .footer {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .btn-commander {
-    width: 100%;
-  }
 }

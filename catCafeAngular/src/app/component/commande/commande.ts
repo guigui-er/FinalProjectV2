@@ -113,6 +113,17 @@ export class Commande implements OnInit {
     return somme;
   } 
 
+  // Calculer le nombre total d'articles sélectionnés
+  protected getNombreArticles(): number {
+    let nombre = 0;
+    // On parcourt chaque article présent dans le panier
+    Object.values(this.panier).forEach(article => {
+      nombre += article.qte;
+    });
+
+    return nombre;
+  }
+
 
 
 }

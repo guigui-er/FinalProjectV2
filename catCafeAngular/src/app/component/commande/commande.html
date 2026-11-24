@@ -34,7 +34,7 @@
           </div>
       </div>
         } @empty {
-        <p class="vide">Aucune boisson chaude disponible.</p>
+        <p class="vide">Aucune boisson chaude disponible pour le moment.</p>
         }
     </section>
 
@@ -54,7 +54,7 @@
             </div>
         </div>
             } @empty {
-            <p class="vide">Aucune boisson froide disponible.</p>
+            <p class="vide">Aucune boisson froide disponible pour le moment.</p>
             }
     </section>
 
@@ -74,7 +74,7 @@
         </div>
       </div>
         } @empty {
-        <p class="vide">Aucun gâteau disponible.</p>
+        <p class="vide">Aucun gâteau disponible pour le moment.</p>
         }
     </section>
 
@@ -94,7 +94,7 @@
         </div>
       </div>
         } @empty {
-        <p class="vide">Aucune glace disponible.</p>
+        <p class="vide">Aucune glace disponible pour le moment.</p>
         }
     </section>
 
@@ -114,7 +114,7 @@
         </div>
       </div>
         } @empty {
-        <p class="vide">Aucun plat disponible.</p>
+        <p class="vide">Aucun plat disponible pour le moment.</p>
         }
     </section>
 
@@ -134,7 +134,7 @@
         </div>
       </div>
         } @empty {
-        <p class="vide">Aucune recette spéciale disponible.</p>
+        <p class="vide">Aucune recette spéciale disponible pour le moment.</p>
         }
     </section>
 
@@ -145,9 +145,20 @@
   <!-- Footer de la commande -->
   <div class="footer">
 
-    <span>Total : <b>{{ getTotal() | number:'1.2-2' }} €</b></span> <!-- Avec DecimalPipe pour afficher seulement 2 chiffres max après le point  -->
+    <div class="recap">
 
-    <button class="btn-commander" type="bouton" (click)="commander()" [disabled]="getTotal() === 0">Commander</button>
+      <!-- Nombre d'article -->
+      <span class="nombre-articles">
+        {{ getNombreArticles() }} article(s)
+      </span>
+
+      <!-- Montant total -->
+      <span class="total">Total : <b>{{ getTotal() | number:'1.2-2' }} €</b></span> <!-- Avec DecimalPipe pour afficher seulement 2 chiffres max après le point  -->
+
+    </div>
+    
+    <!-- Bouton commander -->
+    <button class="btn-commander" type="bouton" [disabled]="getTotal() === 0">Commander</button>
 
   </div>
 
