@@ -1,9 +1,11 @@
  
 <div class="fond-flou" id="voile" aria-hidden="true" ></div>
-<div class="page-connexion">
-<div class="boite" id="boite" role="dialog" aria-modal="true" aria-labelledby="titre-gerant" >
+<div class="page-connexion" (click)="fermerPage()">
+<div class="boite" id="boite" role="dialog" aria-modal="true" aria-labelledby="titre-gerant" (click)="$event.stopPropagation()">
 <div id="boite-contenu">
-    <button class="fermer" id="btn-fermer" type="button" aria-label="Fermer">x</button>
+    <button class="fermer" id="btn-fermer" type="button" aria-label="Fermer" 
+    (click)="fermerPage()">x</button>
+
     <h2 id="titre-gerant">Espace connexion gérant</h2>
     <p class="sous">Connexion réservée à l'équipe du Chat Perché.</p>    
         <form id="f-gerant" (submit)="login()" [formGroup]="formLoginGroup" novalidate>

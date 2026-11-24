@@ -15,20 +15,20 @@ export class AccueilComponent {
     private router: Router,
   ) {}
 
-  ouverturePorte() : void{
+  protected ouverturePorte() : void{
     this.porteOuverte = !this.porteOuverte;
     this.choixConnexOuvert = this.porteOuverte;
   }
 
-  fermerFenetreConnexion(){
+  protected fermerFenetreConnexion(){
     this.choixConnexOuvert=false;
   }
 
-  connexionClient(){
+  protected connexionClient(){
     this.router.navigate(['entree'])
   }
 
-  connexionGerant(){
+  protected connexionGerant(){
     this.router.navigate(['gerant'])
   }
 

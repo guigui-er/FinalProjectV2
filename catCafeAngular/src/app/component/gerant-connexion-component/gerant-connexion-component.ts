@@ -41,4 +41,9 @@ export class GerantConnexionComponent implements OnInit{
     })
   }
 
+  protected fermerPage() {
+
+    this.router.navigate(['accueil'])
+  }
+
 }
