@@ -63,16 +63,32 @@ public class GerantService {
 
     public int nbClientsPresents(){
         int total = 0;
-        for (Reservation reservation : daoReservation.findAll()){
-            if(reservation.getAssise() != null && reservation.getAssise().isComplet()){
-                total+=reservation.getNbClient();
+        for (Assise assise : daoAssise.findAll()) {
+                Reservation reservation = trouverReservation(assise);
+                Commande commande = trouverCommandeTable(reservation);
+
+                boolean estOccupee = assise.isComplet() || commande != null;
+                
+                if (estOccupee && reservation != null) {
+                    total += reservation.getNbClient();
+                }
             }
-        }
         return total;
     }
 
     public int nbTablesOccupees(){
-        return daoAssise.countByCompletTrue();
+        int total = 0;
+        for (Assise assise : daoAssise.findAll()) {
+                Reservation reservation = trouverReservation(assise);
+                Commande commande = trouverCommandeTable(reservation);
+
+                boolean estOccupee = assise.isComplet() || commande != null;
+                
+                if (estOccupee) {
+                    total++;
+                }
+            }
+        return total;
     }
 
     /*
