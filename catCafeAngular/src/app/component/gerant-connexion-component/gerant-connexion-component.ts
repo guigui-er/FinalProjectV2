@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GerantConnexionService } from '../../service/gerant-connexion-service';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -20,6 +20,7 @@ export class GerantConnexionComponent implements OnInit{
     private gerantConnexService: GerantConnexionService,
     private router:Router,
     private formBuilder: FormBuilder,
+    private location: Location,
     private titleService: Title
   ){}
 
@@ -43,7 +44,7 @@ export class GerantConnexionComponent implements OnInit{
 
   protected fermerPage() {
 
-    this.router.navigate(['ecranPrincipal'])
+    this.location.back();
   }
 
 }
