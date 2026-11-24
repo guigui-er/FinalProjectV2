@@ -4,42 +4,225 @@
   --sauge:#a3b18a; --sauge-clair:#e3ead6; --sauge-fonce:#7f9469;
   --mousse:#5f7f4a; --mousse-fonce:#3d5a33;
   --creme:#fbf6ea; --terracotta:#c9714f; --terracotta-fonce:#a85636;
-  --encre:#3b3a2c; --encre-doux:#6b6a55;
-  font-family:'Nunito', system-ui, sans-serif; font-weight:500; color:var(--encre)
+  --encre:#3b3a2c; --encre-doux:#6b6a55; --brun: #5a3a28;
+  --rose: #f6b8c0; --rose-fonce: #e98a96; --jaune: #ffcc48;
+  font-family:'Nunito', system-ui, sans-serif; font-weight:500;  color: var(--brun);
+  display: block;
+  min-height: 100vh;
 }
 
 *{ box-sizing : border-box }
 
-button{ font-family:inherit }
+button, input, select { font-family:inherit }
 
-@keyframes fondu{from{opacity:0}to{opacity:1}}
-@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.page-connexion {
+  position: relative;
+  z-index: 1;                 /* au-dessus du fond flou */
+  min-height: 100vh;
+  display: grid;
+  place-items: center;        /* centre horizontalement et verticalement */
+  padding: 1rem;
+}
 
-.voile{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:18px;background:rgba(38,52,30,.42);backdrop-filter:blur(3px)}
-.voile.ouvert{display:grid;animation:fondu .2s}
+.fond-flou {
+  position: fixed;
+  inset: 0;                 /* couvre tout l'écran */
+  z-index: 0;               /* derrière la boîte */
+  background: url('/accueil/cafe.png') center / cover no-repeat;
+  filter: blur(6px);
+  transform: scale(1.05);   /* évite les bords nets que le flou crée sur les côtés */
+}
 
-.boite{position:relative;width:min(560px,94vw);max-height:90vh;overflow:auto;background:var(--creme);border-radius:26px;padding:24px 26px 22px;box-shadow:0 30px 60px -20px rgba(30,44,24,.6);border:3px solid #fffaf0;animation:pop .3s cubic-bezier(.3,1.5,.5,1)}
-.boite h2{font-family:'Fredoka',sans-serif;font-size:36px;line-height:1;margin:0 0 4px;color:var(--mousse-fonce)}
-.boite .sous{margin:0 0 16px;color:var(--encre-doux);font-size:14px}
+.voile{
+      position:fixed;
+      inset:0;
+      z-index:100;
+      display:none;
+      place-items:center;
+      padding:18px;
+      background:rgba(38,52,30,.42);
+      backdrop-filter:blur(3px)
+      }
+.voile.ouvert{
+      display:grid;
+      }
 
-.fermer{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:2px solid var(--sauge-clair);background:#fffdf6;cursor:pointer;font-size:20px;line-height:1;color:var(--mousse-fonce)}
-.fermer:hover{background:var(--sauge-clair)}
+.boite{
+      position: relative;
+      z-index: 1;
+      --brun: #5a3a28;
+      --creme: #fff6e6;
+      --rose: #f6b8c0;
+      --rose-fonce: #e98a96;
+      --encre-doux: #8a6248;
+      width:min(524px,94vw);
+      max-height: calc(100dvh - 36px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      background:var(--creme);
+      border: 3px solid var(--brun);
+      border-radius: 25px;
+      color: var(--brun);
+      padding: 44px 22px 28px;
+      box-shadow:
+      0 7px 0 var(--brun),
+      0 25px 50px -18px rgba(59, 34, 23, .50);
+      
+      }
+/* Store rose et crème sur la partie haute de la fenêtre. */
+.boite::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 28px;
+      border-bottom: 3px solid var(--brun);
+      background: repeating-linear-gradient(90deg,
+      var(--rose) 0 26px,
+      var(--creme) 26px 52px);
+      border-radius: 21px 21px 0 0;
+      pointer-events: none;
+}
 
-.btn{border:none;cursor:pointer;border-radius:14px;padding:10px 18px;font-weight:700;font-size:14.5px;background:var(--mousse);color:#fbf6ea;box-shadow:0 4px 0 var(--mousse-fonce);transition:transform .08s,filter .15s}
-.btn:hover{filter:brightness(1.07)}
-.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--mousse-fonce)}
-.btn.large{width:100%;padding:13px}
+.boite h2{
+      font-family:'Fredoka','Nunito', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: clamp(24px, 5vw, 32px);
+      line-height: 1.08;
+      margin:0 0 4px;
+      color: var(--brun);
+      }
+.boite .sous{
+      margin:0 0 16px;
+      color:var(--encre-doux);
+      font-size:14px;
+      line-height: 1.4;
+      }
 
-.champ{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.champ label{font-weight:700;font-size:13.5px}
-.champ input,.champ select{font:inherit;font-weight:600;padding:10px 13px;border-radius:12px;border:2px solid #d9dcc8;background:#fffdf7;color:var(--encre);outline:none}
-.champ input:focus,.champ select:focus{border-color:var(--sauge-fonce);box-shadow:0 0 0 4px rgba(163,177,138,.3)}
-.champ.invalide input,.champ.invalide select{border-color:var(--terracotta)}
-.champ .err{color:var(--terracotta-fonce);font-size:12.5px;font-weight:700;min-height:16px}
+.fermer{
+      position: absolute;
+      top: 36px;
+      right: 13px;
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: 3px solid var(--brun);
+      border-radius: 50%;
+      background: var(--rose);
+      color: var(--brun);
+      box-shadow: 0 3px 0 var(--brun);
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1;
+      cursor: pointer;
+      }
 
-.message{border-radius:12px;padding:10px 13px;font-weight:700;font-size:13.5px;margin:10px 0}
-.message.erreur{background:#fbe3da;color:var(--terracotta-fonce);border:2px solid #f0c1ad}
-.message.info{background:var(--sauge-clair);color:var(--mousse-fonce);border:2px solid #c9d6b4}
-.message.ok{background:#e4f1d6;color:#3d6a2c;border:2px solid #bcd9a0}
+.fermer:hover{
+      background:var(--rose-fonce);
+    }
 
-.indice{font-size:12px;color:var(--encre-doux);margin-top:10px;text-align:center}
+.fermer:focus-visible { 
+      outline: 3px solid var(--jaune); 
+      outline-offset: 3px; 
+      }
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+.champ label {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--brun);
+}
+.champ input,
+.champ select {
+  width: 100%;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 2px solid #97664b;
+  border-radius: 13px;
+  outline: none;
+  background: #fffdf9;
+  color: var(--brun);
+  font-size: 14px;
+  font-weight: 700;
+}
+.champ input:focus,
+.champ select:focus {
+  border-color: var(--brun);
+  box-shadow: 0 0 0 4px rgba(255, 202, 70, .60);
+}
+.champ.invalide input,
+.champ.invalide select { border-color: var(--terracotta-fonce); }
+.champ .err {
+  min-height: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--terracotta-fonce);
+}
+
+/* Bouton jaune large */
+.btn {
+  padding: 10px 18px;
+  border: 3px solid var(--brun);
+  border-radius: 25px;
+  background: var(--jaune);
+  color: var(--brun);
+  box-shadow: 0 4px 0 var(--brun);
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+  cursor: pointer;
+}
+.btn:hover { background: #ffda69; }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--brun); }
+.btn:focus-visible { outline: 3px solid #d69522; outline-offset: 4px; }
+.btn.large { display: block; width: 100%; min-height: 46px; padding: 10px 14px; }
+
+/* Identifiants de démonstration, centrés sous le bouton */
+.indice {
+  margin: 13px 0 0;
+  color: var(--encre-doux);
+  font-size: 11.5px;
+  line-height: 1.4;
+  text-align: center;
+}
+.indice b { font-weight: 800; }
+
+/* Les messages d'erreur/succès restent compatibles */
+.message {
+  margin: 10px 0;
+  padding: 10px 13px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.message.erreur {
+  border: 2px solid #f0c1ad;
+  background: #fbe3da;
+  color: var(--terracotta-fonce);
+}
+.message.info {
+  border: 2px solid #c9d6b4;
+  background: var(--sauge-clair);
+  color: var(--mousse-fonce);
+}
+.message.ok {
+  border: 2px solid #bcd9a0;
+  background: #e4f1d6;
+  color: #3d6a2c;
+}
+
+@media (max-width: 480px) {
+  .voile { padding: 12px; }
+  .boite { width: 100%; padding: 44px 18px 23px; border-radius: 22px; }
+  .boite::before { border-radius: 18px 18px 0 0; }
+  .boite h2 { font-size: 26px; }
+  .boite .sous { padding-right: 8px; }
+}

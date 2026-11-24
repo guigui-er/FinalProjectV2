@@ -1,0 +1,101 @@
+
+<section id="ecran-entree" class="ecran actif" aria-label="Entrée du bar à chats">
+  
+  <div class="jardin-fond scene-plan" aria-hidden="true">
+    <img class="calque" src="accueil/ciel-nuages.webp" alt="" draggable="false" />
+    <img class="calque" src="accueil/buissons.webp" alt="" draggable="false" />
+    <img class="calque" src="accueil/facade-briques.webp" alt="" draggable="false" />
+    <img class="calque" src="accueil/auvent.webp" alt="" draggable="false" />
+
+    <img class="calque" src="accueil/vitrines.webp" alt="" draggable="false" />
+    <img class="objet etagere etagere-g" src="accueil/etagere-tasses.webp" alt="" />
+    <img class="objet etagere etagere-d" src="accueil/etagere-tasses.webp" alt="" />
+    
+    <img class="calque" src="accueil/trottoir.webp" alt="" draggable="false" />
+    <img class="objet grande-plante grande-plante-g" src="accueil/plante-pot.webp" alt="" />
+    <img class="objet grande-plante grande-plante-d" src="accueil/plante-pot.webp" alt="" />
+  </div>
+
+  <!-- Même cadrage que le fond : le bâtiment et la porte restent alignés. -->
+  <div class="entree-centre scene-plan">
+    <div class="porte-zone">
+      <h1 class="enseigne-entree">CatCafé</h1>
+
+      <button
+        type="button"
+        class="porte"
+        [class.ouverte]="porteOuverte"
+        [attr.aria-label]="porteOuverte ? 'Refermer la porte du café' : 'Ouvrir la porte du café'"
+        [attr.aria-pressed]="porteOuverte"
+        [attr.aria-describedby]="porteOuverte ? null : 'porte-aide'"
+        (click)="ouverturePorte()"
+      >
+        
+        <span class="interieur" aria-hidden="true">
+          <img src="accueil/interieur-porte.png" alt="" draggable="false" />
+        </span>
+        
+        <span class="battant g" aria-hidden="true">
+          <img src="accueil/porte-gauche.webp" alt="" draggable="false" />
+        </span>
+        <span class="battant d" aria-hidden="true">
+          <img src="accueil/porte-droite.webp" alt="" draggable="false" />
+        </span>
+      </button>
+
+      
+      <img class="objet lierre-porte" src="accueil/lierre-porte.webp" alt="" aria-hidden="true" />
+      <img class="objet plante-porte plante-porte-g" src="accueil/plante-pot-2.webp" alt="" aria-hidden="true" />
+      <img class="objet plante-porte plante-porte-d" src="accueil/plante-pot-2.webp" alt="" aria-hidden="true" />
+      <img class="objet tapis-porte" src="accueil/tapis.webp" alt="" aria-hidden="true" />
+
+      <p id="porte-aide" class="porte-aide" [class.masquee]="porteOuverte">
+        Cliquez sur la porte pour entrer
+      </p>
+      </div>
+    </div>
+
+      @if (choixConnexOuvert) {
+        <div
+      class="voile"
+      role="presentation"
+      (click)="fermerFenetreConnexion()"
+      >
+      <div
+        class="boite"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titre-choix-role"
+        aria-describedby="description-choix-role"
+        (click)="$event.stopPropagation()"//Pour éviter de fermer la boite lorsqu'on clique dedans
+      >
+        <button
+          #boutonFermer
+          class="fermer"
+          type="button"
+          aria-label="Fermer la fenêtre"
+          (click)="fermerFenetreConnexion()"
+        >×</button>
+
+        <h2 id="titre-choix-role">Bienvenue au café !</h2>
+        <p id="description-choix-role" class="sous">
+          Entrez, installez-vous, les chats vous attendent. Vous êtes…
+        </p>
+
+      <div class="choix-role">
+        <button type="button" class="carte-role" (click)="connexionClient()">
+          <span class="ico" aria-hidden="true">🐾</span>
+          <strong>Client</strong>
+          <span>Un thé, un cookie, des ronrons</span>
+        </button>
+        <button type="button" class="carte-role" (click)="connexionGerant()">
+          <span class="ico" aria-hidden="true">🔑</span>
+          <strong>Gérant</strong>
+          <span>Accès au tableau de bord</span>
+        </button>
+      </div>
+    </div>
+  </div>
+      }
+      
+</section>
