@@ -11,6 +11,7 @@ import { StatsGerantResponse } from '../../model/stats-gerant';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { TableAssisesResponse } from '../../model/table-assise';
 import { TableReservationsResponse } from '../../model/table-reservation';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [RouterLink,CommonModule,AsyncPipe],
@@ -22,6 +23,9 @@ export class GerantPage {
 
   protected title: Title = inject(Title);
   protected gerantService: GerantService = inject(GerantService);
+
+  private router: Router = inject(Router);
+
 
   protected reservations$!:Observable<Reservation[]>
   protected chats$!:Observable<Chat[]>
@@ -47,6 +51,9 @@ export class GerantPage {
     this.reservationsEtat$ = this.gerantService.findAllReservationsResponse();
   }
 
+  protected clicRetourAuSalon(): void {
+    this.router.navigate([ '/ecranPrincipal' ]);
+  }
 
 
  

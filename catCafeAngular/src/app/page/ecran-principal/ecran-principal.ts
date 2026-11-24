@@ -234,7 +234,7 @@ export class EcranPrincipal implements OnInit{
 
   /** clic sur la porte « Privé » */
   protected clicPortePrivee(): void {
-    this.router.navigate([ '/client' ]);
+    this.router.navigate([ '/gerant' ]);
   }
 
   /** clic sur le comptoir */
