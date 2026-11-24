@@ -19,7 +19,6 @@ import cat_cafe.model.Client;
 import cat_cafe.model.Compte;
 
 @RestController 
-@CrossOrigin("*")
 @RequestMapping ("/api/client")
 @CrossOrigin ("*")
 public class ClientRestController {

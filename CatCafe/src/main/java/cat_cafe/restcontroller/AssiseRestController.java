@@ -18,7 +18,6 @@ import cat_cafe.dao.IDAOAssise;
 import cat_cafe.model.Assise;
 
 @RestController 
-@CrossOrigin("*")
 @RequestMapping ("/api/assise")
 @CrossOrigin ("*")
 public class AssiseRestController {

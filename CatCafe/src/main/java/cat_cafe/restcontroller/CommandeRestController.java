@@ -22,7 +22,6 @@ import cat_cafe.service.CommandeService;
 import jakarta.transaction.Transactional;
 
 @RestController 
-@CrossOrigin("*")
 @RequestMapping("/api/commande")
 @CrossOrigin ("*")
 public class CommandeRestController {

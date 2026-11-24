@@ -19,7 +19,6 @@ import cat_cafe.dao.IDAOChat;
 import cat_cafe.model.Chat;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/api/chat")
 @CrossOrigin ("*")
 public class ChatRestController {	

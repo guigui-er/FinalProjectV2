@@ -41,21 +41,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
     
 @RestController 
-@CrossOrigin("*")
 @RequestMapping("/api/gerant")
-@CrossOrigin (origins = "http://localhost:4200")
+@CrossOrigin ("*")
 public class GerantRestController {
+
+    private final AuthenticationManager authenticationManager; 
 
     private GerantService gerantService;
     private CommandeService commandeService;
     private IDAOAssise daoAssise;
     private IDAOReservation daoReservation;
 
-    private final AuthenticationManager authenticationManager; 
-    public GerantRestController(AuthenticationManager authenticationManager){
+    public GerantRestController(AuthenticationManager authenticationManager,GerantService gerantService, CommandeService commandeService, IDAOAssise daoAssise, IDAOReservation daoReservation){
         this.authenticationManager = authenticationManager;
-    }
-    public GerantRestController(GerantService gerantService, CommandeService commandeService, IDAOAssise daoAssise, IDAOReservation daoReservation){
         this.gerantService=gerantService;
         this.commandeService=commandeService;
         this.daoAssise= daoAssise;
@@ -94,6 +92,8 @@ public class GerantRestController {
             return TableReservationsResponse.convert(reservation,commande,prixTotal);
         })
         .toList();
+    }
+
     @PostMapping("/auth")
     public AuthResponse auth(@RequestBody AuthRequest request) {
 
@@ -104,12 +104,6 @@ public class GerantRestController {
         return new AuthResponse(true);
     }
     
-
-    @PutMapping ("/{id}")
-    public GerantResponse save(@PathVariable Integer id, @RequestBody Gerant gerant){
-        gerant.setId(id);
-        return GerantResponse.convert(this.dao.save(gerant));
-    }
 
 }
 

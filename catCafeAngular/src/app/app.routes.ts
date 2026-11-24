@@ -22,13 +22,14 @@ export const routes: Routes = [
         path: 'gerant',
         component: GerantConnexionComponent
     },
-        {
-    path: 'ecranPrincipal',
-    component: EcranPrincipal
-   }
+        
+    {
+        path: 'ecranPrincipal',
+        component: EcranPrincipal
+    },
 
     {
-        path: 'gerant',
+        path: 'gerantPage',
         component: GerantPage
     }
 

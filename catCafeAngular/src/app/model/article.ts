@@ -1,5 +1,5 @@
 export interface Article {
-    id:number;
+    id?:number;
     prix:number;
     description:string
 }
