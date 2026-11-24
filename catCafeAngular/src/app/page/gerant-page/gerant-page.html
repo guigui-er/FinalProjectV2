@@ -55,9 +55,9 @@
                     </ng-template>
                     </td>
                   <td>
-                    <span class="statut occupee" *ngIf="assise.complet; else nonComplet">Occupée</span>
+                    <span class="statut occupee" *ngIf="assise.complet; else nonComplet">occupée</span>
                     <ng-template #nonComplet> 
-                      <span class="statut libre">Libre</span>
+                      <span class="statut libre">libre</span>
                     </ng-template>
                   </td>
                   </tr>
@@ -96,9 +96,10 @@
                   <td>{{ reservation.prixTotal }} €</td>
                   <td>
                     <ng-container *ngIf="reservation.commandeStatut; else pasDeCommande">
-                      <span class="statut payee" *ngIf="reservation.accepterPaiement && reservation.commandeStatut === 'Terminee'">Payée</span>
-                      <span class="statut encours" *ngIf="reservation.commandeStatut === 'En_cours'">En cours</span>
-                      <span lass="statut servie" *ngIf="reservation.commandeStatut === 'Servie'">Servie</span>
+                      <span class="statut payee" *ngIf="reservation.accepterPaiement && reservation.commandeStatut === 'Terminee'">payée</span>
+                      <span class="statut encours" *ngIf="reservation.commandeStatut === 'En_cours'">en cours</span>
+                      <span class="statut servie" *ngIf="reservation.commandeStatut === 'Servie'">servie</span>
+                      <span class="statut annulee" *ngIf="reservation.commandeStatut === 'Annulee'">annulée</span>
                     </ng-container>
                     <ng-template #pasDeCommande> 
                       <span>-</span>
@@ -110,27 +111,27 @@
         </div>
       </div>
 
-<!-- PAS EN TABLEAU ! -> en div plutot
       <div class="tableau">
         <h3>Nos chats</h3>
-        <table>
-            <thead>
-            </thead>
-            <tbody>
-                <tr *ngFor="let chat of chats$ | async">
-                <td>{{ chat.nom }}</td>
-                <td>{{ chat.age }} mois</td>
-                <td>
-                <span *ngIf="chat.adopted; else nonAdopte">Adoptable</span>
-                  <ng-template #nonAdopte> 
-                    <span>Adopté</span>
-                  </ng-template>
-                </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="blockcats">
+          <div class="blockcat" *ngFor="let chat of chats$ | async">
+            <div class="imgcat">
+              <img 
+              [src]="'chatsgerant/' + chat.nom + '.webp'"
+              [alt]="chat.nom"
+              />
+            </div>
+            <div>
+              <h3>{{ chat.nom }}</h3>
+              <p>{{ chat.age}} mois</p>
+              <span class="statut adoptable" *ngIf="chat.adopted; else nonAdopte">adopté</span>
+                <ng-template #nonAdopte> 
+                  <span class="statut adopte">adoptable</span>
+                </ng-template>
+            </div>
+          </div>
+        </div>
       </div>
--->
     </main>
 
     <footer>
