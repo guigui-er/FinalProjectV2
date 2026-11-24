@@ -14,10 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cat_cafe.dao.IDAOChat;
+import cat_cafe.dao.IDAOCompte;
+import cat_cafe.dto.request.ChatAdoptionRequest;
+import cat_cafe.dto.response.ChatAdoptionResponse;
 import cat_cafe.dto.response.ChatResponse;
 import cat_cafe.dto.response.ChatResponse.AdoptableResponse;
 import cat_cafe.model.Chat;
 import cat_cafe.model.ChatMF;
+import cat_cafe.model.Client;
+import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/api/chat")
@@ -25,6 +30,9 @@ public class ChatRestController {
     
     @Autowired
 	IDAOChat daoChat;
+
+	@Autowired 
+	IDAOCompte daoClient;
 
 	// Opérations CRUD basiques
 
@@ -89,7 +97,7 @@ public class ChatRestController {
 	// GET mappingz
 
 	@GetMapping("/nom/{nom}") // TESTÉ POSTMAN
-	public List<ChatResponse> findByNomIgnoreCase(@PathVariable String nom) {
+	public List<ChatResponse> chatsParNom(@PathVariable String nom) {
 
 		if(this.daoChat.findByNomIgnoreCase(nom).isEmpty() == true){
 			throw new IllegalArgumentException("Aucun chat ne correspond à votre recherche.");
@@ -101,7 +109,7 @@ public class ChatRestController {
 	}
 
 	@GetMapping("/sexe/{sexe}") // TESTÉ POSTMAN
-	public List<ChatResponse> findBySexe(@PathVariable ChatMF sexe) {
+	public List<ChatResponse> chatsParSexe(@PathVariable ChatMF sexe) {
 
 		return daoChat.findBySexe(sexe)
 			.stream()
@@ -110,7 +118,7 @@ public class ChatRestController {
 	}
 
 	@GetMapping("/age/{age}") // TESTÉ POSTMAN
-	public List<ChatResponse> findByAge(@PathVariable int age) {
+	public List<ChatResponse> chatsParAge(@PathVariable int age) {
 		return daoChat.findByAge(age)
 			.stream()
 			.map(ChatResponse::convert)
@@ -118,7 +126,7 @@ public class ChatRestController {
 	}
 
 	@GetMapping("/adoptable") // TESTÉ POSTMAN
-	public AdoptableResponse findAdoptable() {
+	public AdoptableResponse chatsAdoptables() {
 
 		List<ChatResponse> chats = daoChat.findByAdoptedFalse()
 			.stream()
@@ -130,5 +138,37 @@ public class ChatRestController {
 		return new AdoptableResponse(chats, nombreAdoptables);
 	}
 	
+	// POST mappingz
 
+	@PostMapping("/adopter") // TESTÉ POSTMAN
+	@Transactional
+	public ChatAdoptionResponse adopterChat(@RequestBody ChatAdoptionRequest chatAdoptionRequest) {
+
+		Chat chat = (Chat) daoChat.findById(chatAdoptionRequest.chatId()).orElse(null);
+		Client proprietaire = (Client) daoClient.findByIdClient(chatAdoptionRequest.proprietaireId()).orElse(null);
+		Chat chatAdoptéBdd = (Chat) daoChat.findAll() // Pour vérifier si un chat a déjà été adopté par le client/la cliente
+		.stream() 
+		.filter(c -> c.getProprietaire() != null && c.getProprietaire().getId().equals(proprietaire.getId())).findFirst().orElse(null);
+		// .filter (chaque chat de la liste -> check s'il y a un propriétaire != null && si un autre chat a pas déjà été adopté par le client/la cliente)
+		if (chatAdoptéBdd != null) {
+			throw new IllegalArgumentException("Vous ne pouvez adopter qu'un chat de la boutique.");
+		}
+		
+		if (chat == null || proprietaire == null) {
+			throw new IllegalArgumentException("Le chat ou le client n'existe pas en base de données.");
+		} 
+
+		if (chat.isAdopted()) {
+			throw new IllegalArgumentException(chat.getNom() + " a déjà trouvé une nouvelle famille !");
+		}
+		else {
+			chat.setAdopted(true);
+			chat.setProprietaire(proprietaire);
+			daoChat.save(chat);
+   		    return new ChatAdoptionResponse(
+			"Félicitations ! Vous avez adopté " + chat.getNom() + " ! Amicalement, l'équipe du Cat Café :)", // partie message de la response
+			ChatResponse.convert(chat));		
+		}
+
+	}
 }
