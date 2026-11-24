@@ -78,16 +78,18 @@ public class ReservationService {
     }
 
     @Transactional
-    public void supprimer(Integer id) {
+    public void liberer(Integer id) {
         Reservation reservation = trouverParId(id);
         Assise assise = reservation.getAssise();
 
-        dao.delete(reservation);
-
-        if (assise != null) {
+        if (assise != null && assise.isComplet()) {
             assise.setComplet(false);
             daoAssise.save(assise);
         }
+    }
+
+    public void supprimer(Integer id){
+        daoAssise.deleteById(id);
     }
 
     private Assise chargerAssise(Reservation reservation) {

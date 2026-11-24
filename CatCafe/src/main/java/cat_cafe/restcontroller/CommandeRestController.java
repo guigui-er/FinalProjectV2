@@ -3,6 +3,7 @@ package cat_cafe.restcontroller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cat_cafe.dao.IDAOCommande;
 import cat_cafe.dto.response.CommandeResponse;
+import cat_cafe.dto.response.CommandeResponseV2;
 import cat_cafe.model.Commande;
 import cat_cafe.model.StatutCommande;
 import cat_cafe.service.CommandeService;
@@ -21,6 +23,7 @@ import jakarta.transaction.Transactional;
 
 @RestController 
 @RequestMapping("/api/commande")
+@CrossOrigin ("*")
 public class CommandeRestController {
 
     @Autowired 
@@ -41,6 +44,18 @@ public class CommandeRestController {
 	  .toList();
 	}
 
+	@GetMapping("/allObject")
+	@Transactional 
+	public List<CommandeResponseV2> afficherTousAvecReservation() 
+	{
+	  return this.daoCommande.findAll().stream()
+	  .map(commande -> CommandeResponseV2.convert(
+    	commande,commandeService.calculerPrixTotal(commande)
+		))
+	  .toList();
+	}
+
+
     @GetMapping("/{id}")
 	@Transactional 
 	public CommandeResponse afficherParId(@PathVariable Integer id)
@@ -52,6 +67,8 @@ public class CommandeRestController {
 		))
 		.orElse(null);
 	}
+
+	
 
 	@GetMapping("/statut/{statut}")
 	@Transactional
@@ -87,6 +104,13 @@ public class CommandeRestController {
 	  commande.setId(id);
       daoCommande.save(commande);
       return commande;
+	}
+
+	@PutMapping("/{id}/statut/{statut}")
+	@Transactional
+	public CommandeResponse changerStatut(@PathVariable Integer id, @PathVariable StatutCommande statut) {
+		Commande commande = commandeService.changerStatut(id, statut);
+		return CommandeResponse.convert(commande, commandeService.calculerPrixTotal(commande));
 	}
 
 }

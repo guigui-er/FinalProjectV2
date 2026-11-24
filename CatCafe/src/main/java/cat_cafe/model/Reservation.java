@@ -68,4 +68,12 @@ public class Reservation {
         this.assise = assise;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
 }
