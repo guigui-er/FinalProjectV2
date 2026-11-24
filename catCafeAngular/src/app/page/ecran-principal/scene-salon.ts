@@ -9,13 +9,17 @@
 /** une image placée dans le salon */
 export interface ObjetScene { nom: string; src: string; x: number; y: number; w: number; h: number; z: number; }
 
-/** une table du salon : son image (sièges compris), son ellipse, sa plaque et son cadenas */
+/** une image positionnée, avec son ordre d'affichage */
+export interface ImageScene { src: string; x: number; y: number; w: number; h: number; z: number; }
+
+/** une table du salon : ses deux couches d'images (sièges compris), son ellipse, sa plaque et son cadenas */
 export interface TableScene {
   id: number;            // id de la table dans la maquette (1 à 6) = id attendu en base
   libelle: string;
   capacite: number;      // capacité de la maquette, utilisée si la table n'existe pas en base
   z: number;
-  image: { src: string; x: number; y: number; w: number; h: number };
+  arriere: ImageScene;   // ce qui est derrière le plateau : chaises du fond, dossiers, fond neutre
+  avant: ImageScene;     // la table et ce qui est devant : chaises de côté et de devant, fauteuils
   zone: { x: number; y: number; w: number; h: number };     // ellipse : (x, y) = son centre
   plaque: { x: number; y: number };                         // plaque : (x, y) = milieu de son bord haut
   cadenas: { x: number; y: number; w: number; h: number };
@@ -59,23 +63,39 @@ export const CADENAS_SRC = 'assets/scene/cadenas.webp';
 
 /** les six tables de la maquette */
 export const TABLES_SALON: TableScene[] = [
-  { id: 1, libelle: "Banquette d'angle & table basse", capacite: 2, z: 298,
-    image: { src: 'assets/scene/table-1.webp', x: 41, y: 231, w: 236, h: 174 },
+  { id: 1, libelle: "Banquette d'angle & table basse", capacite: 6, z: 298,
+    arriere: { src: 'assets/scene/table-1-arriere.webp', x: 41, y: 231, w: 236, h: 174, z: 296 },
+    avant:   { src: 'assets/scene/table-1-avant.webp', x: 109, y: 241, w: 152, h: 119, z: 298 },
     zone: { x: 185, y: 308, w: 222, h: 118 },
     plaque: { x: 185, y: 381 },
     cadenas: { x: 174, y: 263.44, w: 22, h: 26 } },
-  { id: 2, libelle: "Table ronde", capacite: 3, z: 300,
-    image: { src: 'assets/scene/table-3.webp', x: 460, y: 248, w: 170, h: 115 },
+  { id: 2, libelle: "Table haute & tabourets", capacite: 2, z: 256,
+    arriere: { src: 'assets/scene/table-2-arriere.webp', x: 324, y: 207, w: 52, h: 21, z: 254 },
+    avant:   { src: 'assets/scene/table-2-avant.webp', x: 289, y: 177, w: 122, h: 89, z: 256 },
+    zone: { x: 350, y: 258, w: 90, h: 50 },
+    plaque: { x: 350, y: 278.5 },
+    cadenas: { x: 339, y: 196.09, w: 22, h: 26 } },
+  { id: 3, libelle: "Table ronde", capacite: 4, z: 300,
+    arriere: { src: 'assets/scene/table-3-arriere.webp', x: 501, y: 248, w: 88, h: 70, z: 298 },
+    avant:   { src: 'assets/scene/table-3-avant.webp', x: 460, y: 251, w: 170, h: 112, z: 300 },
     zone: { x: 545, y: 308, w: 154, h: 82 },
     plaque: { x: 545, y: 347 },
     cadenas: { x: 534, y: 269.26, w: 22, h: 26 } },
-  { id: 3, libelle: "Petite table de bistrot", capacite: 4, z: 272,
-    image: { src: 'assets/scene/table-4.webp', x: 667, y: 231, w: 136, h: 80 },
+  { id: 4, libelle: "Petite table de bistrot", capacite: 2, z: 272,
+    arriere: { src: 'assets/scene/table-4-arriere.webp', x: 708, y: 261, w: 54, h: 22, z: 270 },
+    avant:   { src: 'assets/scene/table-4-avant.webp', x: 667, y: 231, w: 136, h: 80, z: 272 },
     zone: { x: 735, y: 280, w: 100, h: 60 },
     plaque: { x: 735, y: 295 },
     cadenas: { x: 724, y: 247.5, w: 22, h: 26 } },
-  { id: 4, libelle: "Grande table en bois", capacite: 6, z: 470,
-    image: { src: 'assets/scene/table-6.webp', x: 310, y: 412, w: 220, h: 134 },
+  { id: 5, libelle: "Coin canapé & fauteuils", capacite: 4, z: 452,
+    arriere: { src: 'assets/scene/table-5-arriere.webp', x: 671, y: 391, w: 128, h: 72, z: 450 },
+    avant:   { src: 'assets/scene/table-5-avant.webp', x: 624, y: 401, w: 222, h: 97, z: 452 },
+    zone: { x: 735, y: 460, w: 204, h: 112 },
+    plaque: { x: 735, y: 485 },
+    cadenas: { x: 724, y: 420.8, w: 22, h: 26 } },
+  { id: 6, libelle: "Grande table en bois", capacite: 8, z: 470,
+    arriere: { src: 'assets/scene/table-6-arriere.webp', x: 322, y: 412, w: 194, h: 78, z: 468 },
+    avant:   { src: 'assets/scene/table-6-avant.webp', x: 310, y: 415, w: 220, h: 131, z: 470 },
     zone: { x: 420, y: 478, w: 250, h: 104 },
     plaque: { x: 420, y: 523 },
     cadenas: { x: 409, y: 438.76, w: 22, h: 26 } }
@@ -123,4 +143,49 @@ export const IMAGES_CHATS: Record<string, ImageChat> = {
   'chat-ecaille-assis-sol': { src: 'assets/scene/chat-ecaille-assis-sol.webp', dx: -38, dy: -56, w: 76, h: 57 },
   'chat-ecaille-dort-coussin': { src: 'assets/scene/chat-ecaille-dort-coussin.webp', dx: -38, dy: -58, w: 76, h: 58 },
   'chat-ecaille-dort-sol': { src: 'assets/scene/chat-ecaille-dort-sol.webp', dx: -38, dy: -52, w: 76, h: 52 }
+};
+
+/** clients assis : CLIENTS_ASSIS[idTable][place][modèle]
+    place  = ordre de remplissage de la maquette (0 = 1re place occupée, 1 = 2e…)
+    modèle = 0 à 5, les six clients de la maquette (chapeau, violet, nœud, casquette, lunettes, mamie) */
+export const NB_MODELES_CLIENTS = 6;
+export const CLIENTS_ASSIS: Record<number, ImageScene[][]> = {
+  1: [
+    [{ src: 'assets/scene/client-t1-p1-m1.webp', x: 153, y: 213, w: 64, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p1-m2.webp', x: 158, y: 213, w: 54, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p1-m3.webp', x: 153, y: 213, w: 64, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p1-m4.webp', x: 158, y: 213, w: 54, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p1-m5.webp', x: 158, y: 213, w: 54, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p1-m6.webp', x: 158, y: 213, w: 54, h: 66, z: 297 }],
+    [{ src: 'assets/scene/client-t1-p2-m1.webp', x: 108, y: 213, w: 64, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p2-m2.webp', x: 113, y: 213, w: 54, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p2-m3.webp', x: 108, y: 213, w: 64, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p2-m4.webp', x: 113, y: 213, w: 54, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p2-m5.webp', x: 113, y: 213, w: 54, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p2-m6.webp', x: 113, y: 213, w: 54, h: 66, z: 297 }],
+    [{ src: 'assets/scene/client-t1-p3-m1.webp', x: 198, y: 213, w: 64, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p3-m2.webp', x: 203, y: 213, w: 54, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p3-m3.webp', x: 198, y: 213, w: 64, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p3-m4.webp', x: 203, y: 213, w: 54, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p3-m5.webp', x: 203, y: 213, w: 54, h: 66, z: 297 }, { src: 'assets/scene/client-t1-p3-m6.webp', x: 203, y: 213, w: 54, h: 66, z: 297 }],
+    [{ src: 'assets/scene/client-t1-p4-m1.webp', x: 38, y: 233, w: 64, h: 76, z: 294 }, { src: 'assets/scene/client-t1-p4-m2.webp', x: 43, y: 233, w: 54, h: 76, z: 294 }, { src: 'assets/scene/client-t1-p4-m3.webp', x: 38, y: 233, w: 64, h: 76, z: 294 }, { src: 'assets/scene/client-t1-p4-m4.webp', x: 43, y: 233, w: 54, h: 76, z: 294 }, { src: 'assets/scene/client-t1-p4-m5.webp', x: 43, y: 233, w: 54, h: 76, z: 294 }, { src: 'assets/scene/client-t1-p4-m6.webp', x: 43, y: 233, w: 54, h: 76, z: 294 }],
+    [{ src: 'assets/scene/client-t1-p5-m1.webp', x: 38, y: 271, w: 64, h: 76, z: 332 }, { src: 'assets/scene/client-t1-p5-m2.webp', x: 43, y: 271, w: 54, h: 76, z: 332 }, { src: 'assets/scene/client-t1-p5-m3.webp', x: 38, y: 271, w: 64, h: 76, z: 332 }, { src: 'assets/scene/client-t1-p5-m4.webp', x: 43, y: 271, w: 54, h: 76, z: 332 }, { src: 'assets/scene/client-t1-p5-m5.webp', x: 43, y: 271, w: 54, h: 76, z: 332 }, { src: 'assets/scene/client-t1-p5-m6.webp', x: 43, y: 271, w: 54, h: 76, z: 332 }],
+    [{ src: 'assets/scene/client-t1-p6-m1.webp', x: 38, y: 309, w: 64, h: 76, z: 370 }, { src: 'assets/scene/client-t1-p6-m2.webp', x: 43, y: 309, w: 54, h: 76, z: 370 }, { src: 'assets/scene/client-t1-p6-m3.webp', x: 38, y: 309, w: 64, h: 76, z: 370 }, { src: 'assets/scene/client-t1-p6-m4.webp', x: 43, y: 309, w: 54, h: 76, z: 370 }, { src: 'assets/scene/client-t1-p6-m5.webp', x: 43, y: 309, w: 54, h: 76, z: 370 }, { src: 'assets/scene/client-t1-p6-m6.webp', x: 43, y: 309, w: 54, h: 76, z: 370 }]
+  ],
+  2: [
+    [{ src: 'assets/scene/client-t2-p1-m1.webp', x: 272, y: 173, w: 64, h: 76, z: 261 }, { src: 'assets/scene/client-t2-p1-m2.webp', x: 277, y: 173, w: 54, h: 76, z: 261 }, { src: 'assets/scene/client-t2-p1-m3.webp', x: 272, y: 173, w: 64, h: 76, z: 261 }, { src: 'assets/scene/client-t2-p1-m4.webp', x: 277, y: 173, w: 54, h: 76, z: 261 }, { src: 'assets/scene/client-t2-p1-m5.webp', x: 277, y: 173, w: 54, h: 76, z: 261 }, { src: 'assets/scene/client-t2-p1-m6.webp', x: 277, y: 173, w: 54, h: 76, z: 261 }],
+    [{ src: 'assets/scene/client-t2-p2-m1.webp', x: 364, y: 173, w: 64, h: 76, z: 261 }, { src: 'assets/scene/client-t2-p2-m2.webp', x: 369, y: 173, w: 54, h: 76, z: 261 }, { src: 'assets/scene/client-t2-p2-m3.webp', x: 364, y: 173, w: 64, h: 76, z: 261 }, { src: 'assets/scene/client-t2-p2-m4.webp', x: 369, y: 173, w: 54, h: 76, z: 261 }, { src: 'assets/scene/client-t2-p2-m5.webp', x: 369, y: 173, w: 54, h: 76, z: 261 }, { src: 'assets/scene/client-t2-p2-m6.webp', x: 369, y: 173, w: 54, h: 76, z: 261 }]
+  ],
+  3: [
+    [{ src: 'assets/scene/client-t3-p1-m1.webp', x: 513, y: 223, w: 64, h: 66, z: 299 }, { src: 'assets/scene/client-t3-p1-m2.webp', x: 518, y: 223, w: 54, h: 66, z: 299 }, { src: 'assets/scene/client-t3-p1-m3.webp', x: 513, y: 223, w: 64, h: 66, z: 299 }, { src: 'assets/scene/client-t3-p1-m4.webp', x: 518, y: 223, w: 54, h: 66, z: 299 }, { src: 'assets/scene/client-t3-p1-m5.webp', x: 518, y: 223, w: 54, h: 66, z: 299 }, { src: 'assets/scene/client-t3-p1-m6.webp', x: 518, y: 223, w: 54, h: 66, z: 299 }],
+    [{ src: 'assets/scene/client-t3-p2-m1.webp', x: 446, y: 243, w: 64, h: 76, z: 303 }, { src: 'assets/scene/client-t3-p2-m2.webp', x: 451, y: 243, w: 54, h: 76, z: 303 }, { src: 'assets/scene/client-t3-p2-m3.webp', x: 446, y: 243, w: 64, h: 76, z: 303 }, { src: 'assets/scene/client-t3-p2-m4.webp', x: 451, y: 243, w: 54, h: 76, z: 303 }, { src: 'assets/scene/client-t3-p2-m5.webp', x: 451, y: 243, w: 54, h: 76, z: 303 }, { src: 'assets/scene/client-t3-p2-m6.webp', x: 451, y: 243, w: 54, h: 76, z: 303 }],
+    [{ src: 'assets/scene/client-t3-p3-m1.webp', x: 580, y: 243, w: 64, h: 76, z: 303 }, { src: 'assets/scene/client-t3-p3-m2.webp', x: 585, y: 243, w: 54, h: 76, z: 303 }, { src: 'assets/scene/client-t3-p3-m3.webp', x: 580, y: 243, w: 64, h: 76, z: 303 }, { src: 'assets/scene/client-t3-p3-m4.webp', x: 585, y: 243, w: 54, h: 76, z: 303 }, { src: 'assets/scene/client-t3-p3-m5.webp', x: 585, y: 243, w: 54, h: 76, z: 303 }, { src: 'assets/scene/client-t3-p3-m6.webp', x: 585, y: 243, w: 54, h: 76, z: 303 }],
+    [{ src: 'assets/scene/client-t3-p4-m1.webp', x: 513, y: 276, w: 64, h: 77, z: 336 }, { src: 'assets/scene/client-t3-p4-m2.webp', x: 518, y: 276, w: 54, h: 77, z: 336 }, { src: 'assets/scene/client-t3-p4-m3.webp', x: 513, y: 276, w: 64, h: 77, z: 336 }, { src: 'assets/scene/client-t3-p4-m4.webp', x: 518, y: 276, w: 54, h: 77, z: 336 }, { src: 'assets/scene/client-t3-p4-m5.webp', x: 518, y: 276, w: 54, h: 77, z: 336 }, { src: 'assets/scene/client-t3-p4-m6.webp', x: 518, y: 276, w: 54, h: 77, z: 336 }]
+  ],
+  4: [
+    [{ src: 'assets/scene/client-t4-p1-m1.webp', x: 653, y: 215, w: 64, h: 76, z: 275 }, { src: 'assets/scene/client-t4-p1-m2.webp', x: 658, y: 215, w: 54, h: 76, z: 275 }, { src: 'assets/scene/client-t4-p1-m3.webp', x: 653, y: 215, w: 64, h: 76, z: 275 }, { src: 'assets/scene/client-t4-p1-m4.webp', x: 658, y: 215, w: 54, h: 76, z: 275 }, { src: 'assets/scene/client-t4-p1-m5.webp', x: 658, y: 215, w: 54, h: 76, z: 275 }, { src: 'assets/scene/client-t4-p1-m6.webp', x: 658, y: 215, w: 54, h: 76, z: 275 }],
+    [{ src: 'assets/scene/client-t4-p2-m1.webp', x: 753, y: 215, w: 64, h: 76, z: 275 }, { src: 'assets/scene/client-t4-p2-m2.webp', x: 758, y: 215, w: 54, h: 76, z: 275 }, { src: 'assets/scene/client-t4-p2-m3.webp', x: 753, y: 215, w: 64, h: 76, z: 275 }, { src: 'assets/scene/client-t4-p2-m4.webp', x: 758, y: 215, w: 54, h: 76, z: 275 }, { src: 'assets/scene/client-t4-p2-m5.webp', x: 758, y: 215, w: 54, h: 76, z: 275 }, { src: 'assets/scene/client-t4-p2-m6.webp', x: 758, y: 215, w: 54, h: 76, z: 275 }]
+  ],
+  5: [
+    [{ src: 'assets/scene/client-t5-p1-m1.webp', x: 679, y: 373, w: 64, h: 66, z: 451 }, { src: 'assets/scene/client-t5-p1-m2.webp', x: 684, y: 373, w: 54, h: 66, z: 451 }, { src: 'assets/scene/client-t5-p1-m3.webp', x: 679, y: 373, w: 64, h: 66, z: 451 }, { src: 'assets/scene/client-t5-p1-m4.webp', x: 684, y: 373, w: 54, h: 66, z: 451 }, { src: 'assets/scene/client-t5-p1-m5.webp', x: 684, y: 373, w: 54, h: 66, z: 451 }, { src: 'assets/scene/client-t5-p1-m6.webp', x: 684, y: 373, w: 54, h: 66, z: 451 }],
+    [{ src: 'assets/scene/client-t5-p2-m1.webp', x: 727, y: 373, w: 64, h: 66, z: 451 }, { src: 'assets/scene/client-t5-p2-m2.webp', x: 732, y: 373, w: 54, h: 66, z: 451 }, { src: 'assets/scene/client-t5-p2-m3.webp', x: 727, y: 373, w: 64, h: 66, z: 451 }, { src: 'assets/scene/client-t5-p2-m4.webp', x: 732, y: 373, w: 54, h: 66, z: 451 }, { src: 'assets/scene/client-t5-p2-m5.webp', x: 732, y: 373, w: 54, h: 66, z: 451 }, { src: 'assets/scene/client-t5-p2-m6.webp', x: 732, y: 373, w: 54, h: 66, z: 451 }],
+    [{ src: 'assets/scene/client-t5-p3-m1.webp', x: 614, y: 387, w: 64, h: 76, z: 459 }, { src: 'assets/scene/client-t5-p3-m2.webp', x: 619, y: 387, w: 54, h: 76, z: 459 }, { src: 'assets/scene/client-t5-p3-m3.webp', x: 614, y: 387, w: 64, h: 76, z: 459 }, { src: 'assets/scene/client-t5-p3-m4.webp', x: 619, y: 387, w: 54, h: 76, z: 459 }, { src: 'assets/scene/client-t5-p3-m5.webp', x: 619, y: 387, w: 54, h: 76, z: 459 }, { src: 'assets/scene/client-t5-p3-m6.webp', x: 619, y: 387, w: 54, h: 76, z: 459 }],
+    [{ src: 'assets/scene/client-t5-p4-m1.webp', x: 792, y: 387, w: 64, h: 76, z: 459 }, { src: 'assets/scene/client-t5-p4-m2.webp', x: 797, y: 387, w: 54, h: 76, z: 459 }, { src: 'assets/scene/client-t5-p4-m3.webp', x: 792, y: 387, w: 64, h: 76, z: 459 }, { src: 'assets/scene/client-t5-p4-m4.webp', x: 797, y: 387, w: 54, h: 76, z: 459 }, { src: 'assets/scene/client-t5-p4-m5.webp', x: 797, y: 387, w: 54, h: 76, z: 459 }, { src: 'assets/scene/client-t5-p4-m6.webp', x: 797, y: 387, w: 54, h: 76, z: 459 }]
+  ],
+  6: [
+    [{ src: 'assets/scene/client-t6-p1-m1.webp', x: 365, y: 387, w: 64, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p1-m2.webp', x: 370, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p1-m3.webp', x: 365, y: 387, w: 64, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p1-m4.webp', x: 370, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p1-m5.webp', x: 370, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p1-m6.webp', x: 370, y: 387, w: 54, h: 66, z: 469 }],
+    [{ src: 'assets/scene/client-t6-p2-m1.webp', x: 365, y: 452, w: 64, h: 77, z: 512 }, { src: 'assets/scene/client-t6-p2-m2.webp', x: 370, y: 452, w: 54, h: 77, z: 512 }, { src: 'assets/scene/client-t6-p2-m3.webp', x: 365, y: 452, w: 64, h: 77, z: 512 }, { src: 'assets/scene/client-t6-p2-m4.webp', x: 370, y: 452, w: 54, h: 77, z: 512 }, { src: 'assets/scene/client-t6-p2-m5.webp', x: 370, y: 452, w: 54, h: 77, z: 512 }, { src: 'assets/scene/client-t6-p2-m6.webp', x: 370, y: 452, w: 54, h: 77, z: 512 }],
+    [{ src: 'assets/scene/client-t6-p3-m1.webp', x: 411, y: 387, w: 64, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p3-m2.webp', x: 416, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p3-m3.webp', x: 411, y: 387, w: 64, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p3-m4.webp', x: 416, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p3-m5.webp', x: 416, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p3-m6.webp', x: 416, y: 387, w: 54, h: 66, z: 469 }],
+    [{ src: 'assets/scene/client-t6-p4-m1.webp', x: 411, y: 452, w: 64, h: 77, z: 512 }, { src: 'assets/scene/client-t6-p4-m2.webp', x: 416, y: 452, w: 54, h: 77, z: 512 }, { src: 'assets/scene/client-t6-p4-m3.webp', x: 411, y: 452, w: 64, h: 77, z: 512 }, { src: 'assets/scene/client-t6-p4-m4.webp', x: 416, y: 452, w: 54, h: 77, z: 512 }, { src: 'assets/scene/client-t6-p4-m5.webp', x: 416, y: 452, w: 54, h: 77, z: 512 }, { src: 'assets/scene/client-t6-p4-m6.webp', x: 416, y: 452, w: 54, h: 77, z: 512 }],
+    [{ src: 'assets/scene/client-t6-p5-m1.webp', x: 319, y: 387, w: 64, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p5-m2.webp', x: 324, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p5-m3.webp', x: 319, y: 387, w: 64, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p5-m4.webp', x: 324, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p5-m5.webp', x: 324, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p5-m6.webp', x: 324, y: 387, w: 54, h: 66, z: 469 }],
+    [{ src: 'assets/scene/client-t6-p6-m1.webp', x: 319, y: 452, w: 64, h: 76, z: 512 }, { src: 'assets/scene/client-t6-p6-m2.webp', x: 324, y: 452, w: 54, h: 76, z: 512 }, { src: 'assets/scene/client-t6-p6-m3.webp', x: 319, y: 452, w: 64, h: 76, z: 512 }, { src: 'assets/scene/client-t6-p6-m4.webp', x: 324, y: 452, w: 54, h: 76, z: 512 }, { src: 'assets/scene/client-t6-p6-m5.webp', x: 324, y: 452, w: 54, h: 76, z: 512 }, { src: 'assets/scene/client-t6-p6-m6.webp', x: 324, y: 452, w: 54, h: 76, z: 512 }],
+    [{ src: 'assets/scene/client-t6-p7-m1.webp', x: 457, y: 387, w: 64, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p7-m2.webp', x: 462, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p7-m3.webp', x: 457, y: 387, w: 64, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p7-m4.webp', x: 462, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p7-m5.webp', x: 462, y: 387, w: 54, h: 66, z: 469 }, { src: 'assets/scene/client-t6-p7-m6.webp', x: 462, y: 387, w: 54, h: 66, z: 469 }],
+    [{ src: 'assets/scene/client-t6-p8-m1.webp', x: 457, y: 452, w: 64, h: 76, z: 512 }, { src: 'assets/scene/client-t6-p8-m2.webp', x: 462, y: 452, w: 54, h: 76, z: 512 }, { src: 'assets/scene/client-t6-p8-m3.webp', x: 457, y: 452, w: 64, h: 76, z: 512 }, { src: 'assets/scene/client-t6-p8-m4.webp', x: 462, y: 452, w: 54, h: 76, z: 512 }, { src: 'assets/scene/client-t6-p8-m5.webp', x: 462, y: 452, w: 54, h: 76, z: 512 }, { src: 'assets/scene/client-t6-p8-m6.webp', x: 462, y: 452, w: 54, h: 76, z: 512 }]
+  ]
 };

@@ -20,7 +20,9 @@
  <div class="salon-et-panneau">
       <div>
         <div class="cadre-salon" id="cadre-salon"><div class="scene" id="scene">
-            @let tablesSalon = (Tables$ | async);
+          @let tablesSalon = (Tables$ | async);
+          @let reservationsSalon = (Reservations$ | async);
+          @let commandesSalon = (Commandes$ | async);
 
           <div class="salon-plateau" [class.placement]="sceneEnPlacement()">
 
@@ -67,7 +69,8 @@
               <img [src]="CAISSE.src" alt="" draggable="false">
             </button>
 
-            <!-- tables : ellipse + image (table et sièges) + cadenas, grisés ensemble ; plaque à part pour rester lisible -->
+            <!-- tables : ellipse, couche arrière, clients assis, couche avant, cadenas — grisés ensemble ;
+                la plaque est à part pour rester lisible -->
             @for (st of TABLES_SALON; track st.id) {
               @let tb = tableBdd(tablesSalon, st.id);
 
@@ -79,12 +82,27 @@
                 <div class="salon-zone"
                     [style.--x]="st.zone.x" [style.--y]="st.zone.y" [style.--w]="st.zone.w" [style.--h]="st.zone.h"></div>
 
+                <!-- couche arrière : chaises du fond, dossiers (cliquable, mais ignorée au clavier : la couche avant suffit) -->
+                <button type="button" class="salon-objet salon-cliquable salon-table" tabindex="-1" aria-hidden="true"
+                        [style.--x]="st.arriere.x" [style.--y]="st.arriere.y" [style.--w]="st.arriere.w" [style.--h]="st.arriere.h"
+                        [style.z-index]="st.arriere.z" (click)="clicTableSalon(st.id, tb)">
+                  <img [src]="st.arriere.src" alt="" draggable="false">
+                </button>
+
+                <!-- clients assis : ceux de la réservation en cours sur cette table -->
+                @for (c of clientsAssis(st.id, tb, reservationsSalon); track $index) {
+                  <img class="salon-objet salon-client" [src]="c.src" alt="" draggable="false" animate.leave="salon-client-part"
+                      [style.--x]="c.x" [style.--y]="c.y" [style.--w]="c.w" [style.--h]="c.h" [style.z-index]="c.z"
+                      (click)="clicTableSalon(st.id, tb)">
+                }
+
+                <!-- couche avant : la table, les chaises de côté et de devant, les fauteuils -->
                 <button type="button" class="salon-objet salon-cliquable salon-table"
                         [attr.title]="'Table ' + st.id + ' · ' + (tb?.capacite ?? st.capacite) + ' places'"
                         [attr.aria-label]="'Table ' + st.id + ', ' + (tb?.capacite ?? st.capacite) + ' places'"
-                        [style.--x]="st.image.x" [style.--y]="st.image.y" [style.--w]="st.image.w" [style.--h]="st.image.h"
-                        (click)="clicTableSalon(st.id, tb)">
-                  <img [src]="st.image.src" alt="" draggable="false">
+                        [style.--x]="st.avant.x" [style.--y]="st.avant.y" [style.--w]="st.avant.w" [style.--h]="st.avant.h"
+                        [style.z-index]="st.avant.z" (click)="clicTableSalon(st.id, tb)">
+                  <img [src]="st.avant.src" alt="" draggable="false">
                 </button>
 
                 <img class="salon-objet salon-cadenas" [src]="CADENAS_SRC" alt="" draggable="false"
@@ -95,6 +113,7 @@
                     [class.occupee]="sceneTableOccupee(st.id, tb)"
                     [class.inelig]="sceneEnPlacement() && !sceneTableEligible(st.id, tb)"
                     [style.--x]="st.plaque.x" [style.--y]="st.plaque.y">T{{ st.id }} · {{ tb?.capacite ?? st.capacite }} places</span>
+
             }
 
             <!-- chats (ceux de ta base, placés sur les emplacements de la maquette) -->
@@ -114,6 +133,7 @@
                 [style.--x]="PREMIER_PLAN.x" [style.--y]="PREMIER_PLAN.y" [style.--w]="PREMIER_PLAN.w" [style.--h]="PREMIER_PLAN.h"
                 [style.z-index]="PREMIER_PLAN.z">
           </div>
+
 
         </div></div>
 

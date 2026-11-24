@@ -1,6 +1,6 @@
 export interface Table {
 
     id?: number,
-    capacite: number,
+    capacite?: number,
     complet: boolean
 }

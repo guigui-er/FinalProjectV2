@@ -148,7 +148,6 @@
 
 
 
-/* Le cadre devient une « boîte de référence » pour les tailles de texte (unité cqw = 1 % de sa largeur). */
 .cadre-salon { container-type: inline-size; }
 
 /* La scène remplit le cadre : tout est placé en pourcentage, donc plus besoin de mise à l'échelle. */
@@ -193,7 +192,24 @@ img.salon-objet { pointer-events: none; }            /* les images décoratives 
   isolation: isolate;
   pointer-events: none;                               /* seul le bouton de la table reçoit les clics */
 }
-.salon-groupe-table .salon-table { pointer-events: auto; z-index: 1; }
+.salon-groupe-table .salon-table { pointer-events: auto; }        /* le z-index de chaque couche vient du template */
+
+/* clients assis : cliquables (ils renvoient vers leur table) */
+.salon-groupe-table .salon-client { pointer-events: auto; cursor: pointer; }
+
+/* arrivée : les clients apparaissent en douceur quand le groupe s'installe */
+.salon-client { animation: salon-client-arrive .5s ease-out both; }
+@keyframes salon-client-arrive {
+  from { opacity: 0; transform: translateY(6%); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* départ (paiement) : ils s'effacent avant de disparaître — Angular 20.2+ (animate.leave) */
+.salon-client-part { animation: salon-client-part .6s ease-in both; }
+@keyframes salon-client-part {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(-10%); }
+}
 
 /* ellipse pointillée sous la table : (x, y) = son centre */
 .salon-zone {
@@ -221,7 +237,7 @@ img.salon-objet { pointer-events: none; }            /* les images décoratives 
 .placement .salon-groupe-table.inelig .salon-table { cursor: not-allowed; }
 .placement .salon-groupe-table.inelig .salon-table:hover img { filter: none; }
 
-.salon-cadenas { display: none; z-index: 2; }
+.salon-cadenas { display: none; z-index: 3000; }   /* au-dessus de la table et des clients */
 .placement .salon-groupe-table.inelig .salon-cadenas { display: block; }
 
 /* plaque « T3 · 4 places » : (x, y) = milieu de son bord haut ; tailles proportionnelles au salon */
@@ -246,6 +262,38 @@ img.salon-objet { pointer-events: none; }            /* les images décoratives 
 }
 .salon-plaque.occupee { background: #fde3e4; }
 .salon-plaque.inelig  { background: #edeae5; border-color: #8b857b; }
+
+/* ---------- Bulle de commande ---------- */
+.salon-bulle {
+  position: absolute;
+  left: calc(var(--x) * 100% / 880);
+  top:  calc(var(--y) * 100% / 576);
+  transform: translate(-50%, -100%);       /* (x, y) = milieu de son bord bas */
+  z-index: 1950;                           /* au-dessus des tables, sous le premier plan */
+  margin: 0;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: calc(11.5cqw / 8.8);
+  line-height: 1.2;
+  padding: calc(3cqw / 8.8) calc(10cqw / 8.8);
+  color: #5a3a28;
+  background: #fff6e6;
+  border: calc(2.5cqw / 8.8) solid #5a3a28;
+  border-radius: calc(12cqw / 8.8);
+  box-shadow: 0 calc(3cqw / 8.8) 0 #5a3a28;
+  animation: salon-bulle-pop .35s cubic-bezier(.3, 1.5, .5, 1) both;
+}
+.salon-bulle.attente   { background: #fff1cf; }
+.salon-bulle.prepa     { background: #fff1cf; }
+.salon-bulle.livraison { background: #dcebf2; }
+.salon-bulle.servie    { background: #d6ecc4; }
+.salon-bulle:hover     { filter: brightness(1.05); }
+@keyframes salon-bulle-pop {
+  from { opacity: 0; transform: translate(-50%, -80%) scale(.8); }
+  to   { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+}
 
 /* ---------- Chats ---------- */
 .salon-chat { transition: transform .15s; transform-origin: 50% 100%; }
