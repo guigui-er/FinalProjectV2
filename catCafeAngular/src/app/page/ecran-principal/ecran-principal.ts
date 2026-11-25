@@ -21,9 +21,10 @@ import { FOND_SALON, PREMIER_PLAN, DECOR_SALON, PORTE_ENTREE, PORTE_PRIVEE, COMP
          ImageChat, ImageScene, PlaceChat, TableScene } from './scene-salon';
 import { Assise } from '../../model/assise';
 import { Paiement } from '../../component/paiement/paiement';
+import { Commande as CommandePopup} from '../../component/commande/commande';
 
 @Component({
-  imports: [DatePipe, AsyncPipe, Paiement],
+  imports: [DatePipe, AsyncPipe, Paiement, CommandePopup],
   selector: 'app-ecran-principal',
   styleUrl: './ecran-principal.css',
   templateUrl: './ecran-principal.html',
@@ -65,6 +66,24 @@ export class EcranPrincipal implements OnInit{
   onBackdropClick(event: MouseEvent) {
     if (event.target === event.currentTarget) {
       this.closePaiement();
+    }
+  }
+
+  // POPUP COMMANDE
+  showCommande = signal(false);
+
+  openCommande() {
+    this.showCommande.set(true);
+  }
+
+  @HostListener('document:keydown.escape')
+  closeCommande() {
+    this.showCommande.set(false);
+  }
+
+  onBackdropClickCommande(event: MouseEvent) {
+    if (event.target === event.currentTarget) {
+      this.closeCommande();
     }
   }
   
@@ -278,9 +297,9 @@ protected readonly FOND_SALON = FOND_SALON;
       }
 
       // Vérifier que la table est occupée
-      if (!this.sceneTableOccupee(idTable, table)) return;
-
-      this.router.navigate(['commande']);
+      if (!this.sceneTableOccupee(idTable, table)) return; 
+        this.openCommande();
+      
   }
 
 

@@ -206,3 +206,13 @@
     </div>
   </div>
 }
+
+// POPUP COMMANDE
+@if (showCommande()) {
+  <div class="backdrop" (click)="onBackdropClickCommande($event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="close" aria-label="Fermer" (click)="closeCommande()">×</button>
+      <app-commande (fermerPopup)="closeCommande()" />
+    </div>
+  </div>
+}

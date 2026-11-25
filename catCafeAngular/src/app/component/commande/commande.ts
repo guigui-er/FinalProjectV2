@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, output } from '@angular/core';
 import { CommandeService } from '../../service/commande-service';
 import { Observable } from 'rxjs';
 import { AsyncPipe, DecimalPipe } from '@angular/common';
@@ -25,6 +25,8 @@ export class Commande implements OnInit {
   protected glaces$!: Observable<Article[]>;
   protected recettesSpeciales$!: Observable<Article[]>;
 
+  fermerPopup = output<void>()
+  
   // Le panier (temporaire) contient les articles sélectionnés
   protected panier: {
   [cle: string]: {
