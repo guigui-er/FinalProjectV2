@@ -5,7 +5,7 @@
         <h1>Tableau de bord</h1>
         <div class="actions">
           <button class="btn sec" id="btn-retour-salon" (click)="clicRetourAuSalon()">Retour au salon</button>
-          <button class="btn terra" id="btn-deconnexion">Déconnexion</button>
+          <button class="btn terra" id="btn-deconnexion" (click)="logout()">Déconnexion</button>
         </div>
       </div>
     </header>
@@ -101,7 +101,7 @@
                   <td>{{ reservation.prixTotal }} €</td>
                   <td class="textcenter">
                     <ng-container *ngIf="reservation.commandeStatut; else pasDeCommande">
-                      <span class="statut payee" *ngIf="reservation.accepterPaiement && reservation.commandeStatut === 'Terminee'">payée</span>
+                      <span class="statut payee" *ngIf="reservation.accepterPaiement && reservation.commandeStatut === 'Terminee'">terminée</span>
                       <span class="statut encours" *ngIf="reservation.commandeStatut === 'En_cours'">en cours</span>
                       <span class="statut servie" *ngIf="reservation.commandeStatut === 'Servie'">servie</span>
                       <span class="statut annulee" *ngIf="reservation.commandeStatut === 'Annulee'">annulée</span>

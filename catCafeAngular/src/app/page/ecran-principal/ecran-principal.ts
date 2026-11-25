@@ -164,7 +164,7 @@ export class EcranPrincipal implements OnInit{
     this.router.navigate([ 'client' ]);
   }
       protected EntreeGerant(): void {
-    this.router.navigate([ 'gerant' ]);
+    this.router.navigate([ 'gerantPage' ]);
   }
 
     protected commande(): void {
@@ -234,7 +234,7 @@ protected readonly FOND_SALON = FOND_SALON;
 
   /** clic sur la porte « Privé » */
   protected clicPortePrivee(): void {
-    this.router.navigate([ 'gerant' ]);
+    this.router.navigate([ 'gerantPage' ]);
   }
 
   /** clic sur le comptoir */

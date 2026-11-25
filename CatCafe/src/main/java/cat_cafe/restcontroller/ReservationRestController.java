@@ -20,7 +20,6 @@ import cat_cafe.service.ReservationService;
 
 @RestController
 @RequestMapping("/api/reservation")
-@CrossOrigin ("*")
 public class ReservationRestController {
 
     @Autowired
