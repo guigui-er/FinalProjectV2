@@ -10,17 +10,18 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 import { Table } from '../../model/table';
 import { TableService } from '../../service/table-service';
 import { Router } from '@angular/router';
-import { map, Observable, startWith, Subject, switchMap } from 'rxjs';
+import { interval, map, merge, Observable, startWith, Subject, switchMap } from 'rxjs';
 import { Commande } from '../../model/commande';
 import { CommandeService } from '../../service/commande-service';
 import { ChatService } from '../../service/chat-service';
-import { Chat } from '../../model/chat';
+import { ChatDTO } from '../../model/chat';
 
 import { FOND_SALON, PREMIER_PLAN, DECOR_SALON, PORTE_ENTREE, PORTE_PRIVEE, COMPTOIR, CAISSE, CADENAS_SRC,
          TABLES_SALON, PLACES_CHATS, PELAGES_CHATS, IMAGES_CHATS, CLIENTS_ASSIS, NB_MODELES_CLIENTS,
          ImageChat, ImageScene, PlaceChat, TableScene } from './scene-salon';
 import { Assise } from '../../model/assise';
 import { Paiement } from '../../component/paiement/paiement';
+import { StatutCommande } from '../../model/statut-commande';
 
 @Component({
   imports: [DatePipe, AsyncPipe, Paiement],
@@ -43,7 +44,7 @@ export class EcranPrincipal implements OnInit{
   protected Reservations$!: Observable<Reservation[]>;
   protected Clients$!: Observable<Client[]>;
   protected Tables$!: Observable<Assise[]>;
-  protected Chats$!: Observable<Chat[]>;
+  protected Chats$!: Observable<ChatDTO[]>;
   protected statsChats$!: Observable<{ aAdopter: number; total: number }>;
 
   protected reservation!:Reservation;
@@ -67,23 +68,24 @@ export class EcranPrincipal implements OnInit{
       this.closePaiement();
     }
   }
-  
+
   protected tabledispo:Assise[]=this.reservationService.Table;
 
     ngOnInit(): void {
+
 
        this.reservation=this.reservationService.ReservationForm;
 
         console.log(`this.reservation bdd ${this.reservation?.id}`);
 
-      /*this.Commandes$ = this.refresh$.pipe(
+      this.Commandes$ = this.refresh$.pipe(
         // On initialise notre Observable
         startWith(null),
         // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
         switchMap(() => {
-          return this.commandeService.findAllWithResa();
+          return this.commandeService.trouverToutesLesCommandes();
         })
-      )*/ // Pas utile pour le moment a voir quand on aura tout 
+      ) // Pas utile pour le moment a voir quand on aura tout
 
 
       this.Reservations$ = this.refresh$.pipe(
@@ -238,7 +240,7 @@ protected readonly FOND_SALON = FOND_SALON;
   }
 
   /** le chat dort-il ? (image du chat couché) */
-  protected sceneChatDort(chat: Chat): boolean {
+  protected sceneChatDort(chat: ChatDTO): boolean {
     return false;
   }
 
@@ -284,7 +286,7 @@ protected readonly FOND_SALON = FOND_SALON;
 
 }
   /** clic sur un chat */
-  protected clicChatSalon(chat: Chat): void {
+  protected clicChatSalon(chat: ChatDTO): void {
 
     this.router.navigate([ 'gerant' ]);
   }
@@ -302,16 +304,17 @@ protected readonly FOND_SALON = FOND_SALON;
       .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))[0];
   }
 
-  /** les images des clients assis à une table : autant que nbClient, dans l'ordre des places de la maquette */
-  protected clientsAssis(idTable: number, table: Assise | undefined, reservations: Reservation[] | null): ImageScene[] {
-    if (!this.sceneTableOccupee(idTable, table)) return [];          // table libre : personne
-    const resa = this.reservationEnCours(idTable, reservations);
-    const places = CLIENTS_ASSIS[idTable] ?? [];
-    const nb = Math.min(resa?.nbClient ?? 0, places.length);        // jamais plus que de places
-    const graine = resa?.id ?? idTable;                              // même réservation = mêmes clients
-    return places.slice(0, nb).map((modeles, k) => modeles[(graine * 7 + k) % NB_MODELES_CLIENTS]);
-  }
 
+
+protected clientsAssis(idTable: number, table: Assise | undefined,
+                       reservations: Reservation[] | null): ImageScene[] {
+  if (!this.sceneTableOccupee(idTable, table)) return [];
+  const resa = this.reservationEnCours(idTable, reservations);       // ← nouveau
+  const places = CLIENTS_ASSIS[idTable] ?? [];
+  const nb = Math.min(resa?.nbClient ?? 0, places.length);
+  const graine = resa?.id ?? idTable;
+  return places.slice(0, nb).map((modeles, k) => modeles[(graine * 7 + k) % NB_MODELES_CLIENTS]);
+}
   /** la commande en cours sur une table : la plus récente (plus grand id) de la réservation de cette table,
       hors commandes payées — adapte les statuts « payés » à ton enum */
   protected commandeEnCours(idTable: number, commandes: Commande[] | null): Commande | undefined {
@@ -328,13 +331,11 @@ protected readonly FOND_SALON = FOND_SALON;
   }
 
   /** l'image du i-ème chat : son pelage, assis ou endormi, sur un coussin ou au sol */
-  protected imageChat(chat: Chat, i: number): ImageChat {
+  protected imageChat(chat: ChatDTO, i: number): ImageChat {
     const pelage = PELAGES_CHATS[i % PELAGES_CHATS.length];
     const pose = this.sceneChatDort(chat) ? 'dort' : 'assis';
     const support = this.placeChat(i).coussin ? 'coussin' : 'sol';
     return IMAGES_CHATS[`chat-${pelage}-${pose}-${support}`];
   }
-
-
 
 }

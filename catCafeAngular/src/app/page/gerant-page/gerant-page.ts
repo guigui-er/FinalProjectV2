@@ -4,7 +4,7 @@ import { GerantService } from '../../service/gerant-service';
 import { Observable, Subject } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { Reservation } from '../../model/reservation';
-import { Chat } from '../../model/chat';
+import { ChatDTO } from '../../model/chat';
 import { Assise } from '../../model/assise';
 import { Article } from '../../model/article';
 import { StatsGerantResponse } from '../../model/stats-gerant';
@@ -33,7 +33,7 @@ export class GerantPage {
 
 
   protected reservations$!:Observable<Reservation[]>
-  protected chats$!:Observable<Chat[]>
+  protected chats$!:Observable<ChatDTO[]>
   protected assises$!:Observable<Assise[]>
   protected articles$!:Observable<Article[]>
 
@@ -42,7 +42,7 @@ export class GerantPage {
   protected assisesEtat$!: Observable<TableAssisesResponse[]>;
 
   protected reservationsEtat$!: Observable<TableReservationsResponse[]>;
-  
+
   ngOnInit(): void {
     this.title.setTitle("Page du gérant");
 
@@ -67,7 +67,7 @@ export class GerantPage {
 
 
 
- 
+
 
 
 
