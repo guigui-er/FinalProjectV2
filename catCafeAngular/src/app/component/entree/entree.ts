@@ -2,7 +2,7 @@ import { Reservation } from './../../model/reservation';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, startWith, Subject, switchMap } from 'rxjs';
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ClientService } from '../../service/client-service';
 import { ReservationService } from '../../service/reservation-service';
 import { TableService } from '../../service/table-service';
@@ -37,6 +37,11 @@ export class Entree implements OnInit {
   protected tables?: Table[];
 
   protected nbPersonnes= [1,2,3,4,5,6,7];
+
+  constructor(
+    private location: Location,
+    
+  ){}
 
 
   ngOnInit(): void {
@@ -104,5 +109,9 @@ export class Entree implements OnInit {
 
 
     }
+      protected fermerPage() {
+
+    this.location.back();
+  }
 
 }
