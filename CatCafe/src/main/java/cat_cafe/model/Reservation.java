@@ -26,7 +26,7 @@ public class Reservation {
     private Client client;
 
     @ManyToOne 
-    @JoinColumn(name="assise_id",unique=true)
+    @JoinColumn(name="assise_id")
     private Assise assise;
 
     public Reservation(){}
