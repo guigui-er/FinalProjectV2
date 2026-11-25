@@ -1,1 +1,37 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --couleur-principale: #3D5A33;
+  --police-titre: 'Caveat', cursive;
+  --sauge-clair: #e3ead6;
+  --couleur-numero-table: #A85636;
+  --creme: #fbf6ea;
+  --encre-doux: #6b6a55;
+  --mousse-fonce: #3d5a33;
+  --terracotta: #c9714f;
+  --terracotta-fonce: #a85636;
+  --mousse: #5f7f4a;
+}
+
+body {
+  font-family: 'Quicksand', system-ui, sans-serif;
+}
+
+.statut-badge {
+  background: #e1f0d4;
+  color: #3d6a2c;
+  border-color: #b7d79c;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+}
+
+.statut-badge--en-cours {
+  background: #fff1d0;
+  color: #9a6a12;
+  border-color: #f2d58f;
+}

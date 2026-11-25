@@ -1,0 +1,53 @@
+<h2 class="title">Addition - Table {{ commande().reservation.assise.id }}</h2>
+<p class="commande-informations-generiques">
+  <b>{{ commande().reservation.client?.prenom }} {{ commande().reservation.client?.nom }}</b>
+  . 
+  @if(commande().reservation.nbClient>1){
+    {{ commande().reservation.nbClient }} personnes . arrivées
+  }
+  @else{
+    {{ commande().reservation.nbClient }} personne . arrivée
+  }
+  à 
+  {{ commande().reservation.dateTime | date:'HH:mm' }} . R-{{ commande().reservation.id }}
+</p>
+
+<div class="commande-numero-statut">
+  <b>Commande #{{ commande().commandeId }}</b>
+  <span class="statut-badge" 
+  [class.statut-badge--en-cours]="commande().statutCommande === 'En_cours'">{{ commande().statutCommande }}</span>
+</div>
+
+<table class="commande-details">
+  <tbody>
+    @for (detail of commande().details; track $index) {
+      <tr>
+        <td> {{ detail.qte }} x {{ detail.article?.description }}</td>
+        <td class="commande-details-prix">{{ detail.article?.prix * detail.qte  | currency:'EUR'}}</td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<p class="detail-total">
+  <span>Total</span>
+  <b class="title">{{ commande().prixTotal | currency:'EUR' }}</b>
+</p>
+
+@if (enCours()) {
+  <p class="message-paiement-bloque">
+    Impossible de payer : la commande n'est pas encore servie. 
+    Le paiement sera possible dès qu'elle sera servie.
+  </p>
+}
+
+<div class="boutons-commande-details">
+  <button type="button" class="btn bouton-retour-table" (click)="fermer.emit()">← Tables</button>
+  <button
+    type="button"
+    class="btn bouton-payer-table"
+    [disabled]="enCours()"
+    (click)="payer.emit(commande().commandeId)">
+    Payer {{ commande().prixTotal | currency:'EUR' }}
+  </button>
+</div>

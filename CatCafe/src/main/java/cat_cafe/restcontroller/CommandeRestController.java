@@ -41,6 +41,18 @@ public class CommandeRestController {
 	  .toList();
 	}
 
+	@GetMapping("/paiementDisponible")
+	@Transactional 
+	public List<CommandeResponse> afficherToutesLesCommandesEnCoursEtServie() 
+	{
+	  return this.daoCommande.findAllByStatutCommandeIn(List.of(StatutCommande.En_cours, StatutCommande.Servie)).stream()
+	  .map(commande -> CommandeResponse.convert(
+    	commande,
+    	commandeService.calculerPrixTotal(commande)
+		))
+	  .toList();
+	}
+
     @GetMapping("/{id}")
 	@Transactional 
 	public CommandeResponse afficherParId(@PathVariable Integer id)
