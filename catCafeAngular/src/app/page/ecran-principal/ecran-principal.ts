@@ -21,10 +21,11 @@ import { FOND_SALON, PREMIER_PLAN, DECOR_SALON, PORTE_ENTREE, PORTE_PRIVEE, COMP
          ImageChat, ImageScene, PlaceChat, TableScene } from './scene-salon';
 import { Assise } from '../../model/assise';
 import { Paiement } from '../../component/paiement/paiement';
+import { Commande as CommandePopup} from '../../component/commande/commande';
 import { StatutCommande } from '../../model/statut-commande';
 
 @Component({
-  imports: [DatePipe, AsyncPipe, Paiement],
+  imports: [DatePipe, AsyncPipe, Paiement, CommandePopup],
   selector: 'app-ecran-principal',
   styleUrl: './ecran-principal.css',
   templateUrl: './ecran-principal.html',
@@ -67,6 +68,28 @@ export class EcranPrincipal implements OnInit{
   onBackdropClick(event: MouseEvent) {
     if (event.target === event.currentTarget) {
       this.closePaiement();
+    }
+  }
+
+  // POPUP COMMANDE
+  showCommande = signal(false);
+  protected resaSelectionnee = signal<Reservation | undefined>(undefined);
+
+  openCommande(resa: Reservation) {
+    this.resaSelectionnee.set(resa);
+    this.showCommande.set(true);
+  }
+
+  @HostListener('document:keydown.escape')
+  closeCommande() {
+    this.showCommande.set(false);
+    this.resaSelectionnee.set(undefined);
+    this.refresh$.next();
+  }
+
+  onBackdropClickCommande(event: MouseEvent) {
+    if (event.target === event.currentTarget) {
+      this.closeCommande();
     }
   }
 
@@ -268,7 +291,7 @@ protected readonly FOND_SALON = FOND_SALON;
   }
 
   /** clic sur une table, ses sièges, ses clients ou sa bulle ; table = ta table en base, undefined si elle n'y est pas */
-  protected clicTableSalon(idTable: number, table: Assise | undefined): void {
+  protected clicTableSalon(idTable: number, table: Assise | undefined, reservations: Reservation[] | null): void {
 
     if (!table) return;
 
@@ -282,8 +305,10 @@ protected readonly FOND_SALON = FOND_SALON;
 
       // Vérifier que la table est occupée
       if (!this.sceneTableOccupee(idTable, table)) return;
+      const resa = this.reservationEnCours(idTable, reservations);
+      if (!resa?.id) return;
+        this.openCommande(resa);
 
-      this.router.navigate(['commande']);
   }
 
 

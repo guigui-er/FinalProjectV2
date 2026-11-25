@@ -4,13 +4,10 @@
   color: #45483d;
 
   /* Dimensions de la popup */
-  width: 600px;
+  width: min(560px, 96vw);
   max-width: 90vw;
   max-height: 90vh;
   box-sizing: border-box;
-
-  /* Barre de défilement vertical */
-  overflow-y: auto;
 
   /* Apparence */
   padding: 28px;
