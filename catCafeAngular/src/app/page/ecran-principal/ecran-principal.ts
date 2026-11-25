@@ -1,7 +1,7 @@
 import { ReservationService } from './../../service/reservation-service';
 
 
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { ClientService } from '../../service/client-service';
 import { Client } from '../../model/client';
 
@@ -20,9 +20,10 @@ import { FOND_SALON, PREMIER_PLAN, DECOR_SALON, PORTE_ENTREE, PORTE_PRIVEE, COMP
          TABLES_SALON, PLACES_CHATS, PELAGES_CHATS, IMAGES_CHATS, CLIENTS_ASSIS, NB_MODELES_CLIENTS,
          ImageChat, ImageScene, PlaceChat, TableScene } from './scene-salon';
 import { Assise } from '../../model/assise';
+import { Paiement } from '../../component/paiement/paiement';
 
 @Component({
-  imports: [DatePipe,AsyncPipe],
+  imports: [DatePipe, AsyncPipe, Paiement],
   selector: 'app-ecran-principal',
   styleUrl: './ecran-principal.css',
   templateUrl: './ecran-principal.html',
@@ -50,7 +51,23 @@ export class EcranPrincipal implements OnInit{
 
   protected commandes?: Commande[];
 
+  showPayment = signal(false);
 
+  openPaiement() {
+    this.showPayment.set(true);
+  }
+
+  @HostListener('document:keydown.escape')
+  closePaiement() {
+    this.showPayment.set(false);
+  }
+
+  onBackdropClick(event: MouseEvent) {
+    if (event.target === event.currentTarget) {
+      this.closePaiement();
+    }
+  }
+  
   protected tabledispo:Assise[]=this.reservationService.Table;
 
     ngOnInit(): void {
@@ -239,14 +256,12 @@ protected readonly FOND_SALON = FOND_SALON;
 
   /** clic sur le comptoir */
   protected clicComptoir(): void {
-
-    this.router.navigate([ 'gerant' ]);
+    this.openPaiement();
   }
 
   /** clic sur la caisse */
   protected clicCaisse(): void {
-
-    this.router.navigate([ 'gerant' ]);
+    this.openPaiement();
   }
 
   /** clic sur une table, ses sièges, ses clients ou sa bulle ; table = ta table en base, undefined si elle n'y est pas */

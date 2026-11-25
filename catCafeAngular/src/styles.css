@@ -10,18 +10,6 @@
   --bois:#e8b46a; --bois-fonce:#c98a4b; --encre:#5a3a28; --encre-doux:#8a6248;
   --ombre:0 6px 0 rgba(90,58,40,.18), 0 18px 30px -16px rgba(90,58,40,.45);
   --rayon:24px;
-  /*
-  Styles Mathias
-  --couleur-principale: #3D5A33;
-  --police-titre: 'Caveat', cursive;
-  --sauge-clair: #e3ead6;
-  --couleur-numero-table: #A85636;
-  --creme: #fbf6ea;
-  --encre-doux: #6b6a55;
-  --mousse-fonce: #3d5a33;
-  --terracotta: #c9714f;
-  --terracotta-fonce: #a85636;
-  --mousse: #5f7f4a;*/
 }
 
 * {
@@ -79,5 +67,49 @@ Partie paiement
   background: #fff1d0;
   color: #9a6a12;
   border-color: #f2d58f;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.modal {
+  position: relative;
+    width: min(560px, 94vw);
+    max-height: 90vh;
+    overflow: auto;
+    background: var(--creme);
+    border-radius: 26px;
+    padding: 24px 26px 22px;
+    box-shadow: 0 30px 60px -20px rgba(30, 44, 24, .6);
+    border: 3px solid #fffaf0;
+    animation: pop .3s cubic-bezier(.3, 1.5, .5, 1);
+}
+
+.close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--sauge-clair);
+    background: #fffdf6;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--mousse-fonce);
+}
+
+.close:hover {
+    background: var(--sauge-clair);
 }
 

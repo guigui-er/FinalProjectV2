@@ -167,8 +167,7 @@
         </section>
       </aside>
     </div>
-
-
+ 
 <div>
     <button type="button" (click)="commande()">decclencher lecture commande </button>
 </div>
@@ -197,3 +196,13 @@
     </div>
   }
 
+<!-- Partie paiement qui est affiché lors du clique sur le comptoir ou la caisse -->
+
+@if (showPayment()) {
+  <div class="backdrop" (click)="onBackdropClick($event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="close" aria-label="Fermer" (click)="closePaiement()">×</button>
+      <app-paiement (fermerPopup)="closePaiement()" />
+    </div>
+  </div>
+}
