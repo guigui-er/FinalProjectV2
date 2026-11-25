@@ -5,6 +5,7 @@ import { AsyncPipe, DecimalPipe } from '@angular/common';
 import { Article } from '../../model/article';
 import { CommandeModel } from '../../model/commande-model';
 import { DetailCommande } from '../../model/detail-commande';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [AsyncPipe, DecimalPipe],
@@ -36,7 +37,8 @@ export class Commande implements OnInit {
   } = {}; // Le panier est vide au départ ! 
 
   constructor(
-    private commandeService: CommandeService
+    private commandeService: CommandeService,
+    private router: Router
   ) {}
   
   ngOnInit(): void {
@@ -193,5 +195,10 @@ export class Commande implements OnInit {
         alert('Impossible de créer la commande.');
       }
     });
+  }
+
+  // Retourner au salon
+  protected fermerCommande(): void {
+    this.router.navigate(['/ecranPrincipal']);
   }
 }

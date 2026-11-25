@@ -4,7 +4,7 @@
   <!-- En-tête de la commande -->
   <div class="header">
 
-    <button class="btn-fermer">×</button>
+    <button class="btn-fermer" type="button" (click)="fermerCommande()">×</button>
 
     <h2>Menu du Café</h2>
 
@@ -161,7 +161,7 @@
     </div>
     
     <!-- Bouton commander -->
-    <button class="btn-commander" type="bouton" [disabled]="getTotal() === 0" (click)="commander()">Commander</button>
+    <button class="btn-commander" type="button" [disabled]="getTotal() === 0" (click)="commander()">Commander</button>
 
   </div>
 
