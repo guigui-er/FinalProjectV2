@@ -37,6 +37,8 @@ export const routes: Routes = [
         path: 'paiement',
         component: Paiement
     },
+
+    // Popup Commande avec le menu (Célia)
     { 
         path: 'commande', 
         component: Commande 
