@@ -1,14 +1,9 @@
-import { Article } from "./article"
-
 export interface DetailCommande {
 
-      commandeId: number,
-      prix: number,
-      qte: number
-      article:Article
+    id?: number;
+    qte: number;
+    prix: number;
+    commandeId: number;
+    articleId: number;
+
 }
-
-
-
-
-

@@ -1,7 +1,12 @@
 import { Routes } from '@angular/router';
+import { Commande } from './component/commande/commande';
 import { GerantConnexionComponent } from './component/gerant-connexion-component/gerant-connexion-component';
 import { GerantPage } from './page/gerant-page/gerant-page';
 
+export const routes: Routes = [
+    // Popup Commande avec le menu (Célia)
+    { path: 'commande', component: Commande }
+];
 import { AccueilComponent } from './component/accueil-component/accueil-component';
 import { Entree } from './component/entree/entree';
 import { EcranPrincipal } from './page/ecran-principal/ecran-principal';
