@@ -271,24 +271,27 @@ protected readonly FOND_SALON = FOND_SALON;
 
     if (!table) return;
 
+      // Si on est en train de placer un nouveau client
       if (this.sceneEnPlacement()) {
-        if (this.sceneTableEligible(idTable, table)) this.SelectionTable(table);
+        if (this.sceneTableEligible(idTable, table)) { 
+          this.SelectionTable(table);
+        }
         return;
       }
+
+      // Vérifier que la table est occupée
       if (!this.sceneTableOccupee(idTable, table)) return;
 
-      if (this.sceneTableOccupee(idTable, table) && !this.sceneEnPlacement()) {
-        this.router.navigate([ 'gerant' ]);
-        //this.passerCommande(resa);
-        //return;
-      }
-    return;
+      this.router.navigate(['commande']);
+  }
 
-}
+
   /** clic sur un chat */
   protected clicChatSalon(chat: ChatDTO): void {
 
-    this.router.navigate([ 'gerant' ]);
+    const id = chat.id;
+
+    this.router.navigate([ `chat/${id}` ]);
   }
 
 

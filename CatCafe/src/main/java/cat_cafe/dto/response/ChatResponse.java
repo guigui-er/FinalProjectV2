@@ -16,10 +16,8 @@ public record ChatResponse(
     boolean adopted,
     LocalDate date_veto,
     Integer proprietaireId,
-    Integer caresses,
-    String caractère,
-    boolean endormi,
-    boolean satisfait
+    String caractère
+   
 ) {
 
     public static ChatResponse convert(Chat chat) {
@@ -32,10 +30,8 @@ public record ChatResponse(
             chat.isAdopted(),
             chat.getDate_veto(),
             chat.getProprietaire() != null ? chat.getProprietaire().getId() : null,
-            chat.getCaresses(),
-            chat.getCaractère(),
-            chat.isEndormi(),
-            chat.isSatisfait()
+            chat.getCaractère()
+            
         );
     }
 
