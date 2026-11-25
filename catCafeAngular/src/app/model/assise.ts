@@ -1,5 +1,5 @@
-export interface Assise {
-    id: number;
-    capacite: number;
-    complet: boolean;
+export interface Assise{
+    id:number;
+    capacite:number;
+    complet:boolean;
 }

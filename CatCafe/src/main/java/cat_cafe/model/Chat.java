@@ -80,8 +80,8 @@ public class Chat  {
     @Column(nullable = false)
     protected boolean satisfait;
 
-    @Column(name = "caresses")
-    protected int caresses;
+    /*@Column(name = "caresses")
+    protected Integer caresses;*/
 
     @Column(name = "caractère", nullable = false)
     protected String caractère;
@@ -180,9 +180,7 @@ public class Chat  {
         this.satisfait = satisfait;
     }
 
-    public int getCaresses() {
-        return caresses;
-    }
+
 
     /* // setCaresses de base, modifié pour fitter la méthode caresse
     public void setCaresses(int caresses) {
@@ -190,10 +188,6 @@ public class Chat  {
     }
     */
 
-    public int setCaresses(int caresses) {
-        this.caresses = caresses;
-        return this.caresses;
-    }
 
     public String getCaractère() {
         return caractère;

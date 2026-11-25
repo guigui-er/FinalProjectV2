@@ -1,0 +1,303 @@
+.barre { display:flex; align-items:center; gap:14px; flex-wrap:wrap; max-width:1480px; margin:0 auto; padding:14px 20px 10px }
+.barre .logo { font-family:'Fredoka'; font-weight:600; font-size:40px; line-height:1; margin-right:6px; color:#5a3a28 }
+.barre .actions { margin-left:auto; display:flex; gap:8px; flex-wrap:wrap }
+
+.btn{border:3px solid #5a3a28;border-radius:999px;background:#fff6e6;color:#5a3a28;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15.5px;
+  box-shadow:0 4px 0 #5a3a28;padding:9px 20px}
+.btn:hover{filter:brightness(1.05)}
+.btn:active{box-shadow:0 1px 0 #5a3a28}
+.btn:disabled{background:#e4ddd2;color:#a39684;border-color:#a39684;box-shadow:0 4px 0 #a39684}
+
+
+
+.zone-salon { max-width:1480px; margin:0 auto; padding:0 20px 28px }
+.bandeau { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:0 0 12px; padding:10px 16px; font-weight:700;
+           background:#fff6e6; border:3px solid #5a3a28; border-radius:20px; box-shadow:0 5px 0 #5a3a28 }
+
+.bandeau .pastille-jaune { width:12px; height:12px; border-radius:50%; background:#f5c443; border:2px solid #5a3a28;
+                           box-shadow:0 0 0 4px rgba(242,195,91,.35) }
+
+.cadre-salon { position:relative; width:100%; aspect-ratio:880/576; overflow:hidden; margin:0 auto;
+               max-width:min(100%, calc((100vh - 190px) * 880 / 576));
+               border:4px solid #5a3a28; border-radius:26px; background:#f1d6a6;
+               box-shadow:0 6px 0 #5a3a28, 0 22px 40px -20px rgba(90,58,40,.55) }
+.scene { position:absolute; left:0; top:0; width:880px; height:576px; transform-origin:0 0 }
+
+
+
+.salon-et-panneau {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 18px;
+  align-items: start;
+}
+
+
+/* ---------- 2. Colonne du carnet (reste visible au défilement) ---------- */
+.panneau-droit {
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+  border-radius: 26px;
+
+  /* hérité du body dans le fichier d'origine (ligne 416) */
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-weight: 600;
+  color: #5a3a28;
+}
+
+/* ---------- 3. Cadre crème ---------- */
+.panneau-droit .boite {
+  position: relative;                    /* repère de la bande rayée */
+  width: 100%;
+  max-height: none;
+  overflow: visible;
+  padding: 44px 20px 18px;               /* 44 px en haut pour la bande rayée */
+  background: #fff6e6;
+  border: 3.5px solid #5a3a28;
+  border-radius: 28px;
+  box-shadow: 0 6px 0 #5a3a28;
+  animation: none;
+  box-sizing: border-box;                /* défini sur * dans le fichier (ligne 30) */
+}
+
+/* bande rayée rose / crème en haut */
+.panneau-droit .boite::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  border-bottom: 3px solid #5a3a28;
+  border-radius: 24px 24px 0 0;
+  background: repeating-linear-gradient(90deg, #f6b8c0 0 28px, #fff6e6 28px 56px);
+  pointer-events: none;
+}
+
+/* ---------- 4. Titre et sous-titre ---------- */
+.panneau-droit .boite h2 {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1;
+  margin: 0 0 4px;
+  padding-right: 38px;                   /* place du bouton × de la pop-up ; inutile ici, supprimable */
+  color: #5a3a28;
+}
+
+.panneau-droit .boite .sous {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: #8a6248;
+}
+
+/* ---------- 5. Liste d'aide (5 lignes avec icônes) ---------- */
+.astuces {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 6px;
+  display: grid;
+  gap: 7px;
+  font-size: 13.5px;
+}
+
+.astuces li {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+}
+
+/* ---------- 6. Titre « En ce moment » ---------- */
+.menu-cat {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  margin: 12px 0 4px;
+  color: #8a6248;
+}
+
+/* ---------- 7. Lignes T1…T6 et ligne des chats ---------- */
+.resume-ligne {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 13px;
+  border-bottom: 2px dotted #f3dfbf;
+}
+
+.resume-ligne b {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  width: 28px;
+  color: #5a3a28;
+}
+
+.resume-ligne span:nth-child(2) {
+  flex: 1;                               /* pousse le badge contre le bord droit */
+}
+
+
+.legende { display:flex; gap:16px; flex-wrap:wrap; font-size:13px; margin-top:10px; padding:0 6px; color:#5a3a28; font-weight:700 }
+.legende i { display:inline-block; width:14px; height:14px; border-radius:50%; border:2px solid #5a3a28; margin-right:6px; vertical-align:-1px }
+
+
+
+
+.cadre-salon { container-type: inline-size; }
+
+/* La scène remplit le cadre : tout est placé en pourcentage, donc plus besoin de mise à l'échelle. */
+.scene { width: 100%; height: 100%; }
+
+/* Plateau qui contient tous les objets du salon */
+.salon-plateau { position: absolute; inset: 0; }
+
+/* Placement d'un objet à partir de ses coordonnées dans le repère 880 × 576 de la maquette */
+.salon-objet {
+  position: absolute;
+  left:   calc(var(--x) * 100% / 880);
+  top:    calc(var(--y) * 100% / 576);
+  width:  calc(var(--w) * 100% / 880);
+  height: calc(var(--h) * 100% / 576);
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  user-select: none;
+}
+img.salon-objet { pointer-events: none; }            /* les images décoratives laissent passer les clics */
+
+/* Objets cliquables : un bouton invisible qui porte l'image */
+.salon-cliquable { cursor: pointer; }
+.salon-cliquable img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.salon-cliquable:hover img {                          /* halo doré de la maquette */
+  filter: drop-shadow(0 0 5px rgba(255, 214, 120, .95)) drop-shadow(0 0 1px #fff);
+}
+.salon-cliquable:focus-visible { outline: 3px solid #f5c443; outline-offset: 2px; }
+
+/* ---------- Tables ---------- */
+.salon-groupe-table {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  pointer-events: none;                               /* seul le bouton de la table reçoit les clics */
+}
+.salon-groupe-table .salon-table { pointer-events: auto; }        /* le z-index de chaque couche vient du template */
+
+/* clients assis : cliquables (ils renvoient vers leur table) */
+.salon-groupe-table .salon-client { pointer-events: auto; cursor: pointer; }
+
+/* arrivée : les clients apparaissent en douceur quand le groupe s'installe */
+.salon-client { animation: salon-client-arrive .5s ease-out both; }
+@keyframes salon-client-arrive {
+  from { opacity: 0; transform: translateY(6%); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* départ (paiement) : ils s'effacent avant de disparaître — Angular 20.2+ (animate.leave) */
+.salon-client-part { animation: salon-client-part .6s ease-in both; }
+@keyframes salon-client-part {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(-10%); }
+}
+
+/* ellipse pointillée sous la table : (x, y) = son centre */
+.salon-zone {
+  position: absolute;
+  left:   calc(var(--x) * 100% / 880);
+  top:    calc(var(--y) * 100% / 576);
+  width:  calc(var(--w) * 100% / 880);
+  height: calc(var(--h) * 100% / 576);
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: calc(2cqw / 8.8) dashed #c6bba6;
+  background: rgba(250, 243, 228, .48);               /* libre */
+  pointer-events: none;
+  transition: background-color .2s ease;
+}
+.salon-groupe-table.occupee .salon-zone { background: rgba(246, 184, 192, .37); border-color: #d69299; }
+.placement .salon-groupe-table.elig .salon-zone { background: rgba(245, 196, 67, .32); border-color: #d7a527; }
+.placement .salon-groupe-table.inelig .salon-zone { background: rgba(219, 218, 214, .56); border-color: #99968f; }
+
+/* mode placement : table possible (halo jaune) ou impossible (grisée, avec cadenas) */
+.placement .salon-groupe-table.elig .salon-table img { filter: drop-shadow(0 0 5px rgba(245, 196, 67, .68)); }
+.placement .salon-groupe-table.inelig { filter: grayscale(1) brightness(1.04); opacity: .62; }
+.placement .salon-groupe-table.inelig .salon-table { cursor: not-allowed; }
+.placement .salon-groupe-table.inelig .salon-table:hover img { filter: none; }
+
+.salon-cadenas { display: none; z-index: 3000; }   /* au-dessus de la table et des clients */
+.placement .salon-groupe-table.inelig .salon-cadenas { display: block; }
+
+/* plaque « T3 · 4 places » : (x, y) = milieu de son bord haut ; tailles proportionnelles au salon */
+.salon-plaque {
+  position: absolute;
+  left: calc(var(--x) * 100% / 880);
+  top:  calc(var(--y) * 100% / 576);
+  transform: translate(-50%, 0);
+  z-index: 1900;
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
+  font-size: calc(12cqw / 8.8);
+  line-height: 1.2;
+  padding: calc(1cqw / 8.8) calc(9cqw / 8.8);
+  color: #5a3a28;
+  background: #fff6e6;
+  border: calc(2.5cqw / 8.8) solid #5a3a28;
+  border-radius: 999px;
+  box-shadow: 0 calc(2cqw / 8.8) 0 #5a3a28;
+}
+.salon-plaque.occupee { background: #fde3e4; }
+.salon-plaque.inelig  { background: #edeae5; border-color: #8b857b; }
+
+/* ---------- Bulle de commande ---------- */
+.salon-bulle {
+  position: absolute;
+  left: calc(var(--x) * 100% / 880);
+  top:  calc(var(--y) * 100% / 576);
+  transform: translate(-50%, -100%);       /* (x, y) = milieu de son bord bas */
+  z-index: 1950;                           /* au-dessus des tables, sous le premier plan */
+  margin: 0;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: calc(11.5cqw / 8.8);
+  line-height: 1.2;
+  padding: calc(3cqw / 8.8) calc(10cqw / 8.8);
+  color: #5a3a28;
+  background: #fff6e6;
+  border: calc(2.5cqw / 8.8) solid #5a3a28;
+  border-radius: calc(12cqw / 8.8);
+  box-shadow: 0 calc(3cqw / 8.8) 0 #5a3a28;
+  animation: salon-bulle-pop .35s cubic-bezier(.3, 1.5, .5, 1) both;
+}
+.salon-bulle.attente   { background: #fff1cf; }
+.salon-bulle.prepa     { background: #fff1cf; }
+.salon-bulle.livraison { background: #dcebf2; }
+.salon-bulle.servie    { background: #d6ecc4; }
+.salon-bulle:hover     { filter: brightness(1.05); }
+@keyframes salon-bulle-pop {
+  from { opacity: 0; transform: translate(-50%, -80%) scale(.8); }
+  to   { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+}
+
+/* ---------- Chats ---------- */
+.salon-chat { transition: transform .15s; transform-origin: 50% 100%; }
+.salon-chat:hover { transform: scale(1.08); }
+
+/* ---------- Premier plan ---------- */
+.salon-premier-plan { pointer-events: none; }

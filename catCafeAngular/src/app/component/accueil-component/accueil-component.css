@@ -1,0 +1,322 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: "Nunito", system-ui, sans-serif;
+  color: #5a3a28;
+}
+
+* { box-sizing: border-box; }
+
+.ecran { width: 100%; }
+
+#ecran-entree {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #fdf4e3;
+}
+
+/*
+ * Plan de référence : 1600 × 900 (16:9).
+ * Le décor suit un comportement similaire à un SVG preserveAspectRatio="slice" :
+ * il remplit l'écran puis coupe les côtés sur les écrans étroits.
+ * Les images de décor créées dans ce pack sont toutes des calques 1600 × 900.
+ */
+.scene-plan {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 177.77778svh);
+  aspect-ratio: 16 / 9;
+  transform: translate(-50%, -50%);
+}
+
+.jardin-fond { z-index: 0; pointer-events: none; }
+.entree-centre { z-index: 1; pointer-events: none; }
+.porte-zone { display: contents; }
+
+/* Images de décor, sans aucune géométrie SVG dans le HTML. */
+.calque {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+
+.objet {
+  display: block;
+  position: absolute;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Les coordonnées sont en pourcentage du plan 1600 × 900. */
+.etagere { top: 57.4667%; width: 15.75%; height: 19.6%; }
+.etagere-g { left: 23.375%; }
+.etagere-d { left: 60.875%; }
+
+
+.grande-plante { top: 62.2222%; width: 11.875%; height: 24.4444%; }
+.grande-plante-g { left: 12.5%; }
+.grande-plante-d { left: 75.625%; }
+
+/* Enseigne et porte centrale. */
+.enseigne-entree {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 24.2%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 4px 24px 7px;
+  max-width: 90vw;
+  white-space: nowrap;
+  color: #5a3a28;
+  text-align: center;
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+  font-size: clamp(25px, 3.2vw, 54px);
+  font-weight: 700;
+  line-height: 1.2;
+  background: #efb76f;
+  border: 4px solid #5a3a28;
+  border-radius: 22px;
+  box-shadow: 0 6px 0 #5a3a28, 0 12px 20px -12px rgba(90, 58, 40, .6);
+}
+
+.porte {
+  appearance: none;
+  position: absolute;
+  z-index: 4;
+  left: 40.625%;       /* x = 650 sur 1600 */
+  top: 34.4444%;       /* y = 310 sur 900 */
+  width: 18.75%;       /* 300 sur 1600 */
+  height: 46.6667%;    /* 420 sur 900 */
+  margin: 0;
+  padding: 0;
+  pointer-events: auto;
+  cursor: pointer;
+  overflow: hidden;
+  background: #fae5bd;
+  border: 9px solid #925c3a;
+  border-radius: 48% 48% 4px 4px / 34% 34% 0 0;
+  box-shadow: inset 0 0 0 3px #f9d49b, 0 13px 0 #704832,
+              0 24px 30px -18px rgba(90, 58, 40, .65);
+}
+
+.porte .interieur,
+.porte .battant {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.porte .interieur { inset: 0; }
+.porte .battant { width: 50%; }
+.porte .battant.g { left: 0; }
+.porte .battant.d { right: 0; }
+
+.porte .interieur img,
+.porte .battant img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+/* Changement immédiat : aucun rotate, transform, transition ni animation. */
+.porte.ouverte .battant { display: none; }
+
+.porte:focus-visible {
+  outline: 4px solid #f5c443;
+  outline-offset: 5px;
+}
+
+/* Décor transparent autour de la porte, toujours visible une fois ouverte. */
+.lierre-porte {
+  z-index: 5;
+  left: 35.875%;       /* 650 - 76 */
+  top: 29.5556%;       /* 310 - 44 */
+  width: 28.25%;       /* 452 */
+  height: 55.5556%;    /* 500 */
+}
+/*.plante-porte {
+  z-index: 6;
+  top: 68.2222%;      310 + 304 */
+  /*width: 5.3125%;       85 
+ height: 11.8889%;     107 
+}*/
+.plante-porte-g { left: 36.5625%; }  /* 650 - 65 */
+.plante-porte-d { left: 59.375%; }   /* 650 + 300 */
+.tapis-porte {
+  z-index: 6;
+  left: 44.5625%;      /* 650 + 63 */
+  top: 79.6667%;       /* 310 + 407 */
+  width: 10.875%;      /* 174 */
+  height: 4%;          /* 36 */
+}
+
+.porte-aide {
+  position: absolute;
+  z-index: 7;
+  left: 50%;
+  top: 84%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 7px 16px;
+  width: max-content;
+  max-width: 88vw;
+  color: #5a3a28;
+  text-align: center;
+  font-size: clamp(12px, 1.3vw, 17px);
+  font-weight: 800;
+  background: #fff6e6;
+  border: 3px solid #5a3a28;
+  border-radius: 100px;
+  box-shadow: 0 4px 0 #5a3a28;
+}
+.porte-aide.masquee { visibility: hidden; }
+
+@media (max-width: 480px) {
+  .enseigne-entree { padding: 5px 13px; border-width: 3px; }
+  .porte { border-width: 6px; }
+  .porte-aide { padding: 6px 12px; border-width: 2px; }
+}
+.voile {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(90, 58, 40, .32);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.boite {
+  --brun: #5a3a28;
+  --creme: #fff6e6;
+  --rose: #f6b8c0;
+  --rose-fonce: #e98a96;
+  --encre-doux: #8a6248;
+  position: relative;
+  width: min(560px, 94vw);
+  max-height: min(90vh, 700px);
+  overflow-y: auto;
+  padding: 48px 26px 22px;
+  background: var(--creme);
+  border: 3.5px solid var(--brun);
+  border-radius: 28px;
+  color: var(--brun);
+  box-shadow: 0 7px 0 var(--brun), 0 30px 50px -20px rgba(90,58,40,.6);
+}
+
+/* Store rose et crème sur la partie haute de la fenêtre. */
+.boite::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 28px;
+  border-bottom: 3px solid var(--brun);
+  background: repeating-linear-gradient(90deg,
+    var(--rose) 0 28px,
+    var(--creme) 28px 56px);
+  border-radius: 24px 24px 0 0;
+  pointer-events: none;
+}
+
+.boite h2 {
+  font-family: 'Fredoka', 'Nunito', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(24px, 5vw, 32px);
+  line-height: 1.08;
+  margin: 0 44px 4px 0;
+  color: var(--brun);
+}
+
+.boite .sous {
+  margin: 0 0 16px;
+  color: var(--encre-doux);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.fermer {
+  position: absolute;
+  top: 38px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 3px solid var(--brun);
+  border-radius: 50%;
+  background: var(--rose);
+  box-shadow: 0 3px 0 var(--brun);
+  color: var(--brun);
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+.fermer:hover { background: var(--rose-fonce); }
+
+.choix-role {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.carte-role {
+  min-width: 0;
+  min-height: 148px;
+  border: 2.5px solid var(--brun);
+  border-radius: 20px;
+  padding: 18px 14px;
+  background: #fffdf7;
+  box-shadow: 0 3px 0 var(--brun);
+  color: #15110e;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+.carte-role:hover { background: #fff1cf; transform: translateY(-2px); }
+.carte-role .ico { display: block; font-size: 36px; line-height: 1.2; margin-bottom: 9px; }
+.carte-role strong { display: block; font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.carte-role span:last-child { color: var(--encre-doux); font-size: 13px; line-height: 1.3; }
+
+.carte-role:focus-visible,
+.fermer:focus-visible {
+  outline: 3px solid #f5c443;
+  outline-offset: 4px;
+}
+
+@media (max-width: 520px) {
+  .boite { padding: 48px 16px 20px; }
+  .boite h2 { font-size: 26px; }
+  .choix-role { gap: 9px; }
+  .carte-role { padding: 16px 7px; min-height: 146px; }
+  .carte-role strong { font-size: 16px; }
+  .carte-role span:last-child { font-size: 12px; }
+}
+
+@media (max-width: 360px) {
+  .choix-role { grid-template-columns: 1fr; }
+  .carte-role { min-height: 110px; padding: 12px; }
+}
+

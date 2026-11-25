@@ -20,4 +20,7 @@ public interface IDAOCompte extends JpaRepository<Compte,Integer> {
 	@Query("FROM Gerant")
 	public List<Gerant> findAllGerants(); 
 
+	
+
+
 }
