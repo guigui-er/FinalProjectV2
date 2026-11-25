@@ -28,7 +28,6 @@ import jakarta.transaction.Transactional;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/chat")
-@CrossOrigin ("*")
 public class ChatRestController {	
     
     @Autowired
