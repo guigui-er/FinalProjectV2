@@ -43,8 +43,12 @@
 </form>-->
 
 
-<div class="voile" id="voile">
-  <div class="boite" id="boite" >
+<div class="fond-flou" id="voile" aria-hidden="true"></div>
+<div class="page-connexion" (click)="fermerPage()">
+  <div class="boite" id="boite" (click)="$event.stopPropagation()" >
+    <button class="fermer" id="btn-fermer" type="button" aria-label="Fermer" 
+    (click)="fermerPage()">x</button>
+
       <h2>Votre groupe</h2>
       <p class="sous">Quelques infos, et nous vous trouvons une table au café.</p>
 
@@ -89,8 +93,7 @@
     <button class="btn large" [disabled]="clientForm.invalid" type="submit">trouver table</button>
   </div>
 </form>
-
-  </div>
+</div>
 </div>
 
 
