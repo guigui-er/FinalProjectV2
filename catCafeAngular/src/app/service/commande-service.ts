@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Article } from '../model/article';
+import { DetailCommande } from '../model/detail-commande';
+import { CommandeModel } from '../model/commande-model';
+
 
 @Injectable({
   providedIn: 'root',
@@ -11,48 +15,48 @@ export class CommandeService {
     
 
     //Récupérer les boissons chaudes
-    public findAllBoissonsChaudes(): Observable<any[]> {
+    public findAllBoissonsChaudes(): Observable<Article[]> {
         return this.http.get<any[]>(`${this.apiUrl}/boissons/chaudes`);
     }
 
     //Récupérer les boissons froides
-    public findAllBoissonsFroides(): Observable<any[]> {
+    public findAllBoissonsFroides(): Observable<Article[]> {
         return this.http.get<any[]>(`${this.apiUrl}/boissons/froides`);
     }
 
     // Récupérer les aliments
-    public findAllAlimentaires(): Observable<any[]> {
+    public findAllAlimentaires(): Observable<Article[]> {
         return this.http.get<any[]>(`${this.apiUrl}/alimentaires`);
     }
 
     // Récupérer les aliments de type Gateaux
-    public findAllGateaux(): Observable<any[]> {
+    public findAllGateaux(): Observable<Article[]> {
         return this.http.get<any[]>(`${this.apiUrl}/alimentaires/type/gateau`);
     }
 
     // Récupérer les aliments de type Plats
-    public findAllPlats(): Observable<any[]> {
+    public findAllPlats(): Observable<Article[]> {
         return this.http.get<any[]>(`${this.apiUrl}/alimentaires/type/plat`);
     }
 
     // Récupérer les aliments de type Glaces
-    public findAllGlaces(): Observable<any[]> {
+    public findAllGlaces(): Observable<Article[]> {
         return this.http.get<any[]>(`${this.apiUrl}/alimentaires/type/glace`);
     }
 
     // Récupérer les aliments de type RecettesSpeciales
-    public findAllRecettesSpeciales(): Observable<any[]> {
+    public findAllRecettesSpeciales(): Observable<Article[]> {
         return this.http.get<any[]>(`${this.apiUrl}/alimentaires/type/recetteSpeciale`);
     }
 
     // Créer une nouvelle commande
-    public creerCommande(commande: any): Observable<any> {
-        return this.http.post<any>(`${this.apiUrl}/commande`,commande);
+    public creerCommande(commande: CommandeModel): Observable<CommandeModel> {
+        return this.http.post<CommandeModel>(`${this.apiUrl}/commande`,commande);
     }
 
     // Ajouter un détail à une commande
-    public creerDetailCommande(detail: any): Observable<any> {
-        return this.http.post<any>(`${this.apiUrl}/detailCommande`,detail);
+    public creerDetailCommande(detail: DetailCommande ): Observable<DetailCommande> {
+        return this.http.post<DetailCommande>(`${this.apiUrl}/detailCommande`,detail);
     }
 
 }

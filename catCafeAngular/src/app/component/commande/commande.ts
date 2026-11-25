@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommandeService } from '../../service/commande-service';
 import { Observable } from 'rxjs';
 import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { Article } from '../../model/article';
+import { CommandeModel } from '../../model/commande-model';
+import { DetailCommande } from '../../model/detail-commande';
 
 @Component({
   imports: [AsyncPipe, DecimalPipe],
@@ -11,15 +14,15 @@ import { AsyncPipe, DecimalPipe } from '@angular/common';
 })
 export class Commande implements OnInit {
   // Les listes récupérées depuis le backend
-  protected boissonschaudes$!: Observable<any[]>;
-  protected boissonsfroides$!: Observable<any[]>;
+  protected boissonschaudes$!: Observable<Article[]>;
+  protected boissonsfroides$!: Observable<Article[]>;
 
-  // protected alimentaires$!: Observable<any[]>;
+  // protected alimentaires$!: Observable<Article[]>;
   // Les différentes listes en fonctions du type d'aliments ! 
-  protected gateaux$!: Observable<any[]>;
-  protected plats$!: Observable<any[]>;
-  protected glaces$!: Observable<any[]>;
-  protected recettesSpeciales$!: Observable<any[]>;
+  protected gateaux$!: Observable<Article[]>;
+  protected plats$!: Observable<Article[]>;
+  protected glaces$!: Observable<Article[]>;
+  protected recettesSpeciales$!: Observable<Article[]>;
 
   // Le panier (temporaire) contient les articles sélectionnés
   protected panier: {
@@ -57,12 +60,12 @@ export class Commande implements OnInit {
   }
 
   // Créer une clé unique pour chaque article 
-  protected creerCle(article: any, categorie: string): string {
+  protected creerCle(article: Article, categorie: string): string {
     return categorie + '-' + article.id;
   }
 
   // Récupérer la QUANTITE d'un article sélectionné
-  protected getQuantite(article: any, categorie: string): number {
+  protected getQuantite(article: Article, categorie: string): number {
     const cle = this.creerCle(article, categorie); // On récupère la clé de l'article.
     // Si l'article existe dans le panier, on retourne sa quantité. Sinon, on retourne 0.
     return this.panier[cle] ? this.panier[cle].qte : 0;
@@ -70,7 +73,7 @@ export class Commande implements OnInit {
 
 
   // -------------- AJOUTER un article avec le bouton + ! ---------------------
-  protected ajouter(article: any, categorie: string): void {
+  protected ajouter(article: Article, categorie: string): void {
     const cle = this.creerCle(article, categorie); // On récupère la clé de l'article
     // Vérifier si l'article existe déjà dans le panier
     if (this.panier[cle]) {
@@ -89,7 +92,7 @@ export class Commande implements OnInit {
   }
 
   // -------------- AJOUTER un article avec le bouton + ! ---------------------
-  protected retirer(article: any, categorie: string): void {
+  protected retirer(article: Article, categorie: string): void {
     const cle = this.creerCle(article, categorie); // On récupère la clé de l'article
     // Vérifier si l'article existe déjà dans le panier
     if (this.panier[cle]) {
@@ -133,7 +136,7 @@ export class Commande implements OnInit {
     }
 
     // 1. Créer la commande
-    const nouvelleCommande = {
+    const nouvelleCommande : CommandeModel = {
       date: new Date().toISOString().slice(0, 19), //Format attendu par LocalDateTime en Java ! 
       accepter_paiement: false,
       statutCommande: 'En_cours'
@@ -141,14 +144,21 @@ export class Commande implements OnInit {
 
     this.commandeService.creerCommande(nouvelleCommande).subscribe({
 
-      next: (commandeCreee: any) => {
-        // Récupérer l'identifiant de la commande
+      next: (commandeCreee: CommandeModel) => {
+        // Récupérer et vérifier l'identifiant de la commande
         const commandeId = commandeCreee.id;
+        
+        if (commandeId === undefined) {
+          console.error('La commande créée ne possède pas d’identifiant.');
+          alert('Erreur : identifiant de commande introuvable.');
+          return;
+        }
+
         let nombreDetailsCrees = 0;
 
         // 2. Créer un détail pour chaque article
         articles.forEach(article => {
-          const detail = {
+          const detail : DetailCommande = {
             qte: article.qte,
             prix: article.prix,
             commandeId: commandeId,
