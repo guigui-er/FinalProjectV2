@@ -85,7 +85,7 @@
                 <!-- couche arrière : chaises du fond, dossiers (cliquable, mais ignorée au clavier : la couche avant suffit) -->
                 <button type="button" class="salon-objet salon-cliquable salon-table" tabindex="-1" aria-hidden="true"
                         [style.--x]="st.arriere.x" [style.--y]="st.arriere.y" [style.--w]="st.arriere.w" [style.--h]="st.arriere.h"
-                        [style.z-index]="st.arriere.z" (click)="clicTableSalon(st.id, tb)">
+                        [style.z-index]="st.arriere.z" (click)="clicTableSalon(st.id, tb,reservationsSalon)">
                   <img [src]="st.arriere.src" alt="" draggable="false">
                 </button>
 
@@ -93,7 +93,7 @@
                 @for (c of clientsAssis(st.id, tb, reservationsSalon); track $index) {
                   <img class="salon-objet salon-client" [src]="c.src" alt="" draggable="false" animate.leave="salon-client-part"
                       [style.--x]="c.x" [style.--y]="c.y" [style.--w]="c.w" [style.--h]="c.h" [style.z-index]="c.z"
-                      (click)="clicTableSalon(st.id, tb)">
+                      (click)="clicTableSalon(st.id, tb,reservationsSalon)">
                 }
 
                 <!-- couche avant : la table, les chaises de côté et de devant, les fauteuils -->
@@ -101,7 +101,7 @@
                         [attr.title]="'Table ' + st.id + ' · ' + (tb?.capacite ?? st.capacite) + ' places'"
                         [attr.aria-label]="'Table ' + st.id + ', ' + (tb?.capacite ?? st.capacite) + ' places'"
                         [style.--x]="st.avant.x" [style.--y]="st.avant.y" [style.--w]="st.avant.w" [style.--h]="st.avant.h"
-                        [style.z-index]="st.avant.z" (click)="clicTableSalon(st.id, tb)">
+                        [style.z-index]="st.avant.z" (click)="clicTableSalon(st.id, tb,reservationsSalon)">
                   <img [src]="st.avant.src" alt="" draggable="false">
                 </button>
 
@@ -158,7 +158,6 @@
           </ul>
           <div class="menu-cat">En ce moment</div>
             @for (c of (Commandes$ | async) ; track c.commandeId){
-
               <div class="resume-ligne"><b>{{`T${c.reservation.assise?.id}`}}</b><span>{{`client : ${c.reservation?.client.nom}- ${c.reservation.assise?.capacite}`}}</span><span > {{`${c.statutCommande}`}}</span></div>
             }
             @if (statsChats$ | async; as s) {
@@ -167,7 +166,7 @@
         </section>
       </aside>
     </div>
- 
+
 <div>
     <button type="button" (click)="commande()">decclencher lecture commande </button>
 </div>
@@ -208,11 +207,22 @@
 }
 
 // POPUP COMMANDE
-@if (showCommande()) {
+<!--@if (showCommande()) {
   <div class="backdrop" (click)="onBackdropClickCommande($event)">
     <div class="modal" role="dialog" aria-modal="true">
       <button type="button" class="close" aria-label="Fermer" (click)="closeCommande()">×</button>
       <app-commande (fermerPopup)="closeCommande()" />
+    </div>
+  </div>
+}-->
+
+
+<!-- POPUP COMMANDE -->
+@if (showCommande() && resaSelectionnee(); as resa) {
+  <div class="backdrop" (click)="onBackdropClickCommande($event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="close" aria-label="Fermer" (click)="closeCommande()">×</button>
+      <app-commande [reservation]="resa" (fermerPopup)="closeCommande()" />
     </div>
   </div>
 }

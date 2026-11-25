@@ -71,14 +71,18 @@ export class EcranPrincipal implements OnInit{
 
   // POPUP COMMANDE
   showCommande = signal(false);
+  protected resaSelectionnee = signal<Reservation | undefined>(undefined);
 
-  openCommande() {
+  openCommande(resa: Reservation) {
+    this.resaSelectionnee.set(resa);
     this.showCommande.set(true);
   }
 
   @HostListener('document:keydown.escape')
   closeCommande() {
     this.showCommande.set(false);
+    this.resaSelectionnee.set(undefined);
+    this.refresh$.next();
   }
 
   onBackdropClickCommande(event: MouseEvent) {
@@ -86,7 +90,7 @@ export class EcranPrincipal implements OnInit{
       this.closeCommande();
     }
   }
-  
+
   protected tabledispo:Assise[]=this.reservationService.Table;
 
     ngOnInit(): void {
@@ -95,14 +99,14 @@ export class EcranPrincipal implements OnInit{
 
         console.log(`this.reservation bdd ${this.reservation?.id}`);
 
-      /*this.Commandes$ = this.refresh$.pipe(
+      this.Commandes$ = this.refresh$.pipe(
         // On initialise notre Observable
         startWith(null),
         // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
         switchMap(() => {
-          return this.commandeService.findAllWithResa();
+          return this.commandeService.trouverToutesLesCommandes();
         })
-      )*/ // Pas utile pour le moment a voir quand on aura tout 
+      ) // Pas utile pour le moment a voir quand on aura tout
 
 
       this.Reservations$ = this.refresh$.pipe(
@@ -284,22 +288,24 @@ protected readonly FOND_SALON = FOND_SALON;
   }
 
   /** clic sur une table, ses sièges, ses clients ou sa bulle ; table = ta table en base, undefined si elle n'y est pas */
-  protected clicTableSalon(idTable: number, table: Assise | undefined): void {
+  protected clicTableSalon(idTable: number, table: Assise | undefined, reservations: Reservation[] | null): void {
 
     if (!table) return;
 
       // Si on est en train de placer un nouveau client
       if (this.sceneEnPlacement()) {
-        if (this.sceneTableEligible(idTable, table)) { 
+        if (this.sceneTableEligible(idTable, table)) {
           this.SelectionTable(table);
         }
         return;
       }
 
       // Vérifier que la table est occupée
-      if (!this.sceneTableOccupee(idTable, table)) return; 
-        this.openCommande();
-      
+      if (!this.sceneTableOccupee(idTable, table)) return;
+      const resa = this.reservationEnCours(idTable, reservations);
+      if (!resa?.id) return;
+        this.openCommande(resa);
+
   }
 
 
