@@ -14,7 +14,7 @@ import { map, Observable, startWith, Subject, switchMap } from 'rxjs';
 import { Commande } from '../../model/commande';
 import { CommandeService } from '../../service/commande-service';
 import { ChatService } from '../../service/chat-service';
-import { Chat } from '../../model/chat';
+import { ChatDTO } from '../../model/chat';
 
 import { FOND_SALON, PREMIER_PLAN, DECOR_SALON, PORTE_ENTREE, PORTE_PRIVEE, COMPTOIR, CAISSE, CADENAS_SRC,
          TABLES_SALON, PLACES_CHATS, PELAGES_CHATS, IMAGES_CHATS, CLIENTS_ASSIS, NB_MODELES_CLIENTS,
@@ -43,7 +43,7 @@ export class EcranPrincipal implements OnInit{
   protected Reservations$!: Observable<Reservation[]>;
   protected Clients$!: Observable<Client[]>;
   protected Tables$!: Observable<Assise[]>;
-  protected Chats$!: Observable<Chat[]>;
+  protected Chats$!: Observable<ChatDTO[]>;
   protected statsChats$!: Observable<{ aAdopter: number; total: number }>;
 
   protected reservation!:Reservation;
@@ -238,7 +238,7 @@ protected readonly FOND_SALON = FOND_SALON;
   }
 
   /** le chat dort-il ? (image du chat couché) */
-  protected sceneChatDort(chat: Chat): boolean {
+  protected sceneChatDort(chat: ChatDTO): boolean {
     return false;
   }
 
@@ -284,9 +284,11 @@ protected readonly FOND_SALON = FOND_SALON;
 
 }
   /** clic sur un chat */
-  protected clicChatSalon(chat: Chat): void {
+  protected clicChatSalon(chat: ChatDTO): void {
 
-    this.router.navigate([ 'gerant' ]);
+    const id = chat.id;
+
+    this.router.navigate([ `chat/${id}` ]);
   }
 
 
@@ -328,7 +330,7 @@ protected readonly FOND_SALON = FOND_SALON;
   }
 
   /** l'image du i-ème chat : son pelage, assis ou endormi, sur un coussin ou au sol */
-  protected imageChat(chat: Chat, i: number): ImageChat {
+  protected imageChat(chat: ChatDTO, i: number): ImageChat {
     const pelage = PELAGES_CHATS[i % PELAGES_CHATS.length];
     const pose = this.sceneChatDort(chat) ? 'dort' : 'assis';
     const support = this.placeChat(i).coussin ? 'coussin' : 'sol';
