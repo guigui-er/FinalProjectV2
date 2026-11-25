@@ -1,15 +1,12 @@
-import { Reservation } from './reservation';
-import { DetailCommande } from "./detail-commande";
+import { DetailsCommande } from "./details-commande";
+import { Reservation } from "./reservation";
 import { StatutCommande } from "./statut-commande";
 
 export interface Commande {
-
-      id?: number,
-      date: Date,
-      statutCommande:StatutCommande,
-      reservation: Reservation,
-      details?:DetailCommande[],
-      prixTotal:number
+    commandeId: number;
+    date: string;
+    statutCommande: StatutCommande;
+    reservation: Reservation;
+    details: DetailsCommande[];
+    prixTotal: number;
 }
-
-

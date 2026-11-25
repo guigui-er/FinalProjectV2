@@ -10,6 +10,18 @@
   --bois:#e8b46a; --bois-fonce:#c98a4b; --encre:#5a3a28; --encre-doux:#8a6248;
   --ombre:0 6px 0 rgba(90,58,40,.18), 0 18px 30px -16px rgba(90,58,40,.45);
   --rayon:24px;
+  /*
+  Styles Mathias
+  --couleur-principale: #3D5A33;
+  --police-titre: 'Caveat', cursive;
+  --sauge-clair: #e3ead6;
+  --couleur-numero-table: #A85636;
+  --creme: #fbf6ea;
+  --encre-doux: #6b6a55;
+  --mousse-fonce: #3d5a33;
+  --terracotta: #c9714f;
+  --terracotta-fonce: #a85636;
+  --mousse: #5f7f4a;*/
 }
 
 * {
@@ -41,4 +53,31 @@ body{
     font-stretch: 100%;
     font-display: swap;
     src: url(https://fonts.gstatic.com/s/fredoka/v17/X7n64b87HvSqjb_WIi2yDCRwoQ_k7367_DWu89U.woff2) format('woff2');
-    unicode-range: U +0000 -00FF, U +0131, U +0152 -0153, U +02BB -02BC, U +02C6, U +02DA, U +02DC, U +0304, U +0308, U +0329, U +2000 -206F, U +20AC, U +2122, U +2191, U +2193, U +2212, U +2215, U + FEFF, U + FFFD;}
+    unicode-range: U +0000 -00FF, U +0131, U +0152 -0153, U +02BB -02BC, U +02C6, U +02DA, U +02DC, U +0304, U +0308, U +0329, U +2000 -206F, U +20AC, U +2122, U +2191, U +2193, U +2212, U +2215, U + FEFF, U + FFFD;
+}
+
+/* 
+Partie paiement
+*/
+
+.statut-badge {
+  background: #e1f0d4;
+  color: #3d6a2c;
+  border-color: #b7d79c;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+}
+
+.statut-badge--en-cours {
+  background: #fff1d0;
+  color: #9a6a12;
+  border-color: #f2d58f;
+}
+

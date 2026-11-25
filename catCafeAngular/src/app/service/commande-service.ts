@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Commande } from '../model/commande';
 import { Article } from '../model/article';
 import { DetailCommande } from '../model/detail-commande';
 import { CommandeModel } from '../model/commande-model';
@@ -10,10 +11,17 @@ import { CommandeModel } from '../model/commande-model';
   providedIn: 'root',
 })
 export class CommandeService {
-    private apiUrl: string = "http://localhost:8080/api";
     private http: HttpClient = inject(HttpClient);
-    
+    private apiUrl = 'http://localhost:8080/api/';
 
+    public trouverToutesLesCommandes(): Observable<Commande[]> {
+      return this.http.get<Commande[]>(`${this.apiUrl}/commande/paiementDisponible`);
+    }
+
+    public payer(id: number): Observable<Commande> {
+      return this.http.put<Commande>(`${this.apiUrl}/commande/${id}/statut/Terminee`, {});
+    }
+  
     //Récupérer les boissons chaudes
     public findAllBoissonsChaudes(): Observable<Article[]> {
         return this.http.get<any[]>(`${this.apiUrl}/boissons/chaudes`);

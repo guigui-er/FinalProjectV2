@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { Paiement } from './component/paiement/paiement';
 import { Commande } from './component/commande/commande';
 import { GerantConnexionComponent } from './component/gerant-connexion-component/gerant-connexion-component';
 import { GerantPage } from './page/gerant-page/gerant-page';
@@ -31,6 +32,10 @@ export const routes: Routes = [
     {
         path: 'gerantPage',
         component: GerantPage
+    },
+    {
+        path: 'paiement',
+        component: Paiement
     },
 
     // Popup Commande avec le menu (Célia)
