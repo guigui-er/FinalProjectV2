@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { GerantConnexionComponent } from './component/gerant-connexion-component/gerant-connexion-component';
+import { GerantPage } from './page/gerant-page/gerant-page';
 
 import { AccueilComponent } from './component/accueil-component/accueil-component';
 import { Entree } from './component/entree/entree';
@@ -21,11 +22,15 @@ export const routes: Routes = [
         path: 'gerant',
         component: GerantConnexionComponent
     },
-        {
-    path: 'ecranPrincipal',
-    component: EcranPrincipal
-   }
+        
+    {
+        path: 'ecranPrincipal',
+        component: EcranPrincipal
+    },
 
+    {
+        path: 'gerantPage',
+        component: GerantPage
+    }
 
 ];
-
