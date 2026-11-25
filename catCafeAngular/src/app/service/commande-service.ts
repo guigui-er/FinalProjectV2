@@ -12,7 +12,7 @@ import { CommandeModel } from '../model/commande-model';
 })
 export class CommandeService {
     private http: HttpClient = inject(HttpClient);
-    private apiUrl = 'http://localhost:8080/api/';
+    private apiUrl = 'http://localhost:8080/api';
 
     public trouverToutesLesCommandes(): Observable<Commande[]> {
       return this.http.get<Commande[]>(`${this.apiUrl}/commande/paiementDisponible`);
