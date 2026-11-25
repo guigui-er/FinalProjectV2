@@ -202,7 +202,7 @@ protected readonly FOND_SALON = FOND_SALON;
 
   /** vrai quand un groupe choisit sa table : le salon passe en mode placement */
   protected sceneEnPlacement(): boolean {
-    return !!this.reservation && this.reservation.id == undefined;
+    return !!this.reservation && !this.reservation.id ;
   }
 
   /** en mode placement : cette table convient-elle au groupe ? (jaune si oui, grisée avec cadenas sinon) */
