@@ -44,7 +44,7 @@ public record TableReservationsResponse(
         if (commande != null && commande.getStatutCommande()!=null){
             commandeResponse = CommandeResponse.convert(commande, prixTotal);
             commandeId = commandeResponse.commandeId();
-            idReservation = commandeResponse.idReservation();
+           // idReservation = commandeResponse.getReservation().getid();
             total = commandeResponse.prixTotal();
             accepterPaiement = commande.isAccepter_paiement();
             commandeStatut = commande.getStatutCommande().toString();

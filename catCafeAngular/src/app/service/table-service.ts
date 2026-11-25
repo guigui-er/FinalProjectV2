@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Table } from '../model/table';
+import { Assise } from '../model/assise';
 
 @Injectable({
   providedIn: 'root',
@@ -10,24 +11,24 @@ export class TableService {
   private http: HttpClient = inject(HttpClient);
   private apiUrl: string = '/assise';
 
-  public findAll(): Observable<Table[]> {
-      return this.http.get<Table[]>(`http://localhost:8080/api${this.apiUrl}`);
+  public findAll(): Observable<Assise[]> {
+      return this.http.get<Assise[]>(`http://localhost:8080/api${this.apiUrl}`);
   }
 
-  public findById(id: number): Observable<Table> {
-    return this.http.get<Table>(`http://localhost:8080/api${ this.apiUrl }/${ id }`);
+  public findById(id: number): Observable<Assise> {
+    return this.http.get<Assise>(`http://localhost:8080/api${ this.apiUrl }/${ id }`);
   }
 
-  public findByDisponible(capacite: number): Observable<Table[]> {
-    return this.http.get<Table[]>(`http://localhost:8080/api${ this.apiUrl }/disponibles`,{params:{capacite}});
+  public findByDisponible(capacite: number): Observable<Assise[]> {
+    return this.http.get<Assise[]>(`http://localhost:8080/api${ this.apiUrl }/disponibles`,{params:{capacite}});
   }
 
-  public save(table: Table): Observable<Table> {
+  public save(table: Assise): Observable<Assise> {
     if (!table.id) {
-      return this.http.post<Table>(`http://localhost:8080/api${this.apiUrl}`, table);
+      return this.http.post<Assise>(`http://localhost:8080/api${this.apiUrl}`, table);
     }
 
-    return this.http.put<Table>(`http://localhost:8080/api${ this.apiUrl }/${ table.id }`, table);
+    return this.http.put<Assise>(`http://localhost:8080/api${ this.apiUrl }/${ table.id }`, table);
   }
 
 

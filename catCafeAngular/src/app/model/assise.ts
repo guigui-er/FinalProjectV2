@@ -1,5 +1,5 @@
 export interface Assise{
-    id:number;
-    capacite:number;
+    id :number;
+    capacite ?:number;
     complet:boolean;
 }

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Table } from '../model/table';
+import { Assise } from '../model/assise';
 
 
 
@@ -13,16 +14,16 @@ export class ReservationService {
 
   private reservationForm!:Reservation;
 
-  private tabledispo!:Table[];
+  private tabledispo!:Assise[];
 
   private http: HttpClient = inject(HttpClient);
   private apiUrl: string = '/reservation';
 
-  public get Table(): Table[]  {
+  public get Table(): Assise[]  {
     return this.tabledispo;
   }
 
-    public set Table(table: Table[])  {
+    public set Table(table: Assise[])  {
      this.tabledispo=table;
   }
 

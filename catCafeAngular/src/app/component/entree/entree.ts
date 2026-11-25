@@ -11,6 +11,7 @@ import { Client } from '../../model/client';
 import { Table } from '../../model/table';
 import { Router } from '@angular/router';
 import { Genre } from '../../model/genre';
+import { Assise } from '../../model/assise';
 
 @Component({
   imports: [CommonModule,ReactiveFormsModule],
@@ -31,10 +32,10 @@ export class Entree implements OnInit {
   protected nomCtrl!: FormControl;
   protected nbClientCtrl!: FormControl;
   protected editingClientId?: number;
-  protected editingReservationId?: number;
+  protected editingReservationId: number = 0;
   protected nbClient?: number;
 
-  protected tables?: Table[];
+  protected tables?: Assise[];
 
   protected nbPersonnes= [1,2,3,4,5,6,7];
 
@@ -84,20 +85,27 @@ export class Entree implements OnInit {
         console.log(tables);
 
         if (tables.length!=0)
-        {
-          const reservation: Reservation = {
-            id:this.editingReservationId,
-            dateTime: new Date(),
-            nbClient: this.nbClientCtrl.value,
-            client:client,
+        { 
+          let assise : Assise = {
+              id: 0,
+              complet:false,
+              capacite: undefined,
             };
+          const reservation: Reservation = {
+            id: this.editingReservationId,
+            dateTime: new Date().toISOString().slice(0, 19),
+            nbClient: this.nbClientCtrl.value,
+            client: client,
+            assise : assise
+
+          };
           this.reservationService.ReservationForm=reservation;
           this.reservationService.Table=this.tables;
           this.router.navigate([ 'ecranPrincipal' ]);
         }
 
         this.editingClientId = undefined;
-        this.editingReservationId = undefined;
+        this.editingReservationId = 0;
 
 
         //this.tables=undefined;

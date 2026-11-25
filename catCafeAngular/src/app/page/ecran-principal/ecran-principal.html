@@ -157,7 +157,7 @@
             <li><span>🔒</span><span><b>Porte « Privé »</b> — espace gérant</span></li>
           </ul>
           <div class="menu-cat">En ce moment</div>
-            @for (c of (Commandes$ | async) ; track c.id){
+            @for (c of (Commandes$ | async) ; track c.commandeId){
 
               <div class="resume-ligne"><b>{{`T${c.reservation.assise?.id}`}}</b><span>{{`client : ${c.reservation?.client.nom}- ${c.reservation.assise?.capacite}`}}</span><span > {{`${c.statutCommande}`}}</span></div>
             }

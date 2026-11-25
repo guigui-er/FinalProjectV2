@@ -19,6 +19,7 @@ import { Chat } from '../../model/chat';
 import { FOND_SALON, PREMIER_PLAN, DECOR_SALON, PORTE_ENTREE, PORTE_PRIVEE, COMPTOIR, CAISSE, CADENAS_SRC,
          TABLES_SALON, PLACES_CHATS, PELAGES_CHATS, IMAGES_CHATS, CLIENTS_ASSIS, NB_MODELES_CLIENTS,
          ImageChat, ImageScene, PlaceChat, TableScene } from './scene-salon';
+import { Assise } from '../../model/assise';
 
 @Component({
   imports: [DatePipe,AsyncPipe],
@@ -40,7 +41,7 @@ export class EcranPrincipal implements OnInit{
   protected Commandes$!: Observable<Commande[]>;
   protected Reservations$!: Observable<Reservation[]>;
   protected Clients$!: Observable<Client[]>;
-  protected Tables$!: Observable<Table[]>;
+  protected Tables$!: Observable<Assise[]>;
   protected Chats$!: Observable<Chat[]>;
   protected statsChats$!: Observable<{ aAdopter: number; total: number }>;
 
@@ -50,7 +51,7 @@ export class EcranPrincipal implements OnInit{
   protected commandes?: Commande[];
 
 
-  protected tabledispo:Table[]=this.reservationService.Table;
+  protected tabledispo:Assise[]=this.reservationService.Table;
 
     ngOnInit(): void {
 
@@ -58,14 +59,14 @@ export class EcranPrincipal implements OnInit{
 
         console.log(`this.reservation bdd ${this.reservation?.id}`);
 
-      this.Commandes$ = this.refresh$.pipe(
+      /*this.Commandes$ = this.refresh$.pipe(
         // On initialise notre Observable
         startWith(null),
         // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
         switchMap(() => {
           return this.commandeService.findAllWithResa();
         })
-      )
+      )*/ // Pas utile pour le moment a voir quand on aura tout 
 
 
       this.Reservations$ = this.refresh$.pipe(
@@ -117,13 +118,13 @@ export class EcranPrincipal implements OnInit{
 
   }
 
-  protected SelectionTable(tableSelect?:Table ): void {
+  protected SelectionTable(tableSelect:Assise ): void {
 
       const client: Client = this.reservation.client;
-      const table:Table={
-        id: tableSelect?.id,
+      const table:Assise={
+        id: tableSelect.id,
         complet:true,
-        capacite:tableSelect?.capacite,
+        capacite:tableSelect.capacite,
       }
 
 
@@ -171,7 +172,7 @@ export class EcranPrincipal implements OnInit{
   }
 
 
-    protected commander(tableSelect:Table): void {
+    protected commander(tableSelect:Assise): void {
 
 
   }
@@ -192,7 +193,7 @@ protected readonly FOND_SALON = FOND_SALON;
   protected readonly TABLES_SALON = TABLES_SALON;
 
   /** la table de ta base qui correspond à une table du salon (même id), ou undefined */
-  protected tableBdd(tables: Table[] | null, idTable: number): Table | undefined {
+  protected tableBdd(tables: Assise[] | null, idTable: number): Assise | undefined {
     return tables?.find(t => t.id === idTable);
   }
 
@@ -205,7 +206,7 @@ protected readonly FOND_SALON = FOND_SALON;
   }
 
   /** en mode placement : cette table convient-elle au groupe ? (jaune si oui, grisée avec cadenas sinon) */
-  protected sceneTableEligible(idTable: number, table: Table | undefined): boolean {
+  protected sceneTableEligible(idTable: number, table: Assise | undefined): boolean {
      if (!table) return false;                                   // pas de table en base : impossible
       if (this.tabledispo?.length) {
         return this.tabledispo.some(d => d.id === idTable);       // la liste calculée par ton formulaire décide
@@ -215,7 +216,7 @@ protected readonly FOND_SALON = FOND_SALON;
 
 
   /** la table est-elle occupée ? (ellipse et plaque roses, clients assis) — par défaut : champ complet de ta base */
-  protected sceneTableOccupee(idTable: number, table: Table | undefined): boolean {
+  protected sceneTableOccupee(idTable: number, table: Assise | undefined): boolean {
     return !!table?.complet;
   }
 
@@ -249,7 +250,7 @@ protected readonly FOND_SALON = FOND_SALON;
   }
 
   /** clic sur une table, ses sièges, ses clients ou sa bulle ; table = ta table en base, undefined si elle n'y est pas */
-  protected clicTableSalon(idTable: number, table: Table | undefined): void {
+  protected clicTableSalon(idTable: number, table: Assise | undefined): void {
 
     if (!table) return;
 
@@ -287,7 +288,7 @@ protected readonly FOND_SALON = FOND_SALON;
   }
 
   /** les images des clients assis à une table : autant que nbClient, dans l'ordre des places de la maquette */
-  protected clientsAssis(idTable: number, table: Table | undefined, reservations: Reservation[] | null): ImageScene[] {
+  protected clientsAssis(idTable: number, table: Assise | undefined, reservations: Reservation[] | null): ImageScene[] {
     if (!this.sceneTableOccupee(idTable, table)) return [];          // table libre : personne
     const resa = this.reservationEnCours(idTable, reservations);
     const places = CLIENTS_ASSIS[idTable] ?? [];
@@ -302,7 +303,7 @@ protected readonly FOND_SALON = FOND_SALON;
     const STATUTS_TERMINES = ['PAYEE'];
     return commandes
       ?.filter(c => c.reservation?.assise?.id === idTable && !STATUTS_TERMINES.includes(String(c.statutCommande)))
-      .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))[0];
+      .sort((a, b) => (b.commandeId ?? 0) - (a.commandeId ?? 0))[0];
   }
 
 
