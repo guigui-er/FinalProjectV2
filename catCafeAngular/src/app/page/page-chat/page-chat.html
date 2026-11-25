@@ -1,197 +1,60 @@
-<!-- Pop up trouvé dans la maquette, tenter d'adapter? -->
+
 <div class="voile" id="voile" aria-hidden="true">
   <div class="boite" id="boite" role="dialog" aria-modal="true">
-    <button class="fermer" id="btn-fermer" aria-label="Fermer">×</button>
+    <button class="fermer" id="btn-fermer" aria-label="Fermer"><a routerLink="/EcranPrincipal" routerLinkActive="active">Salon </a></button>
     <!-- Le bouton "fermer" doit permettre une redirection vers l'accueil du café -->
     <div id="boite-contenu">
-        <!-- Possibilité de mettre ici un chat avec findById et en récupérant l'id du chat cliqué
-         De cette sorte on affiche les infos de tous les chats dans une page à part et au cas par cas en pop up -->
+    
     </div>
   </div>
 </div>
-<div class="toast" id="toast" role="status"></div>
 
-<div class="tdb">
+<div *ngIf="chatId$ | async as chat" class="carte">
 
-  <section class="carte">
+  <div class="carte-chat">
 
-    <h2>Les chats 🐾</h2>
+    <div class="image-chat">
+    <img
+    [src]="'/images/chats/' + chat.id + '.webp'"
+    [alt]="'Photo de ' + chat.nom">    
+    </div>
+    <!-- Informations du chat -->
 
-    <!-- Pendant le chargement des données -->
-    <ng-template #chargement>
-      <p class="message info">
-        Chargement des chats...
-      </p>
-    </ng-template>
+    <div class="informations">
 
-    <ng-container *ngIf="chats$ | async as chats else chargement;">
-    <div class="grille-chats" id="liste-chats">
-
-    <!-- Affichage de tous les chats et de leur description générale -->
-    <div *ngFor="let chat of chats" class="carte-chat">
-
-      <h2>{{ chat['nom'] }}</h2>
+      <h1>{{ chat.nom }}</h1>
 
       <p><strong>Race :</strong> {{ chat['race'] }}</p>
 
-      <p><strong>Âge :</strong> {{ chat['age']}} mois</p> <!-- Serait plus sympa avec age = X ans Y mois avec une div euclidienne -->
+      <p><strong>Âge :</strong> {{ formatAge(chat.age) }}</p>
 
       <p><strong>Sexe :</strong> {{ chat['sexe'] }}</p>
 
       <p><strong>Caractère :</strong> {{ chat['caractère'] }}</p>
 
-
-      <div class="boutons-adoption">
-        <h4 *ngIf="!chat['adopted']"><span class="badge adoptable"> Disponible à l'adoption</span></h4>
-        <h4 *ngIf="chat['adopted']"><span class="badge adoption"> En cours d'adoption</span></h4>
-      
-        <button
-          *ngIf="!chat['adopted']"
-          (click)="adopterChat(chat)">
-          Adopter
-        </button>
-        <button
-          *ngIf="chat['adopted']"
-          (click)="adopterChat(chat)" disabled="disabled">
-          Adopter
-        </button>
-      
-      </div>
-        <!--{{ chat['adopted'] ? 'Adopté' : "Disponible à l'adoption" }}-->
-
-      <div class="actions-chat">
-
-        <button (click)="voirChat(chat)">
-          Voir
-        </button>
-
-        <button (click)="modifierChat(chat)">
-          Modifier
-        </button>
-
-        <button (click)="supprimerChat(chat)">
-          Supprimer
-        </button>
-      </div>
-
-    </div>
-  </div>
-<div class="carte-chat">
-
-
-<!-- FORMULAIRE DE MODIFICATION -->
-<div *ngIf="showMessage" class="chat-form-container">
-  <h2 id="dérouler">Appuyer sur modifier pour dérouler le menu... 🐾</h2> 
-</div>
-<div *ngIf="showForm" class="chat-form-container">
-
-  <h2 id ="dérouler">Modifier les infos d'un chat 🐱</h2>
-
-  <form [formGroup]="chatForm">
-
-    <!-- NOM -->
-    <div class="form-group">
-      <label for="nom">Nom du chat :</label>
-      <input
-        type="text"
-        id="nom"
-        formControlName="nom"
-        placeholder="Nom du chat"
-      />
     </div>
 
-    <!-- RACE -->
-    <div class="form-group">
-      <label for="race">Race :</label>
-      <input
-        type="text"
-        id="race"
-        formControlName="race"
-        placeholder="Race du chat"
-      />
-    </div>
+    <!-- Statut d'adoption -->
 
-    <!-- AGE -->
-    <div class="form-group">
-      <label for="age">Âge :</label>
-      <input
-        type="number"
-        id="age"
-        formControlName="age"
-        min="0"
-      />
-    </div>
-
-    <!-- SEXE -->
-    <div class="form-group">
-      <label for="sexe">Sexe :</label>
-      <select id="sexe" formControlName="sexe">
-        <option value="">Choisir le sexe</option>
-        <option value="mâle">Mâle</option>
-        <option value="femelle">Femelle</option>
-      </select>
-    </div>
-
-    <!-- ADOPTÉ 
-    <div class="form-group">
-      <label for="adopted">Adopté :</label>
-      <select id="adopted" formControlName="adopted">
-        <option [ngValue]="false">Non</option>
-        <option [ngValue]="true">Oui</option>
-      </select>
-    </div>
-    -->
-
-    <!-- DATE VÉTÉRINAIRE -->
-    <div class="form-group">
-      <label for="date_veto">Date de visite vétérinaire :</label>
-      <input
-        type="date"
-        id="date_veto"
-        formControlName="date_veto"
-      />
-    </div>
-
-    <!-- PROPRIÉTAIRE 
-    <div class="form-group">
-      <label for="proprietaire">Propriétaire :</label>
-      <input
-        type="number"
-        id="proprietaire"
-        formControlName="proprietaire"
-        placeholder="id du propriétaire"
-      />
-    </div>
-    -->
-
-    <!-- CARACTÈRE -->
-    <div class="form-group">
-      <label for="caractère">Caractère :</label>
-      <textarea
-        id="caractère"
-        formControlName="caractère"
-        placeholder="Décris le caractère du chat..."
-      ></textarea>
-    </div>
-
-    <!-- BOUTONS -->
-    <div class="form-buttons">
+    <div class="boutons-adoption">
+      <h4 *ngIf="!chat['adopted']"><span class="badge adoptable"> Disponible à l'adoption</span>       
       <br/>
       <button
-        type="button"
-        (click)="editer()"
-        [disabled]="chatForm.invalid"
-        (click)="showForm = false" >
-        Enregistrer les modifications
-      </button>
-
+        *ngIf="!chat['adopted']"
+        (click)="adopterChat(chat)"> 
+        Adopter
+      </button></h4>
+      <h4 *ngIf="chat['adopted']"><span class="badge adoption"> En cours d'adoption</span>
+      <br/>
       <button
-        type="button"
-        (click)="showForm = false">
-        Annuler
+        *ngIf="chat['adopted']"
+        (click)="adopterChat(chat)" disabled="disabled">
+        Adopter
       </button>
-
+      </h4>
+        
     </div>
 
-  </form>
+  </div>
+
 </div>
