@@ -20,7 +20,6 @@ import cat_cafe.model.Chat;
 
 @RestController
 @RequestMapping("/api/chat")
-@CrossOrigin ("*")
 public class ChatRestController {	
     
     @Autowired

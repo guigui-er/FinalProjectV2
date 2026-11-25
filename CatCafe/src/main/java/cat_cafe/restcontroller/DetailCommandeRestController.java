@@ -22,7 +22,6 @@ import cat_cafe.model.DetailCommande;
 import jakarta.transaction.Transactional;
 
 @RestController 
-@CrossOrigin("*")
 @RequestMapping("/api/detailCommande")
 public class DetailCommandeRestController {
 

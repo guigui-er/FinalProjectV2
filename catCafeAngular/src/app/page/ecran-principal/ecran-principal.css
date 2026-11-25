@@ -27,9 +27,11 @@
 
 .salon-et-panneau {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
+  grid-template-columns: minmax(0, 1fr) 330px;
   gap: 18px;
   align-items: start;
+  width:fit-content;
+  margin:0 auto;
 }
 
 

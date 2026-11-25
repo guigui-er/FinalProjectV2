@@ -5,6 +5,7 @@ import { GerantPage } from './page/gerant-page/gerant-page';
 import { AccueilComponent } from './component/accueil-component/accueil-component';
 import { Entree } from './component/entree/entree';
 import { EcranPrincipal } from './page/ecran-principal/ecran-principal';
+import { authGuard } from './guard/auth-guard';
 
 export const routes: Routes = [
 
@@ -30,7 +31,8 @@ export const routes: Routes = [
 
     {
         path: 'gerantPage',
-        component: GerantPage
+        component: GerantPage,
+        canActivate: [ authGuard ]
     }
 
 ];

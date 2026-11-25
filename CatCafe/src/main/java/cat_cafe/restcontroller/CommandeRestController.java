@@ -23,7 +23,6 @@ import jakarta.transaction.Transactional;
 
 @RestController 
 @RequestMapping("/api/commande")
-@CrossOrigin ("*")
 public class CommandeRestController {
 
     @Autowired 

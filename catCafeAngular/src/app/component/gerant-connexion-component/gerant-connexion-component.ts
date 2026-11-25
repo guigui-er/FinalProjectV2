@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 
+
 @Component({
   imports: [ReactiveFormsModule, CommonModule],
   selector: 'app-gerant-connexion-component',
@@ -15,6 +16,7 @@ export class GerantConnexionComponent implements OnInit{
   protected formLoginGroup!: FormGroup;
   protected formLoginUsernameCtrl!: FormControl;
   protected formLoginPasswordCtrl!: FormControl;
+  protected erreurMessage = '';
 
   constructor(
     private gerantConnexService: GerantConnexionService,
@@ -36,10 +38,29 @@ export class GerantConnexionComponent implements OnInit{
   }
 
   protected login() {
-    this.gerantConnexService.login(this.formLoginGroup.getRawValue()).subscribe(resp => {
+    this.erreurMessage = '';
 
-      this.router.navigate(['gerantPage'])
-    })
+    this.gerantConnexService.login(this.formLoginGroup.getRawValue()).subscribe({
+
+      // next => si la réponse HTTP est OK (200)
+      next:resp => {
+        if (resp.success && resp.token) {
+        // On affecte le jeton JWT reçu au service
+        this.gerantConnexService.token = resp.token;
+        // On redirige vers la page du gérant
+        this.router.navigate(['gerantPage']);
+        }
+        else {
+        this.erreurMessage = 'Identifiants invalides.';
+        }
+      },
+
+      // error => si la réponse est KO (30X, 40X, 50X)
+      error:(err) =>{
+        this.erreurMessage = 'Erreur de connexion'
+      }
+
+    });
   }
 
   protected fermerPage() {

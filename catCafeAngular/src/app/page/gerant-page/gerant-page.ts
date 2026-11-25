@@ -12,6 +12,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { TableAssisesResponse } from '../../model/table-assise';
 import { TableReservationsResponse } from '../../model/table-reservation';
 import { Router } from '@angular/router';
+import { GerantConnexionService } from '../../service/gerant-connexion-service';
 
 @Component({
   imports: [RouterLink,CommonModule,AsyncPipe],
@@ -24,7 +25,11 @@ export class GerantPage {
   protected title: Title = inject(Title);
   protected gerantService: GerantService = inject(GerantService);
 
-  private router: Router = inject(Router);
+
+  constructor(
+    private gerantConnexService: GerantConnexionService,
+    private router:Router,
+  ){}
 
 
   protected reservations$!:Observable<Reservation[]>
@@ -54,6 +59,12 @@ export class GerantPage {
   protected clicRetourAuSalon(): void {
     this.router.navigate([ '/ecranPrincipal' ]);
   }
+
+  protected logout() {
+    this.gerantConnexService.resetAuth();
+    this.router.navigate(['ecranPrincipal'])
+  }
+
 
 
  
