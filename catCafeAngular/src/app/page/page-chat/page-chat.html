@@ -1,0 +1,60 @@
+
+<div class="voile" id="voile" aria-hidden="true">
+  <div class="boite" id="boite" role="dialog" aria-modal="true">
+    <button class="fermer" id="btn-fermer" aria-label="Fermer"><a routerLink="/EcranPrincipal" routerLinkActive="active">Salon </a></button>
+    <!-- Le bouton "fermer" doit permettre une redirection vers l'accueil du café -->
+    <div id="boite-contenu">
+    
+    </div>
+  </div>
+</div>
+
+<div *ngIf="chatId$ | async as chat" class="carte">
+
+  <div class="carte-chat">
+
+    <div class="image-chat">
+    <img
+    [src]="'/images/chats/' + chat.id + '.webp'"
+    [alt]="'Photo de ' + chat.nom">    
+    </div>
+    <!-- Informations du chat -->
+
+    <div class="informations">
+
+      <h1>{{ chat.nom }}</h1>
+
+      <p><strong>Race :</strong> {{ chat['race'] }}</p>
+
+      <p><strong>Âge :</strong> {{ formatAge(chat.age) }}</p>
+
+      <p><strong>Sexe :</strong> {{ chat['sexe'] }}</p>
+
+      <p><strong>Caractère :</strong> {{ chat['caractère'] }}</p>
+
+    </div>
+
+    <!-- Statut d'adoption -->
+
+    <div class="boutons-adoption">
+      <h4 *ngIf="!chat['adopted']"><span class="badge adoptable"> Disponible à l'adoption</span>       
+      <br/>
+      <button
+        *ngIf="!chat['adopted']"
+        (click)="adopterChat(chat)"> 
+        Adopter
+      </button></h4>
+      <h4 *ngIf="chat['adopted']"><span class="badge adoption"> En cours d'adoption</span>
+      <br/>
+      <button
+        *ngIf="chat['adopted']"
+        (click)="adopterChat(chat)" disabled="disabled">
+        Adopter
+      </button>
+      </h4>
+        
+    </div>
+
+  </div>
+
+</div>

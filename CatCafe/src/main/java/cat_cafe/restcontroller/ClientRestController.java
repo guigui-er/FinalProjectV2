@@ -20,7 +20,6 @@ import cat_cafe.model.Compte;
 
 @RestController 
 @RequestMapping ("/api/client")
-@CrossOrigin ("*")
 public class ClientRestController {
 
     @Autowired

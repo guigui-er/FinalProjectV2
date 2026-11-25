@@ -17,7 +17,6 @@ import cat_cafe.model.Alimentaire;
 import cat_cafe.model.TypeAliment;
 
 @RestController 
-@CrossOrigin("*")
 @RequestMapping ("/api/alimentaires")
 public class AlimentaireRestController {
 
