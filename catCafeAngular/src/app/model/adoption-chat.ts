@@ -1,5 +1,5 @@
 export interface AdoptionChat {
 
-    idChat?:number;
-    idProprietaire ?:number;
+    chatId?:number;
+    proprietaireId ?:number;
 }

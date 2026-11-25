@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StatsGerantResponse } from '../model/stats-gerant';
 import { Reservation } from '../model/reservation';
-import { Chat } from '../model/chat';
+import { ChatDTO } from '../model/chat';
 import { Assise } from '../model/assise';
 import { Article } from '../model/article';
 import { Boisson } from '../model/boisson';
@@ -35,8 +35,8 @@ export class GerantService {
         return this.http.get<Reservation[]>("http://localhost:8080/api/reservation");
     }
 
-    public findAllChats(): Observable<Chat[]>{
-        return this.http.get<Chat[]>("http://localhost:8080/api/chat");
+    public findAllChats(): Observable<ChatDTO[]>{
+        return this.http.get<ChatDTO[]>("http://localhost:8080/api/chat");
     }
 
     public findAllAssises(): Observable<Assise[]>{
@@ -55,7 +55,7 @@ export class GerantService {
         return this.http.post<Alimentaire>("http://localhost:8080/api/alimentaire",alimentaire);
     }
 
-    public saveChat(chat:Chat): Observable<Chat>{
-        return this.http.post<Chat>("http://localhost:8080/api/chat",chat);
+    public saveChat(chat:ChatDTO): Observable<ChatDTO>{
+        return this.http.post<ChatDTO>("http://localhost:8080/api/chat",chat);
     }
 }

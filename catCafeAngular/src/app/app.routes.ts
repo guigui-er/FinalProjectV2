@@ -7,6 +7,7 @@ import { AccueilComponent } from './component/accueil-component/accueil-componen
 import { Entree } from './component/entree/entree';
 import { EcranPrincipal } from './page/ecran-principal/ecran-principal';
 import { authGuard } from './guard/auth-guard';
+import { PageChat } from './page/page-chat/page-chat';
 
 export const routes: Routes = [
 
@@ -44,6 +45,11 @@ export const routes: Routes = [
     { 
         path: 'commande', 
         component: Commande 
+    },
+
+    { 
+        path: 'chat/:id', 
+        component: PageChat 
     }
 
 ];
