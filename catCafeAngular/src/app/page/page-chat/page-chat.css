@@ -1,0 +1,254 @@
+
+/* Conteneur général */
+.tdb {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 30px 20px 40px;
+  display: flex;
+  align-items: center;
+}
+
+/* Grand panneau crème */
+.carte {
+  background: var(--creme);
+  border-radius: var(--rayon);
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 2px solid #fffaf0;
+  box-shadow: var(--ombre);
+  width: 60%;
+  display: flex;
+  align-content: center;
+}
+
+/* Titre du panneau */
+.carte h2 {
+  font-family: 'Caveat', cursive;
+  font-size: 36px;
+  margin: 0 0 18px;
+  color: var(--mousse-fonce);
+}
+
+/* Grille des chats */
+.grille-chats {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(220px, 1fr)
+  );
+  gap: 14px;
+}
+
+/* Carte individuelle */
+.carte-chat {
+  display: flex;
+  flex-direction:row;
+  align-items: center;
+  gap: 8px;
+
+  background: #fffdf6;
+  border-radius: 16px;
+  padding: 16px;
+
+  border: 2px solid var(--sauge-clair);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Petit effet au survol */
+.carte-chat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px -10px rgba(52, 74, 40, .5);
+}
+
+/* Nom du chat */
+.carte-chat h3 {
+  font-family: 'Caveat', cursive;
+  font-size: 27px;
+  color: var(--mousse-fonce);
+  margin: 0;
+}
+
+/* Informations */
+.carte-chat p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--encre);
+}
+
+/* Badge de statut */
+.badge {
+  display: flex;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  margin-top: 5px;
+}
+
+.badge.adoptable {
+  display: flex;
+  justify-content: center; /* Centrage horizontal des éléments */
+  background: #e1f0d4;
+  color: #3d6a2c;
+  border-color: #b7d79c;
+}
+
+.badge.adoption {
+  background: var(--rose-clair);
+  color: #a2544c;
+  border-color: #efc3bd;
+}
+
+/* Messages */
+.message {
+  border-radius: 12px;
+  padding: 10px 13px;
+  font-weight: 700;
+  font-size: 13.5px;
+}
+
+.message.info {
+  background: var(--sauge-clair);
+  color: var(--mousse-fonce);
+  border: 2px solid #c9d6b4;
+}
+
+/* Adaptation aux petits écrans */
+@media (max-width: 600px) {
+  .tdb {
+    padding: 16px 12px;
+  }
+
+  .carte {
+    padding: 15px;
+  }
+
+  .grille-chats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* barre d'actions chat*/
+
+.actions-chat {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--sauge-clair);
+  width: 10%;
+}
+
+.actions-chat button {
+  border: none;
+  border-radius: 20px;
+  padding: 7px 12px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  background: var(--sauge-clair);
+  color: var(--mousse-fonce);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.actions-chat button:hover {
+  background: var(--sauge);
+  transform: translateY(-2px);
+}
+
+.actions-chat button:last-child {
+  background: var(--terracotta);
+  color: white;
+}
+
+.actions-chat button:last-child:hover {
+  background: var(--terracotta-fonce);
+}
+
+.boutons-adoption{
+  display: flex;
+  flex-wrap: wrap; /* Éléments les uns sous les autres */
+  align-items: center;    /* Centrage horizontal */
+  justify-content: center;
+  text-align: center;
+}
+
+.boutons-adoption button {
+  border: none;
+  border-radius: 20px;
+  padding: 7px 12px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  background: var(--sauge-clair);
+  color: var(--mousse-fonce);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.boutons-adoption button:hover {
+  background: var(--sauge);
+  transform: translateY(-2px);
+}
+
+/* Formulaire de modifications */
+
+.chat-form-container{
+  width: 60%;
+  box-sizing: border-box;
+}
+
+.form-group textarea,
+.form-group select,
+.form-group input{
+  display: flex;
+  border: none;
+  border-radius: 20px;
+  padding: 7px 12px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  background: var(--sauge-clair);
+  color: var(--mousse-fonce);
+  transition: background 0.2s, transform 0.2s;
+  width: 90%;
+  box-sizing: border-box;
+  padding: 3.14mm;
+  vertical-align:baseline;
+}
+
+.form-buttons button {
+  border: none;
+  border-radius: 20px;
+  padding: 7px 12px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  background: var(--mousse);
+  color: var(--sauge-clair);
+  transition: background 0.2s, transform 0.2s
+}
+
+.form-buttons button:hover {
+  background: var(--mousse-fonce);
+  transform: translateY(-2px);
+}
+
+.form-buttons button:last-child {
+  background: var(--terracotta);
+  color: white;
+}
+
+.form-buttons button:last-child:hover {
+  background: var(--terracotta-fonce);
+}
+
+

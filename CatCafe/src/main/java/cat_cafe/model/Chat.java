@@ -33,11 +33,11 @@ public class Chat  {
     @Column(length = 35,nullable = false)
     protected String race;
 
-    @Column(name="age (mois)",nullable = false)
+    @Column(name="age_mois",nullable = false)
     protected int age; // Mettre l'âge en mois et faire une conversion en années avec une division euclidienne
 
-    @Column(name = "age (annees)", nullable = false)
-    @GeneratedColumn ("age DIV 12") 
+    @Column(name = "age_annees", nullable = false)
+    @GeneratedColumn ("age_mois DIV 12") 
     protected int ageAnnees;
 
 	@Enumerated(EnumType.STRING)
@@ -81,7 +81,7 @@ public class Chat  {
     protected boolean satisfait;
 
     @Column(name = "caresses")
-    protected int caresses;
+    protected Integer caresses;
 
     @Column(name = "caractère", nullable = false)
     protected String caractère;
@@ -89,8 +89,13 @@ public class Chat  {
     public Chat() {
     }
 
-    public Chat(Integer id, String nom, String race, ChatMF sexe, int age, boolean adopted, LocalDate date_veto, Client proprietaire) {
+    public Chat(Integer id, boolean adopted, int age, String caractère, Integer caresses, LocalDate date_veto, boolean endormi, String nom, String race, boolean satisfait, ChatMF sexe, Client proprietaire) {
         this.adopted      = adopted;
+        this.caresses     = caresses;
+        this.caractère    = caractère;
+        this.ageAnnees    = age / 12;
+        this.satisfait    = satisfait;
+        this.endormi      = endormi;
         this.age          = age;
         this.date_veto    = date_veto;
         this.id           = id;
@@ -180,7 +185,7 @@ public class Chat  {
         this.satisfait = satisfait;
     }
 
-    public int getCaresses() {
+    public Integer getCaresses() {
         return caresses;
     }
 
@@ -190,7 +195,7 @@ public class Chat  {
     }
     */
 
-    public int setCaresses(int caresses) {
+    public Integer setCaresses(Integer caresses) {
         this.caresses = caresses;
         return this.caresses;
     }
