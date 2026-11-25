@@ -61,6 +61,7 @@ export class EcranPrincipal implements OnInit{
   @HostListener('document:keydown.escape')
   closePaiement() {
     this.showPayment.set(false);
+    this.refresh$.next();
   }
 
   onBackdropClick(event: MouseEvent) {
@@ -273,7 +274,7 @@ protected readonly FOND_SALON = FOND_SALON;
 
       // Si on est en train de placer un nouveau client
       if (this.sceneEnPlacement()) {
-        if (this.sceneTableEligible(idTable, table)) { 
+        if (this.sceneTableEligible(idTable, table)) {
           this.SelectionTable(table);
         }
         return;
