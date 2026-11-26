@@ -206,3 +206,12 @@
     </div>
   </div>
 }
+
+@if (showAdopterChat(); as chat) {
+  <div class="backdrop" (click)="onBackdropClickChat($event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="close" aria-label="Fermer" (click)="closePageChat()">×</button>
+      <app-page-chat [chat]="chat" (fermerPopupChat)="closePageChat()" />
+    </div>
+  </div>
+}

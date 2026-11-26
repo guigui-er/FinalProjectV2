@@ -21,9 +21,10 @@ import { FOND_SALON, PREMIER_PLAN, DECOR_SALON, PORTE_ENTREE, PORTE_PRIVEE, COMP
          ImageChat, ImageScene, PlaceChat, TableScene } from './scene-salon';
 import { Assise } from '../../model/assise';
 import { Paiement } from '../../component/paiement/paiement';
+import { PageChat } from '../page-chat/page-chat';
 
 @Component({
-  imports: [DatePipe, AsyncPipe, Paiement],
+  imports: [DatePipe, AsyncPipe, Paiement, PageChat],
   selector: 'app-ecran-principal',
   styleUrl: './ecran-principal.css',
   templateUrl: './ecran-principal.html',
@@ -65,6 +66,23 @@ export class EcranPrincipal implements OnInit{
   onBackdropClick(event: MouseEvent) {
     if (event.target === event.currentTarget) {
       this.closePaiement();
+    }
+  }
+
+  showAdopterChat = signal<ChatDTO | null>(null);
+
+  openPageChat(chat: ChatDTO) {
+    this.showAdopterChat.set(chat);
+  }
+
+  @HostListener('document:keydown.escape')
+  closePageChat() {
+    this.showAdopterChat.set(null);
+  }
+
+  onBackdropClickChat(event: MouseEvent) {
+    if (event.target === event.currentTarget) {
+      this.closePageChat();
     }
   }
   
@@ -286,9 +304,7 @@ protected readonly FOND_SALON = FOND_SALON;
   /** clic sur un chat */
   protected clicChatSalon(chat: ChatDTO): void {
 
-    const id = chat.id;
-
-    this.router.navigate([ `chat/${id}` ]);
+    this.openPageChat(chat);
   }
 
 
