@@ -53,7 +53,7 @@ services:
 
   angular:
     image: catcafe:angular
-    build: ./catCafeAngular/dist/catCafeAngular
+    build: ./catCafeAngular
     container_name: catcafe-angular
 
     networks:
