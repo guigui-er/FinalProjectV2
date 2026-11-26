@@ -1,14 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:lts-bullseye'
-             args '''
-                 -v $HOME/.npm:/root/.npm:z
-                 -u root
-             '''
-            // A ADAPTER
-        }
-    }
+    agent any
 
     stages {
         /*stage('Maven Package') {
@@ -20,6 +11,27 @@ pipeline {
                 }
             //} // A voir si ça fonctionne !!
         }*/
+
+        stage('Maven Package') {
+            agent {
+                docker {
+                    image 'maven:3.10.0-eclipse-temurin-21'
+                    args '''
+                        -v $HOME/.m2:/root/.m2:z
+                        -u root
+                        --network devops
+                    '''
+                    reuseNode true // Permet de partager l'espace de travail entre l'agent Jenkins et l'agent Docker
+                }
+            }
+            steps {
+                //dir('BOOT-SECURITY/quest-boot') {
+                /*withSonarQubeEnv('sonar-id') {
+                    sh './node_modules/.bin/sonar-scanner-npm -Dsonar.projectKey=cle-projet-angular'
+                }*/
+            }
+            //} // A voir si ça fonctionne !!
+        }
 
         stage('Docker Compose') {
             steps {
