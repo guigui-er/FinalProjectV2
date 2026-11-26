@@ -35,7 +35,7 @@ pipeline {
 
         stage('Docker Compose') {
             steps {
-                dir('../') { // A voir si ça fonctionne !!! (../FinalProject) ? 
+                { // A voir si ça fonctionne !!! (../FinalProject) ? 
                     sh 'docker compose up -d --build java db pma'
                 }
             }
@@ -61,7 +61,7 @@ pipeline {
 
         stage('Docker Compose Angular') {
             steps {
-                dir('../') { // A voir si ça fonctionne !!! (../FinalProject) ? 
+                { // A voir si ça fonctionne !!! (../FinalProject) ? 
                     sh 'docker compose up -d --build angular'
                 }
             }
