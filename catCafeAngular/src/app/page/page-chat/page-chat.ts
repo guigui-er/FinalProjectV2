@@ -43,28 +43,28 @@ export class PageChat implements OnInit {
 
   ngOnInit(): void {
 
-    this.chatId$ = this.route.paramMap.pipe(
+    // this.chatId$ = this.route.paramMap.pipe(
 
-      map(params => params.get('id')),
+    //   map(params => params.get('id')),
 
-      switchMap(id => {
+    //   switchMap(id => {
 
-        if (!id || isNaN(Number(id))) {
-          throw new Error("Identifiant du chat invalide !");
-        }
+    //     if (!id || isNaN(Number(id))) {
+    //       throw new Error("Identifiant du chat invalide !");
+    //     }
 
-        return this.service.findById(Number(id));
+    //     return this.service.findById(Number(id));
 
-      }),
+    //   }),
 
-      tap(chat => {
-        this.title.setTitle(`La page de ${chat.nom} - ⚞^. .^⚟`);
-      })
+    //   tap(chat => {
+    //     this.title.setTitle(`La page de ${chat.nom} - ⚞^. .^⚟`);
+    //   })
 
-    );
+    // );
 
-    this.client = this.reservationService.ReservationForm.client;
-    console.log(this.client.id, this.client.prenom, this.client.nom)
+    // this.client = this.reservationService.ReservationForm.client;
+    // console.log(this.client.id, this.client.prenom, this.client.nom)
 
   }
 
@@ -84,8 +84,8 @@ export class PageChat implements OnInit {
 
     // Création de la demande d'adoption
     const demande: AdoptionChat = {
-      idChat: chat().id,
-      idProprietaire: this.proprietaireId
+      chatId: chat().id,
+      proprietaireId: this.client.id
     };
 
     this.service.adopterChat(demande).subscribe({
