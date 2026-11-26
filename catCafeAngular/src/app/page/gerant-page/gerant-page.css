@@ -63,6 +63,44 @@ header{
 .btn.terra{
     background:var(--rose);}
 
+.tdb-tete-resa {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+}
+
+.tdb-tete-resa h3 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #4b250e; /* marron foncé type café, à ajuster selon ta palette */
+  margin: 0;
+}
+
+.tdb-tete-resa .outils {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tdb-tete-resa label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4b250e;
+}
+
+.tdb-tete-resa select {
+  padding: 4px 7px;
+  border-radius: 12px;
+  border: 2px solid #4b250e;
+  background-color: #ffffff;
+  color: #2b1608;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
 /* ------------------------------------------------------*/
 .textcenter{
     text-align: center;
@@ -148,6 +186,10 @@ table thead td{
 table tbody td{
     padding: 10px 12px;
     border-bottom: 1px dotted var(--bois);
+}
+
+.outils {
+    font-family: 'Nunito', sans-serif;
 }
 
 .statut{

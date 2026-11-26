@@ -43,6 +43,8 @@ export class GerantPage {
 
   protected reservationsEtat$!: Observable<TableReservationsResponse[]>;
 
+  protected filtreStatut = '';
+
   ngOnInit(): void {
     this.title.setTitle("Page du gérant");
 
@@ -54,6 +56,26 @@ export class GerantPage {
     this.statsData$ = this.gerantService.stats();
     this.assisesEtat$ = this.gerantService.findAllAssisesResponse();
     this.reservationsEtat$ = this.gerantService.findAllReservationsResponse();
+  }
+
+
+  protected onFiltreStatutChange(event: Event): void {
+    this.filtreStatut = (event.target as HTMLSelectElement).value;
+  }
+
+  protected filtrerReservations(reservations: any[] | null): any[] {
+    if (!reservations) return [];
+    if (!this.filtreStatut) return reservations;
+
+    
+    const correspondance: Record<string, string[]> = {
+      'en attente': ['En_cours', 'en cours'],
+      'servie': ['Servie', 'servie'],
+      'payée': ['Terminee', 'terminee']
+    };
+
+    const valeursAcceptees = correspondance[this.filtreStatut] ?? [this.filtreStatut];
+    return reservations.filter(r => valeursAcceptees.includes(String(r.commandeStatut)));
   }
 
   protected clicRetourAuSalon(): void {
