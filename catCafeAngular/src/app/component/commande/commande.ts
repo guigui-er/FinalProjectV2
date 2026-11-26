@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, input, OnInit, output } from '@angular/core';
 import { CommandeService } from '../../service/commande-service';
 import { Observable } from 'rxjs';
 import { AsyncPipe, DecimalPipe } from '@angular/common';
 import { Article } from '../../model/article';
 import { CommandeModel } from '../../model/commande-model';
 import { DetailCommande } from '../../model/detail-commande';
+import { Router } from '@angular/router';
+import { Reservation } from '../../model/reservation';
 
 @Component({
   imports: [AsyncPipe, DecimalPipe],
@@ -18,11 +20,17 @@ export class Commande implements OnInit {
   protected boissonsfroides$!: Observable<Article[]>;
 
   // protected alimentaires$!: Observable<Article[]>;
-  // Les différentes listes en fonctions du type d'aliments ! 
+  // Les différentes listes en fonctions du type d'aliments !
   protected gateaux$!: Observable<Article[]>;
   protected plats$!: Observable<Article[]>;
   protected glaces$!: Observable<Article[]>;
   protected recettesSpeciales$!: Observable<Article[]>;
+
+  fermerPopup = output<void>()
+
+  reservation = input.required<Reservation>();
+
+
 
   // Le panier (temporaire) contient les articles sélectionnés
   protected panier: {
@@ -33,12 +41,13 @@ export class Commande implements OnInit {
     qte: number;
     categorie: string;
   }
-  } = {}; // Le panier est vide au départ ! 
+  } = {}; // Le panier est vide au départ !
 
   constructor(
-    private commandeService: CommandeService
+    private commandeService: CommandeService,
+    private router: Router
   ) {}
-  
+
   ngOnInit(): void {
 
     //Récupération des boissons chaudes
@@ -59,7 +68,7 @@ export class Commande implements OnInit {
     this.recettesSpeciales$ = this.commandeService.findAllRecettesSpeciales();
   }
 
-  // Créer une clé unique pour chaque article 
+  // Créer une clé unique pour chaque article
   protected creerCle(article: Article, categorie: string): string {
     return categorie + '-' + article.id;
   }
@@ -77,10 +86,10 @@ export class Commande implements OnInit {
     const cle = this.creerCle(article, categorie); // On récupère la clé de l'article
     // Vérifier si l'article existe déjà dans le panier
     if (this.panier[cle]) {
-      // Si oui --> on augmente sa qté ! 
+      // Si oui --> on augmente sa qté !
       this.panier[cle].qte++;
     } else {
-      // Sinon --> on crée une nouvelle ligne dans le panier avec qte = 1 ! 
+      // Sinon --> on crée une nouvelle ligne dans le panier avec qte = 1 !
       this.panier[cle] = {
         articleId: article.id,
         description: article.description,
@@ -114,7 +123,7 @@ export class Commande implements OnInit {
       somme += ligneTotal;
     });
     return somme;
-  } 
+  }
 
   // ---- Calculer le nombre total d'articles sélectionnés -----
   protected getNombreArticles(): number {
@@ -127,9 +136,9 @@ export class Commande implements OnInit {
     return nombre;
   }
 
-  // ------ Méthode COMMANDER, au clique du bouton commander ! 
+  // ------ Méthode COMMANDER, au clique du bouton commander !
   protected commander(): void {
-    
+
     const articles = Object.values(this.panier);
     if (articles.length === 0) {
       return;
@@ -137,9 +146,10 @@ export class Commande implements OnInit {
 
     // 1. Créer la commande
     const nouvelleCommande : CommandeModel = {
-      date: new Date().toISOString().slice(0, 19), //Format attendu par LocalDateTime en Java ! 
+      date: new Date().toISOString().slice(0, 19), //Format attendu par LocalDateTime en Java !
       accepter_paiement: false,
-      statutCommande: 'En_cours'
+      statutCommande: 'Servie',
+      reservation: this.reservation(),
     };
 
     this.commandeService.creerCommande(nouvelleCommande).subscribe({
@@ -147,7 +157,7 @@ export class Commande implements OnInit {
       next: (commandeCreee: CommandeModel) => {
         // Récupérer et vérifier l'identifiant de la commande
         const commandeId = commandeCreee.id;
-        
+
         if (commandeId === undefined) {
           console.error('La commande créée ne possède pas d’identifiant.');
           alert('Erreur : identifiant de commande introuvable.');
@@ -193,5 +203,10 @@ export class Commande implements OnInit {
         alert('Impossible de créer la commande.');
       }
     });
+  }
+
+  // Retourner au salon
+  protected fermerCommande(): void {
+    this.router.navigate(['/ecranPrincipal']);
   }
 }

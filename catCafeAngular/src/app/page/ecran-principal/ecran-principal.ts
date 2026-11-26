@@ -10,7 +10,7 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 import { Table } from '../../model/table';
 import { TableService } from '../../service/table-service';
 import { Router } from '@angular/router';
-import { map, Observable, startWith, Subject, switchMap } from 'rxjs';
+import { interval, map, merge, Observable, startWith, Subject, switchMap } from 'rxjs';
 import { Commande } from '../../model/commande';
 import { CommandeService } from '../../service/commande-service';
 import { ChatService } from '../../service/chat-service';
@@ -22,9 +22,11 @@ import { FOND_SALON, PREMIER_PLAN, DECOR_SALON, PORTE_ENTREE, PORTE_PRIVEE, COMP
 import { Assise } from '../../model/assise';
 import { Paiement } from '../../component/paiement/paiement';
 import { PageChat } from '../page-chat/page-chat';
+import { Commande as CommandePopup} from '../../component/commande/commande';
+import { StatutCommande } from '../../model/statut-commande';
 
 @Component({
-  imports: [DatePipe, AsyncPipe, Paiement, PageChat],
+  imports: [DatePipe, AsyncPipe, Paiement, CommandePopup, PageChat],
   selector: 'app-ecran-principal',
   styleUrl: './ecran-principal.css',
   templateUrl: './ecran-principal.html',
@@ -61,6 +63,7 @@ export class EcranPrincipal implements OnInit{
   @HostListener('document:keydown.escape')
   closePaiement() {
     this.showPayment.set(false);
+    this.refresh$.next();
   }
 
   onBackdropClick(event: MouseEvent) {
@@ -86,22 +89,45 @@ export class EcranPrincipal implements OnInit{
     }
   }
   
+  // POPUP COMMANDE
+  showCommande = signal(false);
+  protected resaSelectionnee = signal<Reservation | undefined>(undefined);
+
+  openCommande(resa: Reservation) {
+    this.resaSelectionnee.set(resa);
+    this.showCommande.set(true);
+  }
+
+  @HostListener('document:keydown.escape')
+  closeCommande() {
+    this.showCommande.set(false);
+    this.resaSelectionnee.set(undefined);
+    this.refresh$.next();
+  }
+
+  onBackdropClickCommande(event: MouseEvent) {
+    if (event.target === event.currentTarget) {
+      this.closeCommande();
+    }
+  }
+
   protected tabledispo:Assise[]=this.reservationService.Table;
 
     ngOnInit(): void {
+
 
        this.reservation=this.reservationService.ReservationForm;
 
         console.log(`this.reservation bdd ${this.reservation?.id}`);
 
-      /*this.Commandes$ = this.refresh$.pipe(
+      this.Commandes$ = this.refresh$.pipe(
         // On initialise notre Observable
         startWith(null),
         // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
         switchMap(() => {
-          return this.commandeService.findAllWithResa();
+          return this.commandeService.trouverToutesLesCommandes();
         })
-      )*/ // Pas utile pour le moment a voir quand on aura tout 
+      ) // Pas utile pour le moment a voir quand on aura tout
 
 
       this.Reservations$ = this.refresh$.pipe(
@@ -283,24 +309,27 @@ protected readonly FOND_SALON = FOND_SALON;
   }
 
   /** clic sur une table, ses sièges, ses clients ou sa bulle ; table = ta table en base, undefined si elle n'y est pas */
-  protected clicTableSalon(idTable: number, table: Assise | undefined): void {
+  protected clicTableSalon(idTable: number, table: Assise | undefined, reservations: Reservation[] | null): void {
 
     if (!table) return;
 
+      // Si on est en train de placer un nouveau client
       if (this.sceneEnPlacement()) {
-        if (this.sceneTableEligible(idTable, table)) this.SelectionTable(table);
+        if (this.sceneTableEligible(idTable, table)) {
+          this.SelectionTable(table);
+        }
         return;
       }
+
+      // Vérifier que la table est occupée
       if (!this.sceneTableOccupee(idTable, table)) return;
+      const resa = this.reservationEnCours(idTable, reservations);
+      if (!resa?.id) return;
+        this.openCommande(resa);
 
-      if (this.sceneTableOccupee(idTable, table) && !this.sceneEnPlacement()) {
-        this.router.navigate([ 'gerant' ]);
-        //this.passerCommande(resa);
-        //return;
-      }
-    return;
+  }
 
-}
+
   /** clic sur un chat */
   protected clicChatSalon(chat: ChatDTO): void {
 
@@ -320,16 +349,17 @@ protected readonly FOND_SALON = FOND_SALON;
       .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))[0];
   }
 
-  /** les images des clients assis à une table : autant que nbClient, dans l'ordre des places de la maquette */
-  protected clientsAssis(idTable: number, table: Assise | undefined, reservations: Reservation[] | null): ImageScene[] {
-    if (!this.sceneTableOccupee(idTable, table)) return [];          // table libre : personne
-    const resa = this.reservationEnCours(idTable, reservations);
-    const places = CLIENTS_ASSIS[idTable] ?? [];
-    const nb = Math.min(resa?.nbClient ?? 0, places.length);        // jamais plus que de places
-    const graine = resa?.id ?? idTable;                              // même réservation = mêmes clients
-    return places.slice(0, nb).map((modeles, k) => modeles[(graine * 7 + k) % NB_MODELES_CLIENTS]);
-  }
 
+
+protected clientsAssis(idTable: number, table: Assise | undefined,
+                       reservations: Reservation[] | null): ImageScene[] {
+  if (!this.sceneTableOccupee(idTable, table)) return [];
+  const resa = this.reservationEnCours(idTable, reservations);       // ← nouveau
+  const places = CLIENTS_ASSIS[idTable] ?? [];
+  const nb = Math.min(resa?.nbClient ?? 0, places.length);
+  const graine = resa?.id ?? idTable;
+  return places.slice(0, nb).map((modeles, k) => modeles[(graine * 7 + k) % NB_MODELES_CLIENTS]);
+}
   /** la commande en cours sur une table : la plus récente (plus grand id) de la réservation de cette table,
       hors commandes payées — adapte les statuts « payés » à ton enum */
   protected commandeEnCours(idTable: number, commandes: Commande[] | null): Commande | undefined {
@@ -352,7 +382,5 @@ protected readonly FOND_SALON = FOND_SALON;
     const support = this.placeChat(i).coussin ? 'coussin' : 'sol';
     return IMAGES_CHATS[`chat-${pelage}-${pose}-${support}`];
   }
-
-
 
 }

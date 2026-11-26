@@ -6,6 +6,8 @@ import { ChatService } from '../../service/chat-service';
 import { Observable, switchMap, tap, map } from 'rxjs';
 import { ChatDTO } from '../../model/chat';
 import { AdoptionChat } from '../../model/adoption-chat';
+import { ReservationService } from '../../service/reservation-service';
+import { Client } from '../../model/client';
 
 @Component({
   imports: [
@@ -18,18 +20,23 @@ import { AdoptionChat } from '../../model/adoption-chat';
 })
 export class PageChat implements OnInit {
 
+  
+
   protected title: Title = inject(Title);
   protected service: ChatService = inject(ChatService);
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private reservationService =inject(ReservationService);
 
   // Observable contenant le chat affiché
   protected chatId$!: Observable<ChatDTO>;
 
   // Identifiant du client connecté
   // À récupérer depuis le système d'authentification
-  protected proprietaireId!: number;
+ // protected proprietaireId!: number;
+    protected client?: Client; 
+
 
   chat = input.required<ChatDTO>();
   fermerPopupChat = output<void>();
@@ -56,6 +63,9 @@ export class PageChat implements OnInit {
 
     );
 
+    this.client = this.reservationService.ReservationForm.client;
+    console.log(this.client.id, this.client.prenom, this.client.nom)
+
   }
 
   // Utiliser cette ligne dans le salon this.router.navigate(['/chat', chat.id]);
@@ -67,7 +77,7 @@ export class PageChat implements OnInit {
       return;
     }
 
-    if (!this.proprietaireId) {
+    if (!this.client) {
       alert("Vous devez être connecté pour adopter un chat.");
       return;
     }

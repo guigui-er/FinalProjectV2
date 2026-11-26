@@ -42,7 +42,7 @@ export class GerantPage {
   protected assisesEtat$!: Observable<TableAssisesResponse[]>;
 
   protected reservationsEtat$!: Observable<TableReservationsResponse[]>;
-  
+
   ngOnInit(): void {
     this.title.setTitle("Page du gérant");
 
@@ -67,7 +67,7 @@ export class GerantPage {
 
 
 
- 
+
 
 
 
