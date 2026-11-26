@@ -33,6 +33,7 @@ export class ReservationService {
   }
 
   public set ReservationForm(reservation: Reservation) {
+    console.log(reservation.id);
     this.reservationForm = reservation;
   }
 
