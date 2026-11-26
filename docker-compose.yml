@@ -11,7 +11,8 @@ services:
 
     volumes:
       - db-data:/var/lib/mysql
-      
+      - ./projet_final.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
     networks:
       - cafeChat
 
@@ -65,7 +66,7 @@ services:
       - cafeChat
 
     ports:
-      - 83:80
+      - 4200:80
 
     depends_on:
       - java
