@@ -44,7 +44,6 @@ pipeline {
                 dir('catCafeAngular'){
                     sh 'npm i'
                     sh './node_modules/.bin/ng build'
-                    sh 'npm install -D sonar-scanner-npm'
                     withSonarQubeEnv('catcafeAngular-sonar') {
                         sh './node_modules/.bin/sonar-scanner-npm -Dsonar.projectKey=CatCafeAngular'
                     }
