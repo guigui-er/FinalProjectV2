@@ -8,6 +8,7 @@ import { Entree } from './component/entree/entree';
 import { EcranPrincipal } from './page/ecran-principal/ecran-principal';
 import { authGuard } from './guard/auth-guard';
 import { PageChat } from './page/page-chat/page-chat';
+import { clientGuard } from './guard/client-guard';
 
 export const routes: Routes = [
 
@@ -28,7 +29,8 @@ export const routes: Routes = [
         
     {
         path: 'ecranPrincipal',
-        component: EcranPrincipal
+        component: EcranPrincipal,
+        canActivate: [clientGuard]
     },
 
     { 
@@ -41,7 +43,7 @@ export const routes: Routes = [
         component: GerantPage,
         canActivate: [ authGuard ]
     },
-    {
+    /*{
         path: 'paiement',
         component: Paiement
     },
@@ -55,6 +57,6 @@ export const routes: Routes = [
     { 
         path: 'chat/:id', 
         component: PageChat 
-    }
+    }*/
 
 ];

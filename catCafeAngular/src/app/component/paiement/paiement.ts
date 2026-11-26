@@ -59,7 +59,7 @@ export class Paiement implements OnInit {
   private chargerCommandes(): void {
     this.commandes$ = this.commandeService.trouverToutesLesCommandes().pipe(
       map(commandes =>
-        [...commandes].sort((a, b) => a.reservation.assise.id - b.reservation.assise.id)
+        [...commandes].sort((a, b) => a.reservation?.assise?.id - b.reservation?.assise?.id)
       )
     );
   }

@@ -44,16 +44,16 @@
       @for (commande of (commandes$ | async); track commande.commandeId) {
         <article class="commande" (click)="selectionner(commande)">
           <div class="commande_debut">
-            <h3>T{{ commande.reservation.assise.id }}</h3>
+            <h3>T{{ commande.reservation?.assise.id }}</h3>
           </div>
 
           <div class="commande_centre">
             <p class="commande_client">
-              {{ commande.reservation.client?.prenom }}
-              {{ commande.reservation.client?.nom }}
+              {{ commande.reservation?.client?.prenom }}
+              {{ commande.reservation?.client?.nom }}
             </p>
             <span class="commande_nb-personnes">
-              {{ commande.reservation.nbClient }} pers.
+              {{ commande.reservation?.nbClient }} pers.
             </span>
           </div>
 
