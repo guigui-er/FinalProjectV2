@@ -32,6 +32,9 @@ services:
     networks:
       - cafeChat
 
+    ports:
+     - 8081:80
+
     depends_on:
       db:
         condition: service_healthy
