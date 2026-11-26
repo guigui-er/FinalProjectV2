@@ -3,10 +3,9 @@
   background-color: #fbf6ea;
   color: #45483d;
 
-  /* Dimensions de la popup */
-  width: min(560px, 96vw);
-  max-width: 90vw;
-  max-height: 90vh;
+  /* La commande occupe toute la largeur de la popup */
+  width: 100%;
+  max-width: none;
   box-sizing: border-box;
 
   /* Apparence */
@@ -36,8 +35,10 @@
 .infos {
   color: #817d70;
   font-size: 14px;
+  font-weight: normal;
   margin: 0;
   font-family: Arial, sans-serif;
+  letter-spacing: 0.3px;
 }
 
 /* Bouton fermer de la popup */
@@ -84,7 +85,7 @@ hr {
 .categorie h4 {
   color: #a64f38;
   font-size: 21px;
-  margin: 12px 0;
+  margin: 12px 0 10px;
   font-weight: 600;
 }
 
@@ -97,18 +98,23 @@ hr {
   border-bottom: 1px dotted #dcd4bd;
 }
 
+.ligne-menu:hover {
+  background-color: #f4eddd;
+}
+
 /* Nom de l'article */
 .nom {
   flex: 1;
+  font-weight: normal;
 }
 
 /* Prix de l'article */
 .prix {
   color: #777467;
   font-size: 14px;
+  font-weight: normal;
   min-width: 65px;
   text-align: right;
-  font-family: Arial, sans-serif;
 }
 
 /* Boutons et Quantités des articles */
