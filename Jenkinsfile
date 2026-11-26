@@ -54,17 +54,9 @@ pipeline {
             steps {
                 dir('catCafeAngular'){
                         sh 'npm i'
-                    }
-            }
-        }
-
-
-        stage('NG Build') {
-                steps {
-                    dir('catCafeAngular'){
                         sh './node_modules/.bin/ng build'
                     }
-                }   
+            }
         }
 
         /*stage('SonarQube Analysis') {
