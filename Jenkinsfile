@@ -2,10 +2,10 @@ pipeline {
     agent {
         docker {
             image 'node:lts-bullseye'
-            // args '''
-            //     -v $HOME/.npm:/root/.npm:z
-            //     -u root
-            // '''
+             args '''
+                 -v $HOME/.npm:/root/.npm:z
+                 -u root
+             '''
             // A ADAPTER
         }
     }
@@ -47,7 +47,7 @@ pipeline {
             }
         }*/
 
-        stage('Docker Compose') {
+        stage('Docker Compose Angular') {
             steps {
                 dir('../') { // A voir si ça fonctionne !!! (../FinalProject) ? 
                     sh 'docker compose up -d --build angular'
