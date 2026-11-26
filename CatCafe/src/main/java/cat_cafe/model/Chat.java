@@ -81,7 +81,7 @@ public class Chat  {
     protected boolean satisfait;
 
     @Column(name = "caresses")
-    protected int caresses;
+    protected Integer caresses;
 
     @Column(name = "caractère", nullable = false)
     protected String caractère;
@@ -89,14 +89,18 @@ public class Chat  {
     public Chat() {
     }
 
-    public Chat(Integer id, String nom, String race, ChatMF sexe, int age, boolean adopted, LocalDate date_veto, Client proprietaire) {
-        this.adopted = adopted;
-        this.age = age;
-        this.date_veto = date_veto;
-        this.id = id;
-        this.nom = nom;
-        this.race = race;
-        this.sexe = sexe;
+    public Chat(Integer id, boolean adopted, int age, String caractère, LocalDate date_veto, boolean endormi, String nom, String race, boolean satisfait, ChatMF sexe, Client proprietaire) {
+        this.adopted      = adopted;
+        this.caractère    = caractère;
+        this.ageAnnees    = age / 12;
+        this.satisfait    = satisfait;
+        this.endormi      = endormi;
+        this.age          = age;
+        this.date_veto    = date_veto;
+        this.id           = id;
+        this.nom          = nom;
+        this.race         = race;
+        this.sexe         = sexe;
         this.proprietaire = proprietaire; // Le chat n'a pas de propriétaire par défaut
     }
 
@@ -180,9 +184,7 @@ public class Chat  {
         this.satisfait = satisfait;
     }
 
-    public int getCaresses() {
-        return caresses;
-    }
+
 
     /* // setCaresses de base, modifié pour fitter la méthode caresse
     public void setCaresses(int caresses) {
@@ -190,9 +192,13 @@ public class Chat  {
     }
     */
 
-    public int setCaresses(int caresses) {
+
+    public Integer getCaresses() {
+        return caresses;
+    }
+
+    public void setCaresses(Integer caresses) {
         this.caresses = caresses;
-        return this.caresses;
     }
 
     public String getCaractère() {

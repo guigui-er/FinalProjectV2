@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap');
+:host{
+  --sauge:#a3b18a; --sauge-clair:#e3ead6; --sauge-fonce:#7f9469;
+  --mousse:#5f7f4a; --mousse-fonce:#3d5a33;
+  --creme:#fbf6ea; --terracotta:#c9714f; --terracotta-fonce:#a85636;
+  --encre:#3b3a2c; --encre-doux:#6b6a55; --brun: #5a3a28;
+  --rose: #f6b8c0; --rose-fonce: #e98a96; --jaune: #ffcc48;
+  font-family:'Nunito', system-ui, sans-serif; font-weight:500;  color: var(--brun);
+  display: block;
+  min-height: 100vh;
+}
+
+*{ box-sizing : border-box }
+
+button, input, select { font-family:inherit }
+
+.page-connexion {
+  position: relative;
+  z-index: 1;                 /* au-dessus du fond flou */
+  min-height: 100vh;
+  display: grid;
+  place-items: center;        /* centre horizontalement et verticalement */
+  padding: 1rem;
+}
+
+.fond-flou {
+  position: fixed;
+  inset: 0;                 /* couvre tout l'écran */
+  z-index: 0;               /* derrière la boîte */
+  background: url('/accueil/cafe.png') center / cover no-repeat;
+  filter: blur(6px);
+  transform: scale(1.05);   /* évite les bords nets que le flou crée sur les côtés */
+}
+
+.voile{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  place-items:center;
+  padding:18px;
+  background:rgba(38,52,30,.42);
+  backdrop-filter:blur(3px)}
+/* ligne 293 */
+.voile{
+  display:grid;
+  animation:fondu .2s
+}
+/* ligne 501 : section 11, qui remplace le fond */
+.voile{
+  background:rgba(90,58,40,.32)
+}
+.boite::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 28px;
+      border-bottom: 3px solid var(--brun);
+      background: repeating-linear-gradient(90deg,
+      var(--rose) 0 26px,
+      var(--creme) 26px 52px);
+      border-radius: 21px 21px 0 0;
+      pointer-events: none;
+}
+
+.boite{
+  position:relative;
+  z-index: 1;
+  --brun: #5a3a28;
+  --creme: #fff6e6;
+  --rose: #f6b8c0;
+  --rose-fonce: #e98a96;
+  --encre-doux: #8a6248;
+  width:min(560px,94vw);
+  max-height: calc(100dvh - 36px);
+  overflow:auto;
+  overflow-x: hidden;
+  background:var(--creme);
+  border: 3px solid var(--brun);
+  border-radius: 25px;
+  color: var(--brun);
+  padding:48px 26px 22px;
+  box-shadow:
+      0 7px 0 var(--brun),
+      0 25px 50px -18px rgba(59, 34, 23, .50);
+      
+}
+
+.boite h2{
+  font-family:'Fredoka';
+  font-size:32px;
+  line-height:1;
+  margin:0 0 4px;
+  color:#5a3a28
+}
+
+.boite .sous{
+  margin:0 0 16px;
+  color:#8a6248;
+  font-size:14.5x;
+  font-weight: 700;
+}
+.fermer{
+      position: absolute;
+      top: 36px;
+      right: 13px;
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: 3px solid var(--brun);
+      border-radius: 50%;
+      background: var(--rose);
+      color: var(--brun);
+      box-shadow: 0 3px 0 var(--brun);
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1;
+      cursor: pointer;
+      }
+
+.champ{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  margin-bottom:12px
+}
+.champ input,.champ select{
+  font:inherit;
+  font-weight:600;
+  padding:10px 13px;
+  border-radius:12px;
+  border:2px solid #d9dcc8;
+  background:#fffdf7;
+  color:#5a3a28;
+  outline:none
+}
+.champ input,.champ select{
+  border:2.5px solid #8a6248;
+  border-radius:14px;
+  background:#fffdf7;
+  color:#5a3a28
+}
+
+/* style de base */
+.btn {
+  cursor: pointer;
+  padding: 9px 20px;
+  border: 3px solid #5a3a28;             /* contour marron épais */
+  border-radius: 999px;                  /* forme de pastille */
+  background: #f5c443;                   /* jaune moutarde */
+  color: #5a3a28;                        /* texte marron */
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 15.5px;
+  box-shadow: 0 4px 0 #5a3a28;           /* épaisseur sous le bouton */
+  transition: transform .08s, filter .15s;
+}
+
+/* survol : légèrement plus clair */
+.btn:hover {
+  filter: brightness(1.05);
+}
+
+/* pendant l'appui : le bouton s'enfonce */
+.btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #5a3a28;
+}
+
+/* désactivé : grisé, sans effet */
+.btn:disabled {
+  cursor: not-allowed;
+  background: #e4ddd2;
+  color: #a39684;
+  border-color: #a39684;
+  box-shadow: 0 4px 0 #a39684;
+  filter: none;
+  transform: none;
+}
+
+/* version pleine largeur */
+.btn.large {
+  width: 100%;
+  padding: 13px;
+}

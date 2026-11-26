@@ -25,8 +25,8 @@ public class Reservation {
     @JoinColumn(name="client_id")
     private Client client;
 
-    @OneToOne
-    @JoinColumn(name="assise_id",unique=true)
+    @ManyToOne 
+    @JoinColumn(name="assise_id")
     private Assise assise;
 
     public Reservation(){}
@@ -67,5 +67,14 @@ public class Reservation {
     public void setAssise(Assise assise) {
         this.assise = assise;
     }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
 
 }

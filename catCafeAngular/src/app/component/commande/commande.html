@@ -1,0 +1,167 @@
+
+<div class="commande">
+
+  <!-- En-tête de la commande -->
+  <div class="header">
+
+    <!-- Plus besoin, style géneral de popup dans style.css  -->
+    <!-- <button class="btn-fermer" type="button" (click)="fermerCommande()">×</button> -->
+
+    <h2>Menu du Café</h2>
+
+    <p class="infos">
+      Table {{ reservation()?.assise?.id }}
+      · Client : {{ reservation()?.client?.nom }} {{ reservation()?.client?.prenom }}
+      · {{ reservation()?.nbClient }} pers.
+    </p>
+
+  </div>
+
+  <!-- Contenu du menu -->
+  <div class="contenu">
+
+    <!-- BOISSONS CHAUDES -->
+    <section class="categorie">
+        <h4>Boissons chaudes</h4>
+
+      @for (boisson of (boissonschaudes$ | async); track boisson.id) {
+        <div class="ligne-menu">
+          <span class="nom">{{ boisson.description }}</span>
+          <span class="prix">{{ boisson.prix }} €</span>
+            
+          <div class="qte">
+            <button type="button" (click)="retirer(boisson,'chaude')">−</button>
+            <span>{{ getQuantite(boisson, 'chaude') }}</span>
+            <button type="button" (click)="ajouter(boisson,'chaude')">+</button>
+          </div>
+      </div>
+        } @empty {
+        <p class="vide">Aucune boisson chaude disponible pour le moment.</p>
+        }
+    </section>
+
+    <!-- BOISSONS FROIDES -->
+    <section class="categorie">
+      <h4>Boissons froides</h4>
+      
+      @for (boisson of (boissonsfroides$ | async); track boisson.id) {
+        <div class="ligne-menu">
+            <span class="nom">{{ boisson.description }}</span>
+            <span class="prix">{{ boisson.prix }} €</span>
+
+            <div class="qte">
+                <button type="button" (click)="retirer(boisson,'froide')">−</button>
+                <span>{{ getQuantite(boisson, 'froide') }}</span>
+                <button type="button" (click)="ajouter(boisson,'froide')">+</button>
+            </div>
+        </div>
+            } @empty {
+            <p class="vide">Aucune boisson froide disponible pour le moment.</p>
+            }
+    </section>
+
+    <!-- GATEAUX -->
+    <section class="categorie">
+      <h4>Gâteaux</h4>
+      
+      @for (gateau of (gateaux$ | async); track gateau.id) {
+      <div class="ligne-menu">
+        <span class="nom">{{ gateau.description }}</span>
+        <span class="prix">{{ gateau.prix }} €</span>
+
+        <div class="qte">
+          <button type="button" (click)="retirer(gateau,'gateau')">−</button>
+          <span>{{ getQuantite(gateau, 'gateau') }}</span>
+          <button type="button" (click)="ajouter(gateau,'gateau')">+</button>
+        </div>
+      </div>
+        } @empty {
+        <p class="vide">Aucun gâteau disponible pour le moment.</p>
+        }
+    </section>
+
+    <!-- GLACES -->
+    <section class="categorie">
+      <h4>Glaces</h4>
+      
+      @for (glace of (glaces$ | async); track glace.id) {
+      <div class="ligne-menu">
+        <span class="nom">{{ glace.description }}</span>
+        <span class="prix">{{ glace.prix }} €</span>
+
+        <div class="qte">
+          <button type="button" (click)="retirer(glace,'glace')">−</button>
+          <span>{{ getQuantite(glace, 'glace') }}</span>
+          <button type="button" (click)="ajouter(glace,'glace')">+</button>
+        </div>
+      </div>
+        } @empty {
+        <p class="vide">Aucune glace disponible pour le moment.</p>
+        }
+    </section>
+
+    <!-- PLATS -->
+    <section class="categorie">
+      <h4>Plats</h4>
+      
+      @for (plat of (plats$ | async); track plat.id) {
+      <div class="ligne-menu">
+        <span class="nom">{{ plat.description }}</span>
+        <span class="prix">{{ plat.prix }} €</span>
+
+        <div class="qte">
+          <button type="button" (click)="retirer(plat,'plat')">−</button>
+          <span>{{ getQuantite(plat, 'plat') }}</span>
+          <button type="button" (click)="ajouter(plat,'plat')">+</button>
+        </div>
+      </div>
+        } @empty {
+        <p class="vide">Aucun plat disponible pour le moment.</p>
+        }
+    </section>
+
+    <!-- RECETTES SPECIALES -->
+    <section class="categorie">
+      <h4>Recettes spéciales</h4>
+      
+      @for (recette of (recettesSpeciales$ | async); track recette.id) {
+      <div class="ligne-menu">
+        <span class="nom">{{ recette.description }}</span>
+        <span class="prix">{{ recette.prix }} €</span>
+
+        <div class="qte">
+          <button type="button" (click)="retirer(recette,'recettesSpeciale')">−</button>
+          <span>{{ getQuantite(recette, 'recettesSpeciale') }}</span>
+          <button type="button" (click)="ajouter(recette,'recettesSpeciale')">+</button>
+        </div>
+      </div>
+        } @empty {
+        <p class="vide">Aucune recette spéciale disponible pour le moment.</p>
+        }
+    </section>
+
+  </div>
+
+  <hr>
+
+  <!-- Footer de la commande -->
+  <div class="footer">
+
+    <div class="recap">
+
+      <!-- Nombre d'article(s) -->
+      <span class="nombre-articles">
+        {{ getNombreArticles() }} article(s)
+      </span>
+
+      <!-- Montant total -->
+      <span class="total">Total : <b>{{ getTotal() | number:'1.2-2' }} €</b></span> <!-- Avec DecimalPipe pour afficher seulement 2 chiffres max après le point  -->
+
+    </div>
+    
+    <!-- Bouton commander -->
+    <button class="btn-commander" type="button" [disabled]="getTotal() === 0" (click)="commander()">Commander</button>
+
+  </div>
+
+</div>

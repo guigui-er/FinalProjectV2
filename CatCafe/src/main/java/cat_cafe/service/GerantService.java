@@ -1,36 +1,135 @@
 package cat_cafe.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import cat_cafe.dao.IDAOArticle;
+import cat_cafe.dao.IDAOAssise;
+import cat_cafe.dao.IDAOCommande;
 import cat_cafe.dao.IDAOCompte;
+import cat_cafe.dao.IDAODetailCommande;
+import cat_cafe.dao.IDAOReservation;
+import cat_cafe.dto.response.StatsGerantResponse;
+import cat_cafe.model.Assise;
+import cat_cafe.model.Commande;
+import cat_cafe.model.DetailCommande;
+import cat_cafe.model.Reservation;
+import cat_cafe.model.StatutCommande;
+import jakarta.transaction.Transactional;
 
 
 @Service 
+@Transactional
 public class GerantService {
 
-    @Autowired 
-    IDAOCompte daoCompte;
+    IDAOReservation daoReservation;
+    IDAOAssise daoAssise;
+    IDAOArticle daoArticle;
+    IDAOCommande daoCommande;
 
-    public GerantService(IDAOCompte daoCompte){
-        this.daoCompte=daoCompte;
+    public GerantService(IDAOCommande daoCommande,
+        IDAOReservation daoReservation,IDAOAssise daoAssise,IDAOArticle daoArticle)
+    {
+        this.daoReservation=daoReservation;
+        this.daoAssise=daoAssise;
+        this.daoArticle=daoArticle;
+        this.daoCommande=daoCommande;
     }
 
-    public void emmenerVeto(){
-
+    public StatsGerantResponse stats() {
+        return new StatsGerantResponse(
+            montantEnCaisse(),
+            nbCommandesEnCours(),
+            nbClientsPresents(),
+            nbTablesOccupees()
+        );
     }
 
-    public void remplirGamelle(){
-
+    public double montantEnCaisse(){
+        double total = 0;
+        for(Commande commande: daoCommande.findAll()){
+            if (commande.getStatutCommande() == StatutCommande.Terminee && commande.isAccepter_paiement() && commande.getDate().toLocalDate().equals(LocalDate.now())){
+                for(DetailCommande detail: commande.getDetails()){
+                    total+=detail.getPrix()*detail.getQte();
+                }
+            }
+        }return total;
     }
 
-    public void remplirEau(){
-
+    public int nbCommandesEnCours(){
+        return daoCommande.countByStatutCommande(StatutCommande.En_cours);
     }
 
-    public void nettoyerLitiere(){
-        
+    public int nbClientsPresents(){
+        int total = 0;
+        for (Assise assise : daoAssise.findAll()) {
+                Reservation reservation = trouverReservation(assise);
+                Commande commande = trouverCommandeTable(reservation);
+
+                boolean estOccupee = assise.isComplet() || commande != null;
+                
+                if (estOccupee && reservation != null) {
+                    total += reservation.getNbClient();
+                }
+            }
+        return total;
     }
 
+    public int nbTablesOccupees(){
+        int total = 0;
+        for (Assise assise : daoAssise.findAll()) {
+                Reservation reservation = trouverReservation(assise);
+                Commande commande = trouverCommandeTable(reservation);
+
+                boolean estOccupee = assise.isComplet() || commande != null;
+                
+                if (estOccupee) {
+                    total++;
+                }
+            }
+        return total;
+    }
+
+    /*
+    public int nbCommandeEnCours(){
+        List <Commande> commandes = daoCommande.findAll();
+        int nb = 0;
+        for(Commande commande: commandes){
+            if (commande.getStatutCommande() == StatutCommande.En_cours){
+                 nb +=1;
+            }
+        }return nb;
+    }
+    */
+
+    public Reservation trouverReservation(Assise assise){
+        List<Reservation> reservations = this.daoReservation.findByAssiseIdOrderByDateTimeDesc(assise.getId());
+        return reservations.isEmpty() ? null : reservations.get(0);
+    }
+
+    public Commande trouverCommandeTable(Reservation reservation){
+        if (reservation == null) {
+            return null;
+        }
+        List<Commande> commandes = this.daoCommande.findByReservationId(reservation.getId());
+        return commandes.stream()
+            .filter(c -> c.getStatutCommande() != StatutCommande.Terminee
+                      && c.getStatutCommande() != StatutCommande.Annulee)
+            .findFirst()
+            .orElse(null);
+    }
+
+    public Commande trouverCommandeReservation(Reservation reservation){
+        if (reservation == null) {
+            return null;
+        }
+        List<Commande> commandes = this.daoCommande.findByReservationId(reservation.getId());
+        return commandes.stream()
+            .filter(c -> c.getStatutCommande() != StatutCommande.Annulee)
+            .findFirst()
+            .orElse(null);
+    }
 
 }

@@ -19,7 +19,7 @@ public class ChatService {
 
     // Méthode caresser : utilisé par les clients, modifie les attributs du Chat
     // Vérifie qu'un chat n'est pas endormi avant de le caresser
-    @Transactional 
+    /*@Transactional 
     public Chat caresserChat(Chat chat) {
 
         int caresses_chat = chat.getCaresses();
@@ -31,7 +31,7 @@ public class ChatService {
 
         // Passer par un switch avec en case le caractère du chat ?
         return daoChat.save(chat);
-    }
+    }*/
 
 
 

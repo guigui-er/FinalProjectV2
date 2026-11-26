@@ -1,21 +1,34 @@
 package cat_cafe.dto.response;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import cat_cafe.model.Commande;
+import cat_cafe.model.Reservation;
+import cat_cafe.model.StatutCommande;
 
 public record CommandeResponse(
     Integer commandeId, 
-    Integer idReservation,
+    LocalDateTime date,
+    Reservation reservation,
     List <DetailCommandeResponse> details,
-    double prixTotal
+    double prixTotal,
+    StatutCommande statutCommande
 ) {
 
      public static CommandeResponse convert(Commande commande, double prixTotal) {
-        Integer idReservation = null;
+        Reservation reservation = null;
+        LocalDateTime date = null;
+        StatutCommande statutCommande = null;
 
         if (commande.getReservation() != null) {
-            idReservation = commande.getReservation().getId();
+            reservation = commande.getReservation();
+        }
+        if (commande.getDate() != null) {
+            date = commande.getDate();
+        }
+        if (commande.getStatutCommande() != null) {
+            statutCommande = commande.getStatutCommande();
         }
 
         List<DetailCommandeResponse> details = commande.getDetails()
@@ -25,9 +38,14 @@ public record CommandeResponse(
 
         return new CommandeResponse(
             commande.getId(),
-            idReservation,
+            date,
+            reservation,
             details,
-            prixTotal
+            prixTotal,
+            commande.getStatutCommande()
         );
+        
      }
+
+    
 }
