@@ -87,6 +87,7 @@ export class EcranPrincipal implements OnInit{
   @HostListener('document:keydown.escape')
   closePageChat() {
     this.showAdopterChat.set(null);
+    this.refresh$.next();
   }
 
   onBackdropClickChat(event: MouseEvent) {
@@ -126,8 +127,6 @@ export class EcranPrincipal implements OnInit{
         this.estVueGerant = this.route.snapshot.url.some(part => part.path === 'gerant');
 
        this.reservation=this.reservationService.ReservationForm;
-
-        console.log(`this.reservation bdd ${this.reservation?.id}`);
 
       this.Commandes$ = this.refresh$.pipe(
         // On initialise notre Observable

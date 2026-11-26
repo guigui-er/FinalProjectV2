@@ -130,12 +130,22 @@
             @for (chat of (Chats$ | async); track chat.id; let i = $index) {
               @let pc = placeChat(i);
               @let ic = imageChat(chat, i);
-              <button type="button" class="salon-objet salon-cliquable salon-chat"
-                      [attr.title]="chat.nom" [attr.aria-label]="'Chat ' + chat.nom"
-                      [style.--x]="pc.x + ic.dx" [style.--y]="pc.y + ic.dy" [style.--w]="ic.w" [style.--h]="ic.h"
-                      [style.z-index]="pc.y + 6" (click)="clicChatSalon(chat)">
-                <img [src]="ic.src" alt="" draggable="false">
-              </button>
+              @if(this.reservation.client.id != undefined) {
+                <button type="button" class="salon-objet salon-cliquable salon-chat"
+                  [attr.title]="chat.nom" [attr.aria-label]="'Chat ' + chat.nom"
+                  [style.--x]="pc.x + ic.dx" [style.--y]="pc.y + ic.dy" [style.--w]="ic.w" [style.--h]="ic.h"
+                  [style.z-index]="pc.y + 6" (click)="clicChatSalon(chat)">
+                  <img [src]="ic.src" alt="" draggable="false">
+                </button>
+              }
+              @else {
+                <button type="button" class="salon-objet salon-cliquable salon-chat-grise"
+                  [attr.title]="chat.nom" [attr.aria-label]="'Chat ' + chat.nom"
+                  [style.--x]="pc.x + ic.dx" [style.--y]="pc.y + ic.dy" [style.--w]="ic.w" [style.--h]="ic.h"
+                  [style.z-index]="pc.y + 6">
+                  <img [src]="ic.src" alt="" draggable="false">
+                </button>
+              }
             }
 
             <!-- feuillage au premier plan, devant tout -->

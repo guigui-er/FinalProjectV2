@@ -303,3 +303,11 @@ img.salon-objet { pointer-events: none; }            /* les images décoratives 
 
 /* ---------- Premier plan ---------- */
 .salon-premier-plan { pointer-events: none; }
+
+.salon-chat-grise {
+  transition: transform .15s; transform-origin: 50% 100%; cursor :not-allowed;
+}
+
+.salon-chat-grise:hover {
+  transform: scale(1.08);
+}
