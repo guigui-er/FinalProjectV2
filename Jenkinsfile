@@ -15,7 +15,7 @@ pipeline {
             }
             steps {
                 dir('CatCafe') {
-                    withSonarQubeEnv('sonar') {
+                    withSonarQubeEnv('catcafe-sonar') {
                         sh 'mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=CatCafe'
                     }
                 }
@@ -44,8 +44,8 @@ pipeline {
                 dir('catCafeAngular'){
                     sh 'npm i'
                     sh './node_modules/.bin/ng build'
-                    withSonarQubeEnv('sonar-id') {
-                        sh './node_modules/.bin/sonar-scanner-npm -Dsonar.projectKey=cle-projet-angular'
+                    withSonarQubeEnv('catcafeAngular-sonar') {
+                        sh './node_modules/.bin/sonar-scanner-npm -Dsonar.projectKey=CatCafeAngular'
                     }
                 }
             }
