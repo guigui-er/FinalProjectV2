@@ -40,21 +40,7 @@ export const routes: Routes = [
         path: 'gerantPage',
         component: GerantPage,
         canActivate: [ authGuard ]
-    },
-    {
-        path: 'paiement',
-        component: Paiement
-    },
-
-    // Popup Commande avec le menu (Célia)
-    { 
-        path: 'commande', 
-        component: Commande 
-    },
-
-    { 
-        path: 'chat/:id', 
-        component: PageChat 
     }
+
 
 ];
