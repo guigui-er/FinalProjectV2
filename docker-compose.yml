@@ -11,7 +11,7 @@ services:
 
     volumes:
       - db-data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./projet_final.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
     networks:
       - cafeChat
