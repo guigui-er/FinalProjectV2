@@ -12,7 +12,7 @@ pipeline {
             //} // A voir si ça fonctionne !!
         }*/
 
-        /*stage('Maven Package') {
+        stage('Maven Package') {
             agent {
                 docker {
                     image 'maven:3.10.0-eclipse-temurin-21'
@@ -25,13 +25,14 @@ pipeline {
                 }
             }
             steps {
+                sh 'mvn clean package -DskipTests'
                 //dir('BOOT-SECURITY/quest-boot') {
                 /*withSonarQubeEnv('sonar-id') {
                     sh './node_modules/.bin/sonar-scanner-npm -Dsonar.projectKey=cle-projet-angular'
-                }
+                }*/
             }
             //} // A voir si ça fonctionne !!
-        }*/
+        }
 
         stage('Docker Compose') {
             steps {
