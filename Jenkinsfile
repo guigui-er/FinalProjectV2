@@ -35,9 +35,7 @@ pipeline {
 
         stage('Docker Compose') {
             steps {
-                { // A voir si ça fonctionne !!! (../FinalProject) ? 
-                    sh 'docker compose up -d --build java db pma'
-                }
+                sh 'docker compose up -d --build java db pma'
             }
         }
 
@@ -61,9 +59,7 @@ pipeline {
 
         stage('Docker Compose Angular') {
             steps {
-                { // A voir si ça fonctionne !!! (../FinalProject) ? 
-                    sh 'docker compose up -d --build angular'
-                }
+                sh 'docker compose up -d --build angular'
             }
         }
     }
