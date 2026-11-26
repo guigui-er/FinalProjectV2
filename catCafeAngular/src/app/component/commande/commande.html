@@ -4,16 +4,15 @@
   <!-- En-tête de la commande -->
   <div class="header">
 
-    <button class="btn-fermer" type="button" (click)="fermerCommande()">×</button>
+    <!-- Plus besoin, style géneral de popup dans style.css  -->
+    <!-- <button class="btn-fermer" type="button" (click)="fermerCommande()">×</button> -->
 
     <h2>Menu du Café</h2>
 
     <p class="infos">
-      Table 1 · Client · 2 pers.
-      <!-- Récupérer l'id de la table, le nom/prénom du client et le nombre de personnes -->
-      <!--  
-      Table {{ reservation.assise.numero }} · {{ reservation.client.nom }} {{ reservation.client.prenom }} · {{ reservation.nombrePersonnes }} pers.
-      -->
+      Table {{ reservation()?.assise?.id }}
+      · Client : {{ reservation()?.client?.nom }} {{ reservation()?.client?.prenom }}
+      · {{ reservation()?.nbClient }} pers.
     </p>
 
   </div>
@@ -150,7 +149,7 @@
 
     <div class="recap">
 
-      <!-- Nombre d'article -->
+      <!-- Nombre d'article(s) -->
       <span class="nombre-articles">
         {{ getNombreArticles() }} article(s)
       </span>
