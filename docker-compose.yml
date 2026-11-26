@@ -37,7 +37,7 @@ services:
         condition: service_healthy
 
   java:
-    image: CatCafe
+    image: catcafe
     build: ./CatCafe
     container_name: CatCafe
 
