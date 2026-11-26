@@ -41,13 +41,23 @@ pipeline {
             }
         }
 
-        stage('Installation dépendances') {
-                steps {
-                    dir('catCafeAngular'){
+        stage('Installation dépendances'){
+            agent {
+                docker {
+                    image 'node:lts-bullseye'
+                    args '''
+                        -v $HOME/.npm:/root/.npm:z
+                        -u root
+                    '''
+                }
+            }
+            steps {
+                dir('catCafeAngular'){
                         sh 'npm i'
                     }
-                }
+            }
         }
+
 
         stage('NG Build') {
                 steps {
