@@ -18,7 +18,6 @@ export class Commande implements OnInit {
   // Les listes récupérées depuis le backend
   protected boissonschaudes$!: Observable<Article[]>;
   protected boissonsfroides$!: Observable<Article[]>;
-
   // protected alimentaires$!: Observable<Article[]>;
   // Les différentes listes en fonctions du type d'aliments !
   protected gateaux$!: Observable<Article[]>;
@@ -29,8 +28,6 @@ export class Commande implements OnInit {
   fermerPopup = output<void>()
 
   reservation = input.required<Reservation>();
-
-
 
   // Le panier (temporaire) contient les articles sélectionnés
   protected panier: {
@@ -45,7 +42,7 @@ export class Commande implements OnInit {
 
   constructor(
     private commandeService: CommandeService,
-    private router: Router
+    private router: Router // Plus besoin, utilisé quand commande était en mode page avec les routers 
   ) {}
 
   ngOnInit(): void {
@@ -136,7 +133,7 @@ export class Commande implements OnInit {
     return nombre;
   }
 
-  // ------ Méthode COMMANDER, au clique du bouton commander !
+  // ------ METHODE COMMANDER, au clique du bouton commander !
   protected commander(): void {
 
     const articles = Object.values(this.panier);
@@ -207,6 +204,7 @@ export class Commande implements OnInit {
     });
   }
 
+  // Plus besoin, utilisé quand commande était en mode page avec les routers
   // Retourner au salon
   protected fermerCommande(): void {
     this.router.navigate(['/ecranPrincipal']);
