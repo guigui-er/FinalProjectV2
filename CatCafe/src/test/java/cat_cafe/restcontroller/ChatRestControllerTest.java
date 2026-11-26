@@ -1,4 +1,4 @@
-package cat_cafe.service.restController;
+package cat_cafe.restcontroller;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import cat_cafe.dao.IDAOChat;
 import cat_cafe.dao.IDAOCompte;
 import cat_cafe.model.ChatMF;
-import cat_cafe.model.TypeAliment;
+
 import cat_cafe.restcontroller.ChatRestController;
 
 @WebMvcTest (controllers = ChatRestController.class)

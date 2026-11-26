@@ -1,42 +1,42 @@
-package cat_cafe.service.restController;
+package cat_cafe.restcontroller;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import cat_cafe.dao.IDAOBoisson;
-import cat_cafe.restcontroller.BoissonRestController;
+import cat_cafe.dao.IDAOAlimentaire;
 
-@WebMvcTest (controllers = BoissonRestController.class)
-public class BoissonRestControllerTest {
+import cat_cafe.model.TypeAliment;
+
+@WebMvcTest (controllers = AlimentaireRestController.class)
+public class AlimentaireRestControllerTest {
 
     @Autowired 
     private MockMvc mockmvc;
 
     @MockitoBean
-    private IDAOBoisson daoBoisson; 
+    private IDAOAlimentaire daoAlimentaire; 
 
     @Test 
     @WithMockUser
     void shouldFindAllStatusOk() throws Exception {
 
-        String url = "/api/boissons";
+        String url = "/api/alimentaires";
 
         ResultActions result = this.mockmvc.perform(MockMvcRequestBuilders.get(url));
 
         result.andExpect(MockMvcResultMatchers.status().isOk());
         result.andExpect(MockMvcResultMatchers.jsonPath("$").exists());
 
-        Mockito.verify(this.daoBoisson).findAll();
+        Mockito.verify(this.daoAlimentaire).findAll();
 
     }
 
@@ -44,29 +44,29 @@ public class BoissonRestControllerTest {
     @WithMockUser
     void shouldFindByIdStatusOk() throws Exception {
 
-        String url = "/api/boissons/{id}";
+        String url = "/api/alimentaires/{id}";
 
         ResultActions result = this.mockmvc.perform(MockMvcRequestBuilders.get(url,1));
 
         result.andExpect(MockMvcResultMatchers.status().isOk());
         //result.andExpect(MockMvcResultMatchers.jsonPath("$").exists());
 
-        Mockito.verify(this.daoBoisson).findById(1);
+        Mockito.verify(this.daoAlimentaire).findById(1);
 
     }
 
     @Test 
     @WithMockUser
-    void shouldFindByChaudStatusOk() throws Exception {
+    void shouldFindByTypeStatusOk() throws Exception {
 
-        String url = "/api/boissons/chaudes";
+        String url = "/api/alimentaires/type/{type}";
 
-        ResultActions result = this.mockmvc.perform(MockMvcRequestBuilders.get(url));
+        ResultActions result = this.mockmvc.perform(MockMvcRequestBuilders.get(url, "gateau"));
 
         result.andExpect(MockMvcResultMatchers.status().isOk());
         result.andExpect(MockMvcResultMatchers.jsonPath("$").exists());
 
-        Mockito.verify(this.daoBoisson).findByChaudTrue();
+        Mockito.verify(this.daoAlimentaire).findByType(TypeAliment.gateau);
 
     }
 
@@ -74,18 +74,14 @@ public class BoissonRestControllerTest {
     @WithMockUser 
     void shouldDeleteStatusOk() throws Exception {
 
-        String url = "/api/boissons/{id}";
+        String url = "/api/alimentaires/{id}";
 
         ResultActions result = this.mockmvc.perform(
             MockMvcRequestBuilders.delete(url,1).with(SecurityMockMvcRequestPostProcessors.csrf())
         );
         result.andExpect(MockMvcResultMatchers.status().isOk());
 
-        Mockito.verify(this.daoBoisson).deleteById(1);
+        Mockito.verify(this.daoAlimentaire).deleteById(1);
     }
-    
-
-
-
 
 }
