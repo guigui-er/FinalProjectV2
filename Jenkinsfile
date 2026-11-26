@@ -2,16 +2,6 @@ pipeline {
     agent any
 
     stages {
-        /*stage('Maven Package') {
-            steps {
-                //dir('BOOT-SECURITY/quest-boot') {
-                    withSonarQubeEnv('sonar-id') {
-                        sh './node_modules/.bin/sonar-scanner-npm -Dsonar.projectKey=cle-projet-angular'
-                    }
-                }
-            //} // A voir si ça fonctionne !!
-        }*/
-
         stage('Maven Package') {
             agent {
                 docker {
@@ -20,19 +10,16 @@ pipeline {
                         -v $HOME/.m2:/root/.m2:z
                         -u root
                     '''
-                    reuseNode true // Permet de partager l'espace de travail entre l'agent Jenkins et l'agent Docker
+                    reuseNode true
                 }
             }
             steps {
-                dir('CatCafe'){
-                    sh 'mvn clean package -DskipTests'
+                dir('CatCafe') {
+                    withSonarQubeEnv('sonar') {
+                        sh 'mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=CatCafe'
+                    }
                 }
-                //dir('BOOT-SECURITY/quest-boot') {
-                /*withSonarQubeEnv('sonar-id') {
-                    sh './node_modules/.bin/sonar-scanner-npm -Dsonar.projectKey=cle-projet-angular'
-                }*/
             }
-            //} // A voir si ça fonctionne !!
         }
 
         stage('Docker Compose') {
@@ -48,22 +35,21 @@ pipeline {
                     args '''
                         -v $HOME/.npm:/root/.npm:z
                         -u root
+                        --network devops
                     '''
+                    reuseNode true
                 }
             }
             steps {
                 dir('catCafeAngular'){
-                        sh 'npm i'
-                        sh './node_modules/.bin/ng build'
+                    sh 'npm i'
+                    sh './node_modules/.bin/ng build'
+                    withSonarQubeEnv('sonar-id') {
+                        sh './node_modules/.bin/sonar-scanner-npm -Dsonar.projectKey=cle-projet-angular'
                     }
+                }
             }
         }
-
-        /*stage('SonarQube Analysis') {
-            withSonarQubeEnv() {
-                sh "./node_modules/sonar-scanner"
-            }
-        }*/
 
         stage('Docker Compose Angular') {
             steps {
