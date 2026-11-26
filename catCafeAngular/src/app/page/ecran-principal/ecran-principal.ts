@@ -9,7 +9,7 @@ import { Reservation } from '../../model/reservation';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { Table } from '../../model/table';
 import { TableService } from '../../service/table-service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { interval, map, merge, Observable, startWith, Subject, switchMap } from 'rxjs';
 import { Commande } from '../../model/commande';
 import { CommandeService } from '../../service/commande-service';
@@ -40,6 +40,10 @@ export class EcranPrincipal implements OnInit{
   private chatService: ChatService = inject(ChatService);
   private router: Router = inject(Router);
 
+  // Vue gérant
+  private route = inject(ActivatedRoute);
+  protected estVueGerant = false;
+
 
   private refresh$: Subject<void> = new Subject<void>();
   protected Commandes$!: Observable<Commande[]>;
@@ -57,6 +61,7 @@ export class EcranPrincipal implements OnInit{
   showPayment = signal(false);
 
   openPaiement() {
+    if (this.estVueGerant) return;
     this.showPayment.set(true);
   }
 
@@ -67,6 +72,7 @@ export class EcranPrincipal implements OnInit{
   }
 
   onBackdropClick(event: MouseEvent) {
+    if (this.estVueGerant) return;
     if (event.target === event.currentTarget) {
       this.closePaiement();
     }
@@ -94,6 +100,7 @@ export class EcranPrincipal implements OnInit{
   protected resaSelectionnee = signal<Reservation | undefined>(undefined);
 
   openCommande(resa: Reservation) {
+    if (this.estVueGerant) return;
     this.resaSelectionnee.set(resa);
     this.showCommande.set(true);
   }
@@ -106,6 +113,7 @@ export class EcranPrincipal implements OnInit{
   }
 
   onBackdropClickCommande(event: MouseEvent) {
+    if (this.estVueGerant) return;
     if (event.target === event.currentTarget) {
       this.closeCommande();
     }
@@ -115,6 +123,7 @@ export class EcranPrincipal implements OnInit{
 
     ngOnInit(): void {
 
+        this.estVueGerant = this.route.snapshot.url.some(part => part.path === 'gerant');
 
        this.reservation=this.reservationService.ReservationForm;
 
@@ -180,7 +189,7 @@ export class EcranPrincipal implements OnInit{
   }
 
   protected SelectionTable(tableSelect:Assise ): void {
-
+      if (this.estVueGerant) return;
       const client: Client = this.reservation.client;
       const table:Assise={
         id: tableSelect.id,
@@ -222,6 +231,7 @@ export class EcranPrincipal implements OnInit{
   }
 
     protected EntreeClient(): void {
+    if (this.estVueGerant) return;
     this.router.navigate([ 'client' ]);
   }
       protected EntreeGerant(): void {
@@ -229,17 +239,18 @@ export class EcranPrincipal implements OnInit{
   }
 
     protected commande(): void {
+      if (this.estVueGerant) return;
       this.refresh$.next();
   }
 
 
     protected commander(tableSelect:Assise): void {
-
+      if (this.estVueGerant) return;
 
   }
 
       protected InfosChats(): void {
-
+        if (this.estVueGerant) return;
 
   }
 
@@ -263,6 +274,7 @@ protected readonly FOND_SALON = FOND_SALON;
 
   /** vrai quand un groupe choisit sa table : le salon passe en mode placement */
   protected sceneEnPlacement(): boolean {
+    if (this.estVueGerant) return false;
     return !!this.reservation && !this.reservation.id ;
   }
 
@@ -290,6 +302,7 @@ protected readonly FOND_SALON = FOND_SALON;
 
   /** clic sur la porte « Entrée » */
   protected clicPorteEntree(): void {
+    if (this.estVueGerant) return;
     this.router.navigate([ 'client' ]);
   }
 
@@ -300,17 +313,19 @@ protected readonly FOND_SALON = FOND_SALON;
 
   /** clic sur le comptoir */
   protected clicComptoir(): void {
+    if (this.estVueGerant) return;
     this.openPaiement();
   }
 
   /** clic sur la caisse */
   protected clicCaisse(): void {
+    if (this.estVueGerant) return;
     this.openPaiement();
   }
 
   /** clic sur une table, ses sièges, ses clients ou sa bulle ; table = ta table en base, undefined si elle n'y est pas */
   protected clicTableSalon(idTable: number, table: Assise | undefined, reservations: Reservation[] | null): void {
-
+    if (this.estVueGerant) return;
     if (!table) return;
 
       // Si on est en train de placer un nouveau client
@@ -332,6 +347,7 @@ protected readonly FOND_SALON = FOND_SALON;
 
   /** clic sur un chat */
   protected clicChatSalon(chat: ChatDTO): void {
+    if (this.estVueGerant) return;
 
     this.openPageChat(chat);
   }

@@ -8,14 +8,14 @@ import { ChatDTO } from '../../model/chat';
 import { Assise } from '../../model/assise';
 import { Article } from '../../model/article';
 import { StatsGerantResponse } from '../../model/stats-gerant';
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { TableAssisesResponse } from '../../model/table-assise';
 import { TableReservationsResponse } from '../../model/table-reservation';
 import { Router } from '@angular/router';
 import { GerantConnexionService } from '../../service/gerant-connexion-service';
 
 @Component({
-  imports: [RouterLink,CommonModule,AsyncPipe],
+  imports: [RouterLink,CommonModule,AsyncPipe,DatePipe],
   selector: 'app-gerant-page',
   styleUrl: './gerant-page.css',
   templateUrl: './gerant-page.html',
@@ -43,6 +43,8 @@ export class GerantPage {
 
   protected reservationsEtat$!: Observable<TableReservationsResponse[]>;
 
+  protected filtreStatut = '';
+
   ngOnInit(): void {
     this.title.setTitle("Page du gérant");
 
@@ -56,8 +58,28 @@ export class GerantPage {
     this.reservationsEtat$ = this.gerantService.findAllReservationsResponse();
   }
 
+
+  protected onFiltreStatutChange(event: Event): void {
+    this.filtreStatut = (event.target as HTMLSelectElement).value;
+  }
+
+  protected filtrerReservations(reservations: any[] | null): any[] {
+    if (!reservations) return [];
+    if (!this.filtreStatut) return reservations;
+
+    
+    const correspondance: Record<string, string[]> = {
+      'en attente': ['En_cours', 'en cours'],
+      'servie': ['Servie', 'servie'],
+      'payée': ['Terminee', 'terminee']
+    };
+
+    const valeursAcceptees = correspondance[this.filtreStatut] ?? [this.filtreStatut];
+    return reservations.filter(r => valeursAcceptees.includes(String(r.commandeStatut)));
+  }
+
   protected clicRetourAuSalon(): void {
-    this.router.navigate([ '/ecranPrincipal' ]);
+    this.router.navigate(['/ecranPrincipal/gerant']);
   }
 
   protected logout() {

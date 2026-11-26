@@ -31,6 +31,11 @@ export const routes: Routes = [
         component: EcranPrincipal
     },
 
+    { 
+        path: 'ecranPrincipal/gerant', 
+        component: EcranPrincipal 
+    },
+
     {
         path: 'gerantPage',
         component: GerantPage,

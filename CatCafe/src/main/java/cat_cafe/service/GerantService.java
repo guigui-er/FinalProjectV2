@@ -1,6 +1,7 @@
 package cat_cafe.service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -104,33 +105,31 @@ public class GerantService {
     */
 
     public Reservation trouverReservation(Assise assise){
-        return this.daoReservation.findByAssiseIdOrderByDateTimeDesc(assise.getId()).orElse(null);
+        List<Reservation> reservations = this.daoReservation.findByAssiseIdOrderByDateTimeDesc(assise.getId());
+        return reservations.isEmpty() ? null : reservations.get(0);
     }
 
     public Commande trouverCommandeTable(Reservation reservation){
         if (reservation == null) {
             return null;
         }
-        Commande commande = this.daoCommande.findByReservationId(reservation.getId()).orElse(null);
-        if (commande == null){
-            return null;
-        }
-        if(commande.getStatutCommande() != StatutCommande.Terminee && commande.getStatutCommande() != StatutCommande.Annulee){
-            return commande;
-        }return null;
+        List<Commande> commandes = this.daoCommande.findByReservationId(reservation.getId());
+        return commandes.stream()
+            .filter(c -> c.getStatutCommande() != StatutCommande.Terminee
+                      && c.getStatutCommande() != StatutCommande.Annulee)
+            .findFirst()
+            .orElse(null);
     }
 
     public Commande trouverCommandeReservation(Reservation reservation){
         if (reservation == null) {
             return null;
         }
-        Commande commande = this.daoCommande.findByReservationId(reservation.getId()).orElse(null);
-        if (commande == null){
-            return null;
-        }
-        if(commande.getStatutCommande() != StatutCommande.Annulee){
-            return commande;
-        }return null;
+        List<Commande> commandes = this.daoCommande.findByReservationId(reservation.getId());
+        return commandes.stream()
+            .filter(c -> c.getStatutCommande() != StatutCommande.Annulee)
+            .findFirst()
+            .orElse(null);
     }
 
 }
