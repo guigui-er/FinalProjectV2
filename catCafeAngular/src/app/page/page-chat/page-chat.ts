@@ -32,41 +32,18 @@ export class PageChat implements OnInit {
   // Observable contenant le chat affiché
   protected chatId$!: Observable<ChatDTO>;
 
-  // Identifiant du client connecté
-  // À récupérer depuis le système d'authentification
- // protected proprietaireId!: number;
-    protected client?: Client; 
+  protected client?: Client; 
 
 
   chat = input.required<ChatDTO>();
   fermerPopupChat = output<void>();
 
   ngOnInit(): void {
-
-    // this.chatId$ = this.route.paramMap.pipe(
-
-    //   map(params => params.get('id')),
-
-    //   switchMap(id => {
-
-    //     if (!id || isNaN(Number(id))) {
-    //       throw new Error("Identifiant du chat invalide !");
-    //     }
-
-    //     return this.service.findById(Number(id));
-
-    //   }),
-
-    //   tap(chat => {
-    //     this.title.setTitle(`La page de ${chat.nom} - ⚞^. .^⚟`);
-    //   })
-
-    // );
-
-    // this.client = this.reservationService.ReservationForm.client;
-    // console.log(this.client.id, this.client.prenom, this.client.nom)
-
+    this.client = this.reservationService.ReservationForm.client;
+    console.log(this.client.id, this.client.prenom, this.client.nom)    
   }
+
+
 
   // Utiliser cette ligne dans le salon this.router.navigate(['/chat', chat.id]);
 
@@ -95,6 +72,7 @@ export class PageChat implements OnInit {
 
         // Actualisation des informations du chat
         this.chatId$ = this.service.findById(chat().id!);
+        this.fermerPopupChat.emit();
       },
 
       error: (erreur) => {
