@@ -42,15 +42,19 @@ pipeline {
         }
 
         stage('Installation dépendances') {
-            steps {
-                sh 'npm i'
+            dir{'catCafeAngular'}{
+                steps {
+                    sh 'npm i'
+                }
             }
         }
 
         stage('NG Build') {
-            steps {
-                sh './node_modules/.bin/ng build'
-            }   
+            dir{'catCafeAngular'}{
+                steps {
+                    sh './node_modules/.bin/ng build'
+                }   
+            }
         }
 
         /*stage('SonarQube Analysis') {
