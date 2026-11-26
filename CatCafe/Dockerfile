@@ -4,8 +4,8 @@ WORKDIR /app
 
 #ENV   SPRING_DATASOURCE_URL=jdbc:mysql://quest-db/projet_quest
 
-COPY ./target/*.jar CatCafe-boot.jar
+COPY ./target/*.jar CatCafe.jar
 
-CMD [ "java", "-jar", "CatCafe-boot.jar" ]
+CMD [ "java", "-jar", "CatCafe.jar" ]
 
 EXPOSE 8080

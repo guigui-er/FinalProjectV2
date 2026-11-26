@@ -11,6 +11,7 @@ services:
 
     volumes:
       - db-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
     networks:
       - cafeChat
@@ -36,9 +37,9 @@ services:
         condition: service_healthy
 
   java:
-    image: catCafe:boot
+    image: CatCafe
     build: ./CatCafe
-    container_name: catCafe-boot
+    container_name: CatCafe
 
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db/projet_final

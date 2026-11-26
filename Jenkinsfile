@@ -2,16 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Git checkout') {
-            steps {
-                script {
-                    git credentialsId: 'github-login', // Attention à adapter !!!!
-                        url: 'git@github.com:guigui-er/FinalProjectV2.git',
-                        branch: 'main'
-                }
-            }
-        }
-
         stage('Maven Package') {
             agent {
                 docker {
@@ -39,6 +29,32 @@ pipeline {
             steps {
                 dir('../') { // A voir si ça fonctionne !!! (../FinalProject) ? 
                     sh 'docker compose up -d --build java db pma'
+                }
+            }
+        }
+
+        stage('Installation dépendances') {
+            steps {
+                sh 'npm i'
+            }
+        }
+
+        stage('NG Build') {
+            steps {
+                sh './node_modules/.bin/ng build'
+            }   
+        }
+
+        stage('SonarQube Analysis') {
+            withSonarQubeEnv() {
+                sh "./node_modules/sonar-scanner"
+            }
+        }
+
+        stage('Docker Compose') {
+            steps {
+                dir('../') { // A voir si ça fonctionne !!! (../FinalProject) ? 
+                    sh 'docker compose up -d --build angular'
                 }
             }
         }
