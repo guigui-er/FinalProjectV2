@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, output, Signal, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatService } from '../../service/chat-service';
@@ -38,6 +38,9 @@ export class PageChat implements OnInit {
     protected client?: Client; 
 
 
+  chat = input.required<ChatDTO>();
+  fermerPopupChat = output<void>();
+
   ngOnInit(): void {
 
     this.chatId$ = this.route.paramMap.pipe(
@@ -67,9 +70,9 @@ export class PageChat implements OnInit {
 
   // Utiliser cette ligne dans le salon this.router.navigate(['/chat', chat.id]);
 
-  adopterChat(chat: ChatDTO): void {
+  adopterChat(chat: Signal<ChatDTO>): void {
 
-    if (chat.id === undefined) {
+    if (chat().id === undefined) {
       console.error("Identifiant du chat introuvable !");
       return;
     }
@@ -81,8 +84,8 @@ export class PageChat implements OnInit {
 
     // Création de la demande d'adoption
     const demande: AdoptionChat = {
-      chatId: chat.id,
-      proprietaireId: this.client.id
+      idChat: chat().id,
+      idProprietaire: this.proprietaireId
     };
 
     this.service.adopterChat(demande).subscribe({
@@ -91,7 +94,7 @@ export class PageChat implements OnInit {
         alert("Félicitations ! Vous avez adopté ce chat !");
 
         // Actualisation des informations du chat
-        this.chatId$ = this.service.findById(chat.id!);
+        this.chatId$ = this.service.findById(chat().id!);
       },
 
       error: (erreur) => {
