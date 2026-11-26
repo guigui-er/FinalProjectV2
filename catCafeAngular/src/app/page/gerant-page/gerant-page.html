@@ -133,7 +133,7 @@
           <div class="blockcat" *ngFor="let chat of chats$ | async">
             <div class="imgcat">
               <img
-              [src]="'assets/chatsgerant/' + chat.nom + '.webp'"
+              [src]="'assets/chatsgerant/' + chat.nom.toLowerCase().replace('é', 'e') + '.webp'"
               [alt]="chat.nom"
               />
             </div>
