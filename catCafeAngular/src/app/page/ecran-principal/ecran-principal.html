@@ -1,5 +1,7 @@
 
 <header class="barre">
+  <audio id ="musique-de-fond" src="/musique/MeowCafeMP3.mp3" autoplay  loop [volume]="0.27093"></audio>
+
   <div class="logo">Le Chat Perché</div>
   <div class="actions">
     @if (!estVueGerant) {
@@ -20,7 +22,7 @@
   } @else if (reservation?.id == undefined) {
     <div class="bandeau" id="bandeau">
       <span class="pastille-jaune"></span>
-      <span id="bandeau-texte">{{`Bienvenue au cafe  ! clicker sur  une table pour s'installer`}}</span>
+      <span id="bandeau-texte">{{`Bienvenue au cafe ! Cliquer sur  une table pour s'installer`}}</span>
     </div>
   }
 </div>

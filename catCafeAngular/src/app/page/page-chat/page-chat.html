@@ -24,18 +24,16 @@
     <!-- Statut d'adoption -->
 
     <div class="boutons-adoption">
-      <h4 *ngIf="!chat()['adopted']"><span class="badge adoptable"> Disponible à l'adoption</span>       
+      <h4 *ngIf="!chat()['adopted']"><span class="badge adoptable"> Disponible à l'adoption </span>       
       <br/>
       <button
-        *ngIf="!chat()['adopted']"
         (click)="adopterChat(chat)"> 
         Adopter
       </button></h4>
-      <h4 *ngIf="chat()['adopted']"><span class="badge adoption"> En cours d'adoption</span>
+      <h4 *ngIf="chat()['adopted']"><span class="badge adoption"> Adopté </span>
       <br/>
       <button
-        *ngIf="chat()['adopted']"
-        (click)="adopterChat(chat)" disabled="disabled">
+          disabled="disabled">
         Adopter
       </button>
       </h4>
