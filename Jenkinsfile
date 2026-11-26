@@ -19,13 +19,14 @@ pipeline {
                     args '''
                         -v $HOME/.m2:/root/.m2:z
                         -u root
-                        --network devops
                     '''
                     reuseNode true // Permet de partager l'espace de travail entre l'agent Jenkins et l'agent Docker
                 }
             }
             steps {
-                sh 'mvn clean package -DskipTests'
+                dir('CatCafe'){
+                    sh 'mvn clean package -DskipTests'
+                }
                 //dir('BOOT-SECURITY/quest-boot') {
                 /*withSonarQubeEnv('sonar-id') {
                     sh './node_modules/.bin/sonar-scanner-npm -Dsonar.projectKey=cle-projet-angular'
