@@ -1,10 +1,10 @@
   <div class="carte-chat">
 
     <div class="image-chat">
-    <img
-    [src]="'/images/chats/' + chat().id + '.webp'"
-    [alt]="'Photo de ' + chat().nom">    
-    </div>
+  <img
+    [src]="image()|| '/images/chats/' + chat().id + '.webp'"
+    [alt]="'Photo de ' + chat().nom">
+</div>
     <!-- Informations du chat -->
 
     <div class="informations">
@@ -24,21 +24,23 @@
     <!-- Statut d'adoption -->
 
     <div class="boutons-adoption">
-      <h4 *ngIf="!chat()['adopted']"><span class="badge adoptable"> Disponible à l'adoption</span>       
-      <br/>
-      <button
-        *ngIf="!chat()['adopted']"
-        (click)="adopterChat(chat)"> 
-        Adopter
-      </button></h4>
-      <h4 *ngIf="chat()['adopted']"><span class="badge adoption"> En cours d'adoption</span>
-      <br/>
-      <button
-        *ngIf="chat()['adopted']"
-        (click)="adopterChat(chat)" disabled="disabled">
-        Adopter
-      </button>
-      </h4>
+       <span *ngIf="!chat()['adopted']" class="badge adoptable">
+    Disponible à l'adoption
+       </span>
+
+     <!-- Chat en cours d'adoption -->
+        <span *ngIf="chat()['adopted']" class="badge adoption">
+            En cours d'adoption
+        </span>
+
+  <!-- Bouton Adopter -->
+        <button
+          class="btn"
+          type="button"
+          [disabled]="chat()['adopted']"
+          (click)="adopterChat(chat)">
+          Adopter
+        </button>
         
     </div>
 

@@ -2,8 +2,14 @@
 .barre .logo { font-family:'Fredoka'; font-weight:600; font-size:40px; line-height:1; margin-right:6px; color:#5a3a28 }
 .barre .actions { margin-left:auto; display:flex; gap:8px; flex-wrap:wrap }
 
-.btn{border:3px solid #5a3a28;border-radius:999px;background:#fff6e6;color:#5a3a28;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15.5px;
-  box-shadow:0 4px 0 #5a3a28;padding:9px 20px}
+.btn{border:3px solid #5a3a28;
+  border-radius:999px;
+  background:#fff6e6;color:#5a3a28;
+  font-family:'Fredoka',sans-serif;
+  font-weight:600;
+  font-size:18px;
+  box-shadow:0 4px 0 #5a3a28;
+  padding:9px 20px}
 .btn:hover{filter:brightness(1.05)}
 .btn:active{box-shadow:0 1px 0 #5a3a28}
 .btn:disabled{background:#e4ddd2;color:#a39684;border-color:#a39684;box-shadow:0 4px 0 #a39684}
@@ -27,7 +33,7 @@
 
 .salon-et-panneau {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 330px;
+  grid-template-columns: minmax(0, 1fr) 380px;
   gap: 18px;
   align-items: start;
   width:fit-content;
@@ -102,7 +108,7 @@
   margin: 0 0 6px;
   display: grid;
   gap: 7px;
-  font-size: 13.5px;
+  font-size: 16px;
 }
 
 .astuces li {
@@ -127,7 +133,7 @@
   align-items: center;
   gap: 8px;
   padding: 6px 0;
-  font-size: 13px;
+  font-size: 16px;
   border-bottom: 2px dotted #f3dfbf;
 }
 

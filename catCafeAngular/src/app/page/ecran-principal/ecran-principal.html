@@ -1,10 +1,9 @@
 
 <header class="barre">
-  <div class="logo">Le Chat Perché</div>
+  <div class="logo">CatCafé</div>
   <div class="actions">
     @if (!estVueGerant) {
     <button class="btn" id="btn-accueil" (click)="EntreeClient()">🚪 Accueillir des clients</button>
-    <button class="btn" id="btn-caisse" (click)="EntreeClient()">💶 Caisse</button>
     <button class="btn" id="btn-gerant" (click)="EntreeGerant()">🔒 Espace gérant</button>
     } @else {
       <button class="btn" id="btn-gerant" (click)="EntreeGerant()">↩️ Retour espace gérant</button>
@@ -15,12 +14,12 @@
   @if (estVueGerant) {
     <div class="bandeau" id="bandeau">
       <span class="pastille-jaune"></span>
-      <span id="bandeau-texte">Mode observation gérant — consultation du salon en direct.</span>
+      <span id="bandeau-texte">Mode observation gérant : consultation du salon en direct.</span>
     </div>
   } @else if (reservation?.id == undefined) {
     <div class="bandeau" id="bandeau">
       <span class="pastille-jaune"></span>
-      <span id="bandeau-texte">{{`Bienvenue au cafe  ! clicker sur  une table pour s'installer`}}</span>
+      <span id="bandeau-texte">{{`Bienvenue au cafe ! Clickez sur  une table pour s'installer`}}</span>
     </div>
   }
 </div>
@@ -47,7 +46,7 @@
 
             <!-- porte « Entrée » -->
             <button type="button" class="salon-objet salon-cliquable"
-                    title="Porte d'entrée — accueillir des clients" aria-label="Porte d'entrée — accueillir des clients"
+                    title="Porte d'entrée — accueillir des clients" aria-label="Porte d'entrée: accueillir des clients"
                     [style.--x]="PORTE_ENTREE.x" [style.--y]="PORTE_ENTREE.y" [style.--w]="PORTE_ENTREE.w" [style.--h]="PORTE_ENTREE.h"
                     [style.z-index]="PORTE_ENTREE.z" (click)="clicPorteEntree()">
               <img [src]="PORTE_ENTREE.src" alt="" draggable="false">
@@ -55,7 +54,7 @@
 
             <!-- porte « Privé » -->
             <button type="button" class="salon-objet salon-cliquable"
-                    title="Privé — espace gérant" aria-label="Privé — espace gérant"
+                    title="Privé — espace gérant" aria-label="Privé: espace gérant"
                     [style.--x]="PORTE_PRIVEE.x" [style.--y]="PORTE_PRIVEE.y" [style.--w]="PORTE_PRIVEE.w" [style.--h]="PORTE_PRIVEE.h"
                     [style.z-index]="PORTE_PRIVEE.z" (click)="clicPortePrivee()">
               <img [src]="PORTE_PRIVEE.src" alt="" draggable="false">
@@ -63,7 +62,7 @@
 
             <!-- comptoir -->
             <button type="button" class="salon-objet salon-cliquable"
-                    title="Comptoir — régler l'addition" aria-label="Comptoir — régler l'addition"
+                    title="Comptoir — régler l'addition" aria-label="Comptoir: régler l'addition"
                     [style.--x]="COMPTOIR.x" [style.--y]="COMPTOIR.y" [style.--w]="COMPTOIR.w" [style.--h]="COMPTOIR.h"
                     [style.z-index]="COMPTOIR.z" (click)="clicComptoir()">
               <img [src]="COMPTOIR.src" alt="" draggable="false">
@@ -71,7 +70,7 @@
 
             <!-- caisse -->
             <button type="button" class="salon-objet salon-cliquable"
-                    title="Caisse — régler l'addition" aria-label="Caisse — régler l'addition"
+                    title="Caisse — régler l'addition" aria-label="Caisse: régler l'addition"
                     [style.--x]="CAISSE.x" [style.--y]="CAISSE.y" [style.--w]="CAISSE.w" [style.--h]="CAISSE.h"
                     [style.z-index]="CAISSE.z" (click)="clicCaisse()">
               <img [src]="CAISSE.src" alt="" draggable="false">
@@ -120,7 +119,7 @@
               <span class="salon-plaque"
                     [class.occupee]="sceneTableOccupee(st.id, tb)"
                     [class.inelig]="sceneEnPlacement() && !sceneTableEligible(st.id, tb)"
-                    [style.--x]="st.plaque.x" [style.--y]="st.plaque.y">T{{ st.id }} · {{ tb?.capacite ?? st.capacite }} places</span>
+                    [style.--x]="st.plaque.x" [style.--y]="st.plaque.y">T{{ st.id }}</span>
 
             }
 
@@ -132,7 +131,7 @@
                 <button type="button" class="salon-objet salon-cliquable salon-chat"
                   [attr.title]="chat.nom" [attr.aria-label]="'Chat ' + chat.nom"
                   [style.--x]="pc.x + ic.dx" [style.--y]="pc.y + ic.dy" [style.--w]="ic.w" [style.--h]="ic.h"
-                  [style.z-index]="pc.y + 6" (click)="clicChatSalon(chat)">
+                  [style.z-index]="pc.y + 6" (click)="clicChatSalon(chat, ic.src)">
                   <img [src]="ic.src" alt="" draggable="false">
                 </button>
               }
@@ -157,9 +156,9 @@
 
         <div class="legende">
           <span><i style="background:#f5c443"></i>Table disponible pour votre groupe</span>
-          <span><i style="background:#f6b8c0"></i>Table occupée — cliquez pour commander</span>
-          <span><i style="background:#a8cf8e"></i>Chats — cliquez pour faire connaissance</span>
-          <span><i style="background:#e8b46a"></i>Comptoir / caisse — pour régler l'addition</span>
+          <span><i style="background:#f6b8c0"></i>Table occupée : cliquez pour commander</span>
+          <span><i style="background:hsl(47, 30%, 91%)"></i>Chats : cliquez pour faire connaissance</span>
+          <span><i style="background:#e8b46a"></i>Comptoir / caisse : pour régler l'addition</span>
         </div>
       </div>
       <!-- panneau de droite : le carnet du café, toujours visible -->
@@ -168,18 +167,18 @@
           <h2>Carnet du café</h2>
           <p class="sous">Ce qui se passe au café, en direct.</p>
           <ul class="astuces">
-            <li><span>🚪</span><span><b>Porte d'entrée</b> — accueillir un groupe</span></li>
-            <li><span>🍵</span><span><b>Table occupée</b> — passer commande</span></li>
-            <li><span>🐾</span><span><b>Chat</b> — sa fiche, l'adopter</span></li>
-            <li><span>💶</span><span><b>Comptoir</b> — régler l'addition</span></li>
-            <li><span>🔒</span><span><b>Porte « Privé »</b> — espace gérant</span></li>
+            <li><span>🚪</span><span><b>Porte d'entrée :</b> accueillir un groupe</span></li>
+            <li><span>🍵</span><span><b>Table occupée :</b> passer commande</span></li>
+            <li><span>🐾</span><span><b>Chat :</b> sa fiche, l'adopter</span></li>
+            <!--<li><span>💶</span><span><b>Comptoir</b> — régler l'addition</span></li>-->
+            <li><span>🔒</span><span><b>Porte privée :</b> espace gérant</span></li>
           </ul>
           <div class="menu-cat">En ce moment</div>
             @for (c of (Commandes$ | async) ; track c.commandeId){
               @if (c.reservation) {
                 <div class="resume-ligne">
                   <b>{{`T${c.reservation?.assise?.id}`}}</b>
-                  <span>`client :{{ c.reservation.client?.nom ?? '-' }} - {{ c.reservation.assise?.capacite ?? '-' }}</span>
+                  <span>client : {{ c.reservation.client?.nom ?? '-' }} - {{ c.reservation.assise?.capacite ?? '-' }} pers.</span>
                   <span > {{`${c.statutCommande}`}}</span>
                 </div>
               }
@@ -191,7 +190,41 @@
       </aside>
     </div>
 
-<div>
+
+
+<!-- Partie paiement qui est affiché lors du clique sur le comptoir ou la caisse -->
+
+@if (showPayment()) {
+  <div class="backdrop" (click)="onBackdropClick($event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="close" aria-label="Fermer" (click)="closePaiement()">×</button>
+      <app-paiement (fermerPopup)="closePaiement()" />
+    </div>
+  </div>
+}
+
+@if (showAdopterChat(); as chat) {
+  <div class="backdrop" (click)="onBackdropClickChat($event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="close" aria-label="Fermer" (click)="closePageChat()">×</button>
+      <app-page-chat  [chat]="chat"
+      [image]="imageChatSelectionne"
+      (fermerPopupChat)="closePageChat()" />
+    </div>
+  </div>
+}
+
+
+<!-- POPUP COMMANDE -->
+@if (showCommande() && resaSelectionnee(); as resa) {
+  <div class="backdrop" (click)="onBackdropClickCommande($event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="close" aria-label="Fermer" (click)="closeCommande()">×</button>
+      <app-commande [reservation]="resa" (fermerPopup)="closeCommande()" />
+    </div>
+  </div>
+}
+<!--<div>
     <button type="button" (click)="commande()">decclencher lecture commande </button>
 </div>
 
@@ -217,29 +250,9 @@
     <div>
       <button  type="button" (click)="InfosChats()">{{`Chat id : ${chat.id} avec ${chat.nom} places statut adopte ${chat.adopted}   !`}}</button>
     </div>
-  }
+  }-->
 
-<!-- Partie paiement qui est affiché lors du clique sur le comptoir ou la caisse -->
-
-@if (showPayment()) {
-  <div class="backdrop" (click)="onBackdropClick($event)">
-    <div class="modal" role="dialog" aria-modal="true">
-      <button type="button" class="close" aria-label="Fermer" (click)="closePaiement()">×</button>
-      <app-paiement (fermerPopup)="closePaiement()" />
-    </div>
-  </div>
-}
-
-@if (showAdopterChat(); as chat) {
-  <div class="backdrop" (click)="onBackdropClickChat($event)">
-    <div class="modal" role="dialog" aria-modal="true">
-      <button type="button" class="close" aria-label="Fermer" (click)="closePageChat()">×</button>
-      <app-page-chat [chat]="chat" (fermerPopupChat)="closePageChat()" />
-    </div>
-  </div>
-}
-// POPUP COMMANDE
-<!--@if (showCommande()) {
+  <!--@if (showCommande()) {
   <div class="backdrop" (click)="onBackdropClickCommande($event)">
     <div class="modal" role="dialog" aria-modal="true">
       <button type="button" class="close" aria-label="Fermer" (click)="closeCommande()">×</button>
@@ -247,14 +260,3 @@
     </div>
   </div>
 }-->
-
-
-<!-- POPUP COMMANDE -->
-@if (showCommande() && resaSelectionnee(); as resa) {
-  <div class="backdrop" (click)="onBackdropClickCommande($event)">
-    <div class="modal" role="dialog" aria-modal="true">
-      <button type="button" class="close" aria-label="Fermer" (click)="closeCommande()">×</button>
-      <app-commande [reservation]="resa" (fermerPopup)="closeCommande()" />
-    </div>
-  </div>
-}

@@ -44,21 +44,25 @@
   display: flex;
   flex-direction:row;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  width: 100%;
 
-  background: #fffdf6;
+  background: transparent;
   border-radius: 16px;
-  padding: 16px;
+  padding: 8px;
 
-  border: 2px solid var(--sauge-clair);
-  transition: transform 0.2s, box-shadow 0.2s;
+  
+}
+.carte-chat img {
+  width: 120px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin-right: 15px;
 }
 
-/* Petit effet au survol */
-.carte-chat:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px -10px rgba(52, 74, 40, .5);
-}
+
+
 
 /* Nom du chat */
 .carte-chat h3 {
@@ -71,14 +75,14 @@
 /* Informations */
 .carte-chat p {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--encre);
 }
 
 /* Badge de statut */
 .badge {
   display: flex;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: .04em;
   text-transform: uppercase;
@@ -86,6 +90,9 @@
   border-radius: 999px;
   border: 1.5px solid transparent;
   margin-top: 5px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .badge.adoptable {
@@ -171,30 +178,27 @@
   background: var(--terracotta-fonce);
 }
 
-.boutons-adoption{
+.boutons-adoption {
+  grid-column: 1 / -1;
+
   display: flex;
-  flex-wrap: wrap; /* Éléments les uns sous les autres */
-  align-items: center;    /* Centrage horizontal */
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  text-align: center;
-}
+  gap: 14px;
 
-.boutons-adoption button {
+  width: 150px;
+  flex-shrink: 0;
+
+  margin: 0;
+  padding: 0;
   border: none;
-  border-radius: 20px;
-  padding: 7px 12px;
-  font-family: 'Quicksand', sans-serif;
-  font-weight: 700;
-  font-size: 12px;
-  cursor: pointer;
-  background: var(--sauge-clair);
-  color: var(--mousse-fonce);
-  transition: background 0.2s, transform 0.2s;
 }
 
-.boutons-adoption button:hover {
-  background: var(--sauge);
-  transform: translateY(-2px);
+/* Bouton Adopter */
+.boutons-adoption .btn {
+  width: 100%;
+  font-size: 18px;
 }
 
 /* Formulaire de modifications */

@@ -58,6 +58,8 @@ export class EcranPrincipal implements OnInit{
 
   protected commandes?: Commande[];
 
+  imageChatSelectionne: string = '';
+
   showPayment = signal(false);
 
   openPaiement() {
@@ -345,7 +347,8 @@ protected readonly FOND_SALON = FOND_SALON;
 
 
   /** clic sur un chat */
-  protected clicChatSalon(chat: ChatDTO): void {
+  protected clicChatSalon(chat: ChatDTO, image: string): void {
+    this.imageChatSelectionne = image;
     if (this.estVueGerant) return;
 
     this.openPageChat(chat);
