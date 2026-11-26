@@ -187,6 +187,8 @@ export class Commande implements OnInit {
 
                 // Vider le panier
                 this.panier = {};
+                //Fermer la popup
+                this.fermerPopup.emit();
               }
             },
 
