@@ -48,6 +48,9 @@ public class CommandeService {
         }
 
         commande.setStatutCommande(nouveauStatut);
+        if (nouveauStatut == StatutCommande.Terminee) {
+            commande.setAccepter_paiement(true);
+        }
         Commande sauvegardee = daoCommande.save(commande);
 
         if (commandeTerminer(nouveauStatut)) {

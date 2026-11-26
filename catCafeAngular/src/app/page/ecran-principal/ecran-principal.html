@@ -2,14 +2,22 @@
 <header class="barre">
   <div class="logo">Le Chat Perché</div>
   <div class="actions">
+    @if (!estVueGerant) {
     <button class="btn" id="btn-accueil" (click)="EntreeClient()">🚪 Accueillir des clients</button>
     <button class="btn" id="btn-caisse" (click)="EntreeClient()">💶 Caisse</button>
     <button class="btn" id="btn-gerant" (click)="EntreeGerant()">🔒 Espace gérant</button>
+    } @else {
+      <button class="btn" id="btn-gerant" (click)="EntreeGerant()">↩️ Retour espace gérant</button>
+    }
   </div>
 </header>
 <div class="zone-salon">
-  @if(reservation?.id==undefined)
-  {
+  @if (estVueGerant) {
+    <div class="bandeau" id="bandeau">
+      <span class="pastille-jaune"></span>
+      <span id="bandeau-texte">Mode observation gérant — consultation du salon en direct.</span>
+    </div>
+  } @else if (reservation?.id == undefined) {
     <div class="bandeau" id="bandeau">
       <span class="pastille-jaune"></span>
       <span id="bandeau-texte">{{`Bienvenue au cafe  ! clicker sur  une table pour s'installer`}}</span>
