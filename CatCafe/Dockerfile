@@ -2,7 +2,7 @@ FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-#ENV   SPRING_DATASOURCE_URL=jdbc:mysql://quest-db/projet_quest
+ENV SPRING_DATASOURCE_URL=jdbc:mysql://db/projet_final
 
 COPY ./target/*.jar CatCafe-0.0.1-SNAPSHOT.jar
 
