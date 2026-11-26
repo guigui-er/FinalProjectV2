@@ -42,7 +42,7 @@ pipeline {
         }
 
         stage('Installation dépendances') {
-            dir{'catCafeAngular'}{
+            dir('catCafeAngular'){
                 steps {
                     sh 'npm i'
                 }
@@ -50,7 +50,7 @@ pipeline {
         }
 
         stage('NG Build') {
-            dir{'catCafeAngular'}{
+            dir('catCafeAngular'){
                 steps {
                     sh './node_modules/.bin/ng build'
                 }   
