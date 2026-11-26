@@ -47,6 +47,9 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db/projet_final
 
+    ports:
+      - 8080:8080
+
     networks:
       - cafeChat
 
