@@ -24,6 +24,7 @@ import { Paiement } from '../../component/paiement/paiement';
 import { PageChat } from '../page-chat/page-chat';
 import { Commande as CommandePopup} from '../../component/commande/commande';
 import { StatutCommande } from '../../model/statut-commande';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   imports: [DatePipe, AsyncPipe, Paiement, CommandePopup, PageChat],
@@ -32,6 +33,8 @@ import { StatutCommande } from '../../model/statut-commande';
   templateUrl: './ecran-principal.html',
 })
 export class EcranPrincipal implements OnInit{
+
+  protected title: Title = inject(Title);
 
   private reservationService: ReservationService = inject(ReservationService);
   private clientService: ClientService = inject(ClientService);
@@ -122,69 +125,66 @@ export class EcranPrincipal implements OnInit{
 
   protected tabledispo:Assise[]=this.reservationService.Table;
 
-    ngOnInit(): void {
+  ngOnInit(): void {
 
-        this.estVueGerant = this.route.snapshot.url.some(part => part.path === 'gerant');
+    this.title.setTitle("Bienvenue au chat perché ⚞^. .^⚟");
 
-       this.reservation=this.reservationService.ReservationForm;
+    this.estVueGerant = this.route.snapshot.url.some(part => part.path === 'gerant');
 
-      this.Commandes$ = this.refresh$.pipe(
-        // On initialise notre Observable
-        startWith(null),
-        // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
-        switchMap(() => {
-          return this.commandeService.trouverToutesLesCommandes();
-        })
-      ) // Pas utile pour le moment a voir quand on aura tout
+    this.reservation=this.reservationService.ReservationForm;
 
-
-      this.Reservations$ = this.refresh$.pipe(
-        // On initialise notre Observable
-        startWith(null),
-        // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
-        switchMap(() => {
-          return this.reservationService.findAll();
-        })
-      );
-
-      this.Clients$ = this.refresh$.pipe(
-        // On initialise notre Observable
-        startWith(null),
-        // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
-        switchMap(() => {
-          return this.clientService.findAll();
-        })
-      );
-
-      this.Tables$ = this.refresh$.pipe(
-        // On initialise notre Observable
-        startWith(null),
-        // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
-        switchMap(() => {
-          return this.tableService.findAll();
-        })
-      );
-
-      this.Chats$ = this.refresh$.pipe(
-        // On initialise notre Observable
-        startWith(null),
-        // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
-        switchMap(() => {
-          return this.chatService.findAll();
-        })
-      );
-
-      this.statsChats$ = this.Chats$.pipe(
-      map(chats => ({
-      aAdopter: chats.filter(c => !c.adopted).length,
-      total: chats.length
-      }))
+    this.Commandes$ = this.refresh$.pipe(
+      // On initialise notre Observable
+      startWith(null),
+      // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
+      switchMap(() => {
+        return this.commandeService.trouverToutesLesCommandes();
+      })
+    ) // Pas utile pour le moment a voir quand on aura tout
 
 
-);
+    this.Reservations$ = this.refresh$.pipe(
+      // On initialise notre Observable
+      startWith(null),
+      // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
+      switchMap(() => {
+        return this.reservationService.findAll();
+      })
+    );
 
+    this.Clients$ = this.refresh$.pipe(
+      // On initialise notre Observable
+      startWith(null),
+      // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
+      switchMap(() => {
+        return this.clientService.findAll();
+      })
+    );
 
+    this.Tables$ = this.refresh$.pipe(
+      // On initialise notre Observable
+      startWith(null),
+      // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
+      switchMap(() => {
+        return this.tableService.findAll();
+      })
+    );
 
+    this.Chats$ = this.refresh$.pipe(
+      // On initialise notre Observable
+      startWith(null),
+      // Fonction qui sera déclenchée dès qu'une nouvelle valeur dans le flux arrivera
+      switchMap(() => {
+        return this.chatService.findAll();
+      })
+    );
+
+    this.statsChats$ = this.Chats$.pipe(
+    map(chats => ({
+    aAdopter: chats.filter(c => !c.adopted).length,
+    total: chats.length
+    }))
+  );
   }
 
   protected SelectionTable(tableSelect:Assise ): void {
