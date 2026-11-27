@@ -87,7 +87,7 @@ export class GerantPage {
 
   protected logout() {
     this.gerantConnexService.resetAuth();
-    this.router.navigate(['ecranPrincipal'])
+    this.router.navigate(['/ecranPrincipal'])
   }
 
   protected imageChatGerant(i: number): string {
