@@ -9,6 +9,7 @@ pipeline {
                     args '''
                         -v $HOME/.m2:/root/.m2:z
                         -u root
+                        --network devops
                     '''
                     reuseNode true
                 }
