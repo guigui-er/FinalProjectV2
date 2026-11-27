@@ -1,0 +1,158 @@
+<section class="ecran ecran-fondu">
+  <div class="tdb">
+    <header>
+      <div class="tdb-tete">
+        <h1>Tableau de bord</h1>
+        <div class="actions">
+          <button class="btn sec" id="btn-retour-salon" (click)="clicRetourAuSalon()">Retour au salon</button>
+          <button class="btn terra" id="btn-deconnexion" (click)="logout()">Déconnexion</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <audio id ="musique-de-fond" src="/musique/MeowCafeMP3.mp3" autoplay [volume]="0.093" loop></audio>
+
+      <div class="kpis" *ngIf="statsData$ | async as stats">
+        <div class="kpi">
+          <h3>{{ stats.nbTablesOccupees }} / 6</h3>
+          <p>Tables occupées</p></div>
+        <div class="kpi">
+          <h3>{{ stats.nbClientsPresents }}</h3>
+          <p>Clients présents</p></div>
+        <div class="kpi">
+          <h3>{{ stats.nbCommandesEnCours }}</h3>
+          <p>Commandes en cours</p></div>
+        <div class="kpi">
+          <h3>{{ stats.montantEnCaisse | number:'1.2-2' }} €</h3>
+          <p>Encaissé aujourd'hui</p></div>
+      </div>
+
+      <div class="tableau">
+        <h3>État des tables</h3>
+        <div class="defile">
+          <table>
+              <thead>
+                <tr>
+                  <td>N°</td>
+                  <td>Capacité</td>
+                  <td>Clients</td>
+                  <td>Commande en cours</td>
+                  <td class="textcenter">Statut</td>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr class="ligne" *ngFor="let assise of assisesEtat$ | async">
+                  <td style="font-family: 'Fredoka', sans-serif;">T{{ assise.id }}</td>
+                  <td>{{ assise.capacite }} places</td>
+                  <td>
+                    <span *ngIf="assise.commandeStatut; else pasDeCommande">{{ assise.clientPrenom }} {{ assise.clientNom }}</span>
+                      <ng-template #nonAdopte>
+                        <span>0</span>
+                      </ng-template>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="assise.commandeStatut; else pasDeCommande">
+                      <span *ngIf="assise.commandeStatut === 'En_cours'">En cours</span>
+                      <span *ngIf="assise.commandeStatut === 'Servie'">Servie</span>
+                    </ng-container>
+                    <ng-template #pasDeCommande>
+                      <span>-</span>
+                    </ng-template>
+                    </td>
+                  <td class="textcenter">
+                    <span class="statut occupee" *ngIf="assise.complet; else nonComplet">occupée</span>
+                    <ng-template #nonComplet>
+                      <span class="statut libre">libre</span>
+                    </ng-template>
+                  </td>
+                </tr>
+              </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tableau">
+        <div class="tdb-tete-resa">
+          <h3>Réservations</h3>
+          <span class="outils">
+            <label for="filtre-statut">Statut</label>
+            <select id="filtre-statut" (change)="onFiltreStatutChange($event)">
+              <option value="">Tous</option>
+              <option value="En_cours">En cours</option>
+              <option value="Servie">Servie</option>
+              <option value="Terminee">Terminée</option>
+            </select>
+          </span>
+        </div>
+        <div class="defile">
+          <table>
+              <thead>
+                <tr>
+                  <td>N°</td>
+                  <td>Arrivée</td>
+                  <td>Table</td>
+                  <td>Client</td>
+                  <td>Pers.</td>
+                  <td>Commandes</td>
+                  <td>Total</td>
+                  <td class="textcenter">Statut</td>
+                </tr>
+              </thead>
+
+              <tbody>
+                  <tr class="ligne" *ngFor="let reservation of filtrerReservations(reservationsEtat$ | async)">
+                  <td style="font-family: 'Fredoka', sans-serif;">R{{ reservation.id }}</td>
+                  <td>{{ reservation.dateTime | date:'dd/MM/yyyy à HH:mm' }}</td>
+                  <td>T{{ reservation.assiseId}}</td>
+                  <td>{{ reservation.clientPrenom }} {{ reservation.clientNom }}</td>
+                  <td>{{ reservation.nbClient }}</td>
+                  <td style="color:rgba(107, 62, 24, 0.781)">
+                    <span *ngFor="let detail of reservation.commandeResponse?.details">{{ detail.qte }}x {{ detail.article?.description }} </span>
+                  </td>
+                  <td>{{ reservation.prixTotal | number:'1.2-2' }} €</td>
+                  <td class="textcenter">
+                    <ng-container *ngIf="reservation.commandeStatut; else pasDeCommande">
+                      <span class="statut payee" *ngIf="reservation.commandeStatut === 'Terminee'">Terminée</span>
+                      <span class="statut encours" *ngIf="reservation.commandeStatut === 'En_cours'">En cours</span>
+                      <span class="statut servie" *ngIf="reservation.commandeStatut === 'Servie'">Servie</span>
+                      <span class="statut annulee" *ngIf="reservation.commandeStatut === 'Annulee'">Annulée</span>
+                    </ng-container>
+                    <ng-template #pasDeCommande>
+                      <span>-</span>
+                    </ng-template>
+                  </td>
+                  </tr>
+              </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tableau">
+        <h3>Nos chats</h3>
+        <div class="blockcats">
+          <div class="blockcat" *ngFor="let chat of chats$ | async; let i = index">
+            <div class="imgcat">
+              <img
+              [src]="imageChatGerant(i)"
+              [alt]="chat.nom"
+              />
+            </div>
+            <div>
+              <h3>{{ chat.nom }}</h3>
+              <p>{{ formatAge(chat.age)}} </p>
+              <span class="statut adoptable" *ngIf="chat.adopted; else nonAdopte">Adopté</span>
+                <ng-template #nonAdopte>
+                  <span class="statut adopte">Adoptable</span>
+                </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+    </footer>
+  </div>
+</section>

@@ -89,9 +89,8 @@ public class Chat  {
     public Chat() {
     }
 
-    public Chat(Integer id, boolean adopted, int age, String caractère, Integer caresses, LocalDate date_veto, boolean endormi, String nom, String race, boolean satisfait, ChatMF sexe, Client proprietaire) {
+    public Chat(Integer id, boolean adopted, int age, String caractère, LocalDate date_veto, boolean endormi, String nom, String race, boolean satisfait, ChatMF sexe, Client proprietaire) {
         this.adopted      = adopted;
-        this.caresses     = caresses;
         this.caractère    = caractère;
         this.ageAnnees    = age / 12;
         this.satisfait    = satisfait;
@@ -185,9 +184,7 @@ public class Chat  {
         this.satisfait = satisfait;
     }
 
-    public Integer getCaresses() {
-        return caresses;
-    }
+
 
     /* // setCaresses de base, modifié pour fitter la méthode caresse
     public void setCaresses(int caresses) {
@@ -195,9 +192,13 @@ public class Chat  {
     }
     */
 
-    public Integer setCaresses(Integer caresses) {
+
+    public Integer getCaresses() {
+        return caresses;
+    }
+
+    public void setCaresses(Integer caresses) {
         this.caresses = caresses;
-        return this.caresses;
     }
 
     public String getCaractère() {

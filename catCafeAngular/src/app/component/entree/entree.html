@@ -1,1 +1,106 @@
-<p>entree works!</p>
+<!--<p>entree works!</p>
+
+<form (submit)="ajouterClient()" [formGroup]="clientForm">
+  <div>
+    <input type="text" [formControl]="prenomCtrl" placeholder="Prenom"/>
+    |
+    <input type="text" [formControl]="nomCtrl" placeholder="nom"/>
+    |
+    <label for="nb_personne">Nombre de personnes : </label>
+    <select id="nb_personne" [formControl]="nbClientCtrl" >
+      <option [ngValue]="" >choisir</option>
+      @for (nb of nbPersonnes; track nb) {
+          <option [ngValue]="nb">{{`${nb} personnes`}}</option>
+        }
+    </select>
+  </div>
+
+  @if (nomCtrl.dirty && nomCtrl.hasError('required')) {
+    <div>
+      Le nom est obligatoire !
+    </div>
+  }
+    @if (prenomCtrl.dirty && prenomCtrl.hasError('required')) {
+    <div>
+      Le prenom est obligatoire !
+    </div>
+  }
+      @if (nbClientCtrl.dirty && nbClientCtrl.hasError('required')) {
+    <div>
+      selectionnez un nombre de personne !
+    </div>
+  }
+      @if (tables?.length===0) {
+    <div>
+      {{`Désolés, c'est complet pour un groupe de ${nbClient} : Revenez un peu plus tard !`}}
+    </div>
+  }
+
+
+  <div>
+    <button [disabled]="clientForm.invalid" type="submit">trouver table</button>
+  </div>
+</form>-->
+
+
+<div class="fond-flou" id="voile" aria-hidden="true"></div>
+<div class="page-connexion" (click)="fermerPage()">
+  <div class="boite" id="boite" (click)="$event.stopPropagation()" >
+    <button class="fermer" id="btn-fermer" type="button" aria-label="Fermer" 
+    (click)="fermerPage()">x</button>
+
+      <h2>Votre groupe</h2>
+      <p class="sous">Quelques infos, et nous vous trouvons une table au café.</p>
+
+<form (submit)="ajouterClient()" [formGroup]="clientForm">
+
+    <div class="champ"><input type="text" [formControl]="prenomCtrl" placeholder="Prenom"/></div>
+    <div class="champ"><input type="text" [formControl]="nomCtrl" placeholder="nom"/></div>
+    <div class="champ">
+    <label class ="sous" for="nb_personne">Nombre de personnes : </label>
+    <select id="nb_personne" [formControl]="nbClientCtrl" >
+      <option [ngValue]="" >choisir</option>
+      @for (nb of nbPersonnes; track nb) {
+          <option [ngValue]="nb">{{`${nb} personnes`}}</option>
+        }
+    </select>
+    </div>
+
+
+  @if (nomCtrl.dirty && nomCtrl.hasError('required')) {
+    <div>
+      Le nom est obligatoire !
+    </div>
+  }
+    @if (prenomCtrl.dirty && prenomCtrl.hasError('required')) {
+    <div>
+      Le prenom est obligatoire !
+    </div>
+  }
+      @if (nbClientCtrl.dirty && nbClientCtrl.hasError('required')) {
+    <div>
+      selectionnez un nombre de personne !
+    </div>
+  }
+      @if (tables?.length===0) {
+    <div>
+      {{`Désolés, c'est complet pour un groupe de ${nbClient} : Revenez un peu plus tard !`}}
+    </div>
+  }
+
+
+  <div>
+    <button class="btn large" [disabled]="clientForm.invalid" type="submit">Trouver une table</button>
+  </div>
+</form>
+</div>
+</div>
+
+
+    <!--<form id="f-client" novalidate>
+      <div class="champ"><label for="fc-nom">Nom</label><input id="fc-nom" maxlength="30" autocomplete="family-name"><span class="err"></span></div>
+      <div class="champ"><label for="fc-prenom">Prénom</label><input id="fc-prenom" maxlength="30" autocomplete="given-name"><span class="err"></span></div>
+      <div class="champ"><label for="fc-nb">Nombre de personnes</label>
+        <select id="fc-nb"><option value="">Choisir…</option>${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}">${n} personne${n > 1 ? 's' : ''}</option>`).join('')}</select>
+        <span class="err"></span></div>
+      <div id="fc-message"></div>-->

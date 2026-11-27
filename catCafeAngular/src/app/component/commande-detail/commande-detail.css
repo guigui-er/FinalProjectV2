@@ -1,0 +1,124 @@
+.detail-meta {
+  margin: -8px 0 16px;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.commande-informations-generiques {
+  margin: 0 0 16px;
+  color: var(--encre-doux);
+  font-size: 14px;
+}
+
+.detail-lignes {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-lignes li {
+  padding: 10px 12px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.detail-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid #e5e5e5;
+  font-size: 1.2rem;
+}
+
+.commande-numero-statut {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.title{
+    color: var(--couleur-principale);
+    font-family: var(--police-titre);
+    margin-bottom: 4px;
+}
+
+.commande-details {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.commande-details-prix {
+  text-align: right;
+}
+
+.boutons-commande-details {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.bouton-retour-table {
+  background: var(--creme);
+  color: var(--mousse-fonce);
+  box-shadow: var(--ombre-bouton);
+  border: 3px solid var(--brun);
+  cursor: pointer;
+  border-radius: var(--rayon-bouton);
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 14.5px;
+  transition: transform .08s, filter .15s;
+}
+
+.bouton-retour-table:hover {
+  filter: brightness(1.07);
+  
+}
+
+.bouton-payer-table {
+  background: var(--terracotta);
+  box-shadow: var(--ombre-bouton);
+  border: 3px solid var(--brun);
+  cursor: pointer;
+  border-radius: var(--rayon-bouton);
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: #fbf6ea;
+  transition: transform .08s, filter .15s;
+}
+
+.bouton-payer-table:hover {
+  filter: brightness(1.07);
+}
+
+.bouton-payer-table:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.boutons-commande-details .btn {
+    flex: 1;
+}
+
+.message-paiement-bloque {
+ background: #fbe3da;
+  color: var(--terracotta-fonce);
+  border: 2px solid #f0c1ad;
+  border-radius: 12px;
+  padding: 10px 13px;
+  font-weight: 700;
+  font-size: 13.5px;
+  margin: 10px 0;
+  color: var(--terracotta-fonce);
+}
+  

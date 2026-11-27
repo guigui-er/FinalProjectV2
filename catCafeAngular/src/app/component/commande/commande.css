@@ -1,0 +1,236 @@
+/* Fond général de la commande */
+.commande {
+  width: 100%;
+  color: var(--brun);
+  font-family: var(--police-texte);
+}
+
+/* En-tête de la commande */
+.header {
+  position: relative;
+  padding-bottom: 16px;
+}
+
+/* Titre principal */
+.header h2 {
+  font-family: var(--police-titre);
+  color: var(--brun);
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 35px 6px 0;
+}
+
+/* Informations table, client, réservation */
+.infos {
+  color: var(--brun-doux);
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Contenu du menu */
+.contenu {
+  padding: 5px 0;
+}
+
+/* Catégories du menu */
+.categorie {
+  margin-bottom: 18px;
+}
+
+/* Titres des catégories */
+.categorie h4 {
+  font-family: var(--police-titre);
+  color: var(--brun);
+  background: var(--rose-pale);
+  font-size: 21px;
+  font-weight: 600;
+  padding: 9px 12px;
+  border-radius: 10px;
+  margin: 0 0 8px;
+}
+
+/* Ligne des articles */
+.ligne-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 5px;
+  border-bottom: 2px dotted var(--beige);
+  transition: background 0.2s;
+}
+
+.ligne-menu:hover {
+  background: var(--creme-2);
+  border-radius: 8px;
+}
+
+/* Nom de l'article */
+.nom {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Prix de l'article */
+.prix {
+  color: var(--brun-doux);
+  font-size: 16px;
+  font-weight: 700;
+  min-width: 50px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Quantités des articles */
+.qte {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+/* Boutons + et - */
+.qte button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 2px solid var(--brun);
+  border-radius: 9px;
+  background: var(--creme);
+  color: var(--brun);
+  font-family: var(--police-texte);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 2px 0 var(--brun);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+/* Bouton moins */
+.qte button:first-child {
+  background: var(--creme);
+}
+
+.qte button:first-child:hover {
+  background: var(--rose-pale);
+}
+
+/* Bouton plus */
+.qte button:last-child {
+  background: var(--vert-doux);
+}
+
+.qte button:last-child:hover {
+  background: var(--sauge-fonce);
+}
+
+/* Effet au clic */
+.qte button:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+/* Nombre d'articles sélectionnés */
+.qte span {
+  min-width: 18px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* Message lorsqu'une catégorie est vide */
+.vide {
+  color: var(--brun-doux);
+  font-size: 14px;
+  font-style: italic;
+  padding: 5px;
+}
+
+/* Séparateur horizontal */
+hr {
+  border: none;
+  border-top: 2px dashed var(--beige);
+  margin: 18px 0;
+}
+
+/* Pied de commande */
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 16px;
+  background: var(--creme-2);
+  border-radius: 15px;
+}
+
+/* Récapitulatif de la commande */
+.recap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Nombre d'articles */
+.nombre-articles {
+  color: var(--brun-doux);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Montant total */
+.total {
+  color: var(--brun);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Prix total */
+.footer b {
+  font-family: var(--police-titre);
+  color: var(--brun);
+  font-size: 26px;
+  font-weight: 600;
+}
+
+/* Adaptation sur mobile */
+@media (max-width: 480px) {
+  .header h2 {
+    font-size: 26px;
+  }
+
+  .ligne-menu {
+    gap: 6px;
+    padding: 10px 0;
+  }
+
+  .nom {
+    font-size: 12px;
+    overflow-wrap: anywhere;
+  }
+
+  .prix {
+    min-width: 40px;
+    font-size: 12px;
+  }
+
+  .qte {
+    gap: 5px;
+  }
+
+  .qte button {
+    width: 27px;
+    height: 27px;
+  }
+
+  .categorie h4 {
+    font-size: 19px;
+  }
+}

@@ -1,4 +1,4 @@
 export enum ChatMF {
-    MALE = 'mâle',
-    FEMELLE = 'femelle'
+  mâle = 'mâle',
+  femelle = 'femelle',
 }

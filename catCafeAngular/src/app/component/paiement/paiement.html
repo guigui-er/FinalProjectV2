@@ -1,0 +1,74 @@
+<!-- Page de remerciement après paiement -->
+@if (recap(); as r) {
+
+  <div class="recap">
+    <h2 class="title">Merci et à bientôt !</h2>
+    <p class="paiement-informations-generiques">
+      R-{{ r.reservation.id }} . Table {{ r.reservation.assise.id }}
+    </p>
+
+    <p class="message-paiement-reussi">
+        Paiement de {{r.prixTotal | currency:'EUR' }} enregistré 
+        pour {{r.reservation.client.prenom}} {{r.reservation.client.nom}}. 
+        Nous espérons vous revoir très vite.
+    </p>
+
+    <div class="div-fermer-paiement">
+        <button type="button" class="btn-fermer-paiement" (click)="fermerRecap()">Fermer</button>
+    </div>
+  </div>
+
+} 
+
+<!-- Zoom sur une commande: celle sélectionnée -->
+
+@else if (commandeSelectionnee(); as selection) {
+
+  <app-commande-detail
+    [commande]="selection"
+    (fermer)="fermer()"
+    (payer)="payerCommande($event)" />
+
+} 
+
+<!-- Liste de toutes les commandes ayant pour statut 'En_cours'
+ ou 'Terminee'. Page principale du comptoir
+-->
+
+@else {
+  <section class="commandes">
+    <h2 class="title">Caisse</h2>
+    <p class="subtitle">Choisissez la table qui règle son addition</p>
+
+    <div class="liste-commandes">
+      @for (commande of (commandes$ | async); track commande.commandeId) {
+        <article class="commande" (click)="selectionner(commande)">
+          <div class="commande_debut">
+            <h3>T{{ commande.reservation?.assise.id }}</h3>
+          </div>
+
+          <div class="commande_centre">
+            <p class="commande_client">
+              {{ commande.reservation?.client?.prenom }}
+              {{ commande.reservation?.client?.nom }}
+            </p>
+            <span class="commande_nb-personnes">
+              {{ commande.reservation?.nbClient }} pers.
+            </span>
+          </div>
+
+            <div class="commande_fin">
+                <span
+                    class="commande_statut statut-badge"
+                    [class.statut-badge--en-cours]="commande.statutCommande === 'En_cours'">
+                    {{ commande.statutCommande }}
+                </span>
+                <strong class="commande_prix">{{ commande.prixTotal | currency:'EUR' }}</strong>
+            </div>
+        </article>
+      } @empty {
+        <p>Aucune commande pour le moment.</p>
+      }
+    </div>
+  </section>
+}

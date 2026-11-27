@@ -1,0 +1,263 @@
+
+<header class="barre">
+  <audio id ="musique-de-fond" src="/musique/MeowCafeMP3.mp3" autoplay  loop [volume]="0.27093"></audio>
+  <div class="logo">CatCafé</div>
+  <div class="actions">
+    @if (!estVueGerant) {
+    <button class="btn" id="btn-accueil" (click)="EntreeClient()">🚪 Accueillir des clients</button>
+    <button class="btn" id="btn-gerant" (click)="EntreeGerant()">🔒 Espace gérant</button>
+    } @else {
+      <button class="btn" id="btn-gerant" (click)="EntreeGerant()">↩️ Retour espace gérant</button>
+    }
+  </div>
+</header>
+<div class="zone-salon">
+  @if (estVueGerant) {
+    <div class="bandeau" id="bandeau">
+      <span class="pastille-jaune"></span>
+      <span id="bandeau-texte">Mode observation gérant : consultation du salon en direct.</span>
+    </div>
+  } @else if (reservation?.id == undefined) {
+    <div class="bandeau" id="bandeau">
+      <span class="pastille-jaune"></span>
+      <span id="bandeau-texte">{{`Bienvenue au cafe ! Cliquer sur  une table pour s'installer`}}</span>
+    </div>
+  }
+</div>
+
+ <div class="salon-et-panneau">
+      <div>
+        <div class="cadre-salon" id="cadre-salon"><div class="scene" id="scene">
+          @let tablesSalon = (Tables$ | async);
+          @let reservationsSalon = (Reservations$ | async);
+          @let commandesSalon = (Commandes$ | async);
+
+          <div class="salon-plateau" [class.placement]="sceneEnPlacement()">
+
+            <!-- fond : mur, fenêtres, étagères, parquet -->
+            <img class="salon-objet" [src]="FOND_SALON.src" alt="" draggable="false"
+                [style.--x]="FOND_SALON.x" [style.--y]="FOND_SALON.y" [style.--w]="FOND_SALON.w" [style.--h]="FOND_SALON.h"
+                [style.z-index]="FOND_SALON.z">
+
+            <!-- décor non cliquable : barista, arbre à chat, coussins, plantes -->
+            @for (o of DECOR_SALON; track o.nom) {
+              <img class="salon-objet" [src]="o.src" alt="" draggable="false"
+                  [style.--x]="o.x" [style.--y]="o.y" [style.--w]="o.w" [style.--h]="o.h" [style.z-index]="o.z">
+            }
+
+            <!-- porte « Entrée » -->
+            <button type="button" class="salon-objet salon-cliquable"
+                    title="Porte d'entrée — accueillir des clients" aria-label="Porte d'entrée: accueillir des clients"
+                    [style.--x]="PORTE_ENTREE.x" [style.--y]="PORTE_ENTREE.y" [style.--w]="PORTE_ENTREE.w" [style.--h]="PORTE_ENTREE.h"
+                    [style.z-index]="PORTE_ENTREE.z" (click)="clicPorteEntree()">
+              <img [src]="PORTE_ENTREE.src" alt="" draggable="false">
+            </button>
+
+            <!-- porte « Privé » -->
+            <button type="button" class="salon-objet salon-cliquable"
+                    title="Privé — espace gérant" aria-label="Privé: espace gérant"
+                    [style.--x]="PORTE_PRIVEE.x" [style.--y]="PORTE_PRIVEE.y" [style.--w]="PORTE_PRIVEE.w" [style.--h]="PORTE_PRIVEE.h"
+                    [style.z-index]="PORTE_PRIVEE.z" (click)="clicPortePrivee()">
+              <img [src]="PORTE_PRIVEE.src" alt="" draggable="false">
+            </button>
+
+            <!-- comptoir -->
+            <button type="button" class="salon-objet salon-cliquable"
+                    title="Comptoir — régler l'addition" aria-label="Comptoir: régler l'addition"
+                    [style.--x]="COMPTOIR.x" [style.--y]="COMPTOIR.y" [style.--w]="COMPTOIR.w" [style.--h]="COMPTOIR.h"
+                    [style.z-index]="COMPTOIR.z" (click)="clicComptoir()">
+              <img [src]="COMPTOIR.src" alt="" draggable="false">
+            </button>
+
+            <!-- caisse -->
+            <button type="button" class="salon-objet salon-cliquable"
+                    title="Caisse — régler l'addition" aria-label="Caisse: régler l'addition"
+                    [style.--x]="CAISSE.x" [style.--y]="CAISSE.y" [style.--w]="CAISSE.w" [style.--h]="CAISSE.h"
+                    [style.z-index]="CAISSE.z" (click)="clicCaisse()">
+              <img [src]="CAISSE.src" alt="" draggable="false">
+            </button>
+
+            <!-- tables : ellipse, couche arrière, clients assis, couche avant, cadenas — grisés ensemble ;
+                la plaque est à part pour rester lisible -->
+            @for (st of TABLES_SALON; track st.id) {
+              @let tb = tableBdd(tablesSalon, st.id);
+
+              <div class="salon-groupe-table" [style.z-index]="st.z"
+                  [class.occupee]="sceneTableOccupee(st.id, tb)"
+                  [class.elig]="sceneEnPlacement() && sceneTableEligible(st.id, tb)"
+                  [class.inelig]="sceneEnPlacement() && !sceneTableEligible(st.id, tb)">
+
+                <div class="salon-zone"
+                    [style.--x]="st.zone.x" [style.--y]="st.zone.y" [style.--w]="st.zone.w" [style.--h]="st.zone.h"></div>
+
+                <!-- couche arrière : chaises du fond, dossiers (cliquable, mais ignorée au clavier : la couche avant suffit) -->
+                <button type="button" class="salon-objet salon-cliquable salon-table" tabindex="-1" aria-hidden="true"
+                        [style.--x]="st.arriere.x" [style.--y]="st.arriere.y" [style.--w]="st.arriere.w" [style.--h]="st.arriere.h"
+                        [style.z-index]="st.arriere.z" (click)="clicTableSalon(st.id, tb,reservationsSalon)">
+                  <img [src]="st.arriere.src" alt="" draggable="false">
+                </button>
+
+                <!-- clients assis : ceux de la réservation en cours sur cette table -->
+                @for (c of clientsAssis(st.id, tb, reservationsSalon); track $index) {
+                  <img class="salon-objet salon-client" [src]="c.src" alt="" draggable="false" animate.leave="salon-client-part"
+                      [style.--x]="c.x" [style.--y]="c.y" [style.--w]="c.w" [style.--h]="c.h" [style.z-index]="c.z"
+                      (click)="clicTableSalon(st.id, tb,reservationsSalon)">
+                }
+
+                <!-- couche avant : la table, les chaises de côté et de devant, les fauteuils -->
+                <button type="button" class="salon-objet salon-cliquable salon-table"
+                        [attr.title]="'Table ' + st.id + ' · ' + (tb?.capacite ?? st.capacite) + ' places'"
+                        [attr.aria-label]="'Table ' + st.id + ', ' + (tb?.capacite ?? st.capacite) + ' places'"
+                        [style.--x]="st.avant.x" [style.--y]="st.avant.y" [style.--w]="st.avant.w" [style.--h]="st.avant.h"
+                        [style.z-index]="st.avant.z" (click)="clicTableSalon(st.id, tb,reservationsSalon)">
+                  <img [src]="st.avant.src" alt="" draggable="false">
+                </button>
+
+                <img class="salon-objet salon-cadenas" [src]="CADENAS_SRC" alt="" draggable="false"
+                    [style.--x]="st.cadenas.x" [style.--y]="st.cadenas.y" [style.--w]="st.cadenas.w" [style.--h]="st.cadenas.h">
+              </div>
+
+              <span class="salon-plaque"
+                    [class.occupee]="sceneTableOccupee(st.id, tb)"
+                    [class.inelig]="sceneEnPlacement() && !sceneTableEligible(st.id, tb)"
+                    [style.--x]="st.plaque.x" [style.--y]="st.plaque.y">T{{ st.id }}</span>
+
+            }
+
+            <!-- chats (ceux de ta base, placés sur les emplacements de la maquette) -->
+            @for (chat of (Chats$ | async); track chat.id; let i = $index) {
+              @let pc = placeChat(i);
+              @let ic = imageChat(chat, i);
+              @if(this.reservation.client.id != undefined) {
+                <button type="button" class="salon-objet salon-cliquable salon-chat"
+                  [attr.title]="chat.nom" [attr.aria-label]="'Chat ' + chat.nom"
+                  [style.--x]="pc.x + ic.dx" [style.--y]="pc.y + ic.dy" [style.--w]="ic.w" [style.--h]="ic.h"
+                  [style.z-index]="pc.y + 6" (click)="clicChatSalon(chat, ic.src)">
+                  <img [src]="ic.src" alt="" draggable="false">
+                </button>
+              }
+              @else {
+                <button type="button" class="salon-objet salon-cliquable salon-chat-grise"
+                  [attr.title]="chat.nom" [attr.aria-label]="'Chat ' + chat.nom"
+                  [style.--x]="pc.x + ic.dx" [style.--y]="pc.y + ic.dy" [style.--w]="ic.w" [style.--h]="ic.h"
+                  [style.z-index]="pc.y + 6">
+                  <img [src]="ic.src" alt="" draggable="false">
+                </button>
+              }
+            }
+
+            <!-- feuillage au premier plan, devant tout -->
+            <img class="salon-objet salon-premier-plan" [src]="PREMIER_PLAN.src" alt="" draggable="false"
+                [style.--x]="PREMIER_PLAN.x" [style.--y]="PREMIER_PLAN.y" [style.--w]="PREMIER_PLAN.w" [style.--h]="PREMIER_PLAN.h"
+                [style.z-index]="PREMIER_PLAN.z">
+          </div>
+
+
+        </div></div>
+
+        <div class="legende">
+          <span><i style="background:#f5c443"></i>Table disponible pour votre groupe</span>
+          <span><i style="background:#f6b8c0"></i>Table occupée : cliquez pour commander</span>
+          <span><i style="background:hsl(47, 30%, 91%)"></i>Chats : cliquez pour faire connaissance</span>
+          <span><i style="background:#e8b46a"></i>Comptoir / caisse : pour régler l'addition</span>
+        </div>
+      </div>
+      <!-- panneau de droite : le carnet du café, toujours visible -->
+      <aside class="panneau-droit" id="panneau-droit" aria-label="Carnet du café">
+        <section class="boite carnet-jardin" id="panneau-accueil">
+          <h2>Carnet du café</h2>
+          <p class="sous">Ce qui se passe au café, en direct.</p>
+          <ul class="astuces">
+            <li><span>🚪</span><span><b>Porte d'entrée :</b> accueillir un groupe</span></li>
+            <li><span>🍵</span><span><b>Table occupée :</b> passer commande</span></li>
+            <li><span>🐾</span><span><b>Chat :</b> sa fiche, l'adopter</span></li>
+            <!--<li><span>💶</span><span><b>Comptoir</b> — régler l'addition</span></li>-->
+            <li><span>🔒</span><span><b>Porte privée :</b> espace gérant</span></li>
+          </ul>
+          <div class="menu-cat">En ce moment</div>
+            @for (c of (Commandes$ | async) ; track c.commandeId){
+              @if (c.reservation) {
+                <div class="resume-ligne">
+                  <b>{{`T${c.reservation?.assise?.id}`}}</b>
+                  <span>client : {{ c.reservation.client?.nom ?? '-' }} </span>
+                  <span > {{`${c.statutCommande}`}}</span>
+                </div>
+              }
+            }
+            @if (statsChats$ | async; as s) {
+              <div class="resume-ligne"><b>🐾</b><span>{{`${s.aAdopter} chats à adopter sur ${s.total}`}}</span></div>
+                }
+        </section>
+      </aside>
+    </div>
+
+
+
+<!-- Partie paiement qui est affiché lors du clique sur le comptoir ou la caisse -->
+
+@if (showPayment()) {
+  <div class="backdrop" (click)="onBackdropClick($event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="close" aria-label="Fermer" (click)="closePaiement()">×</button>
+      <app-paiement (fermerPopup)="closePaiement()" />
+    </div>
+  </div>
+}
+
+@if (showAdopterChat(); as chat) {
+  <div class="backdrop" (click)="onBackdropClickChat($event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="close" aria-label="Fermer" (click)="closePageChat()">×</button>
+      <app-page-chat  [chat]="chat"
+      [image]="imageChatSelectionne"
+      (fermerPopupChat)="closePageChat()" />
+    </div>
+  </div>
+}
+
+
+<!-- POPUP COMMANDE -->
+@if (showCommande() && resaSelectionnee(); as resa) {
+  <div class="backdrop" (click)="onBackdropClickCommande($event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="close" aria-label="Fermer" (click)="closeCommande()">×</button>
+      <app-commande [reservation]="resa" (fermerPopup)="closeCommande()" />
+    </div>
+  </div>
+}
+<!--<div>
+    <button type="button" (click)="commande()">decclencher lecture commande </button>
+</div>
+
+<p>liste des Tables dispo</p>
+@for (t of tabledispo; track t.id) {
+
+<div>
+    <button type="button" (click)="SelectionTable(t)">{{`table id : ${t.id} avec ${t.capacite} places !`}}</button>
+</div>
+}
+
+
+<p>liste table </p>
+ @for (t of (Tables$ | async) ; track t.id){
+    <div>
+      <button [disabled]="!t.complet" type="button" (click)="commander(t)">{{`table id : ${t.id} avec ${t.capacite} places !`}}</button>
+    </div>
+  }
+
+
+  <p>liste chat </p>
+ @for (chat of (Chats$ | async) ; track chat.id){
+    <div>
+      <button  type="button" (click)="InfosChats()">{{`Chat id : ${chat.id} avec ${chat.nom} places statut adopte ${chat.adopted}   !`}}</button>
+    </div>
+  }-->
+
+  <!--@if (showCommande()) {
+  <div class="backdrop" (click)="onBackdropClickCommande($event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="close" aria-label="Fermer" (click)="closeCommande()">×</button>
+      <app-commande (fermerPopup)="closeCommande()" />
+    </div>
+  </div>
+}-->

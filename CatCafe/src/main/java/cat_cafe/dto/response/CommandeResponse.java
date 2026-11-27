@@ -13,7 +13,8 @@ public record CommandeResponse(
     StatutCommande statutCommande,
     Reservation reservation,
     List <DetailCommandeResponse> details,
-    double prixTotal
+    double prixTotal,
+    StatutCommande statutCommande
 ) {
 
      public static CommandeResponse convert(Commande commande, double prixTotal) {
@@ -42,7 +43,11 @@ public record CommandeResponse(
             statutCommande,
             reservation,
             details,
-            prixTotal
+            prixTotal,
+            commande.getStatutCommande()
         );
+        
      }
+
+    
 }

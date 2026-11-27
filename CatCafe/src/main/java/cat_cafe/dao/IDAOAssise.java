@@ -9,4 +9,6 @@ import cat_cafe.model.Assise;
 public interface IDAOAssise extends JpaRepository<Assise, Integer> {
     List<Assise> findByCompletFalse();
     List<Assise> findByCompletFalseAndCapaciteGreaterThanEqual(int capacite);
+
+    int countByCompletTrue();
 }
