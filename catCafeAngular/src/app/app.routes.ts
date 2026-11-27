@@ -25,17 +25,20 @@ export const routes: Routes = [
     {
         path: 'gerant',
         component: GerantConnexionComponent
+        
     },
         
     {
         path: 'ecranPrincipal',
         component: EcranPrincipal,
+        
         canActivate: [clientGuard]
     },
 
     { 
         path: 'ecranPrincipal/gerant', 
-        component: EcranPrincipal 
+        component: EcranPrincipal ,
+        canActivate: [ authGuard ]
     },
 
     {
