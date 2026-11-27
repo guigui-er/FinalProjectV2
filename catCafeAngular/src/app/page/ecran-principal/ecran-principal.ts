@@ -129,7 +129,7 @@ export class EcranPrincipal implements OnInit{
 
   ngOnInit(): void {
 
-    this.title.setTitle("Bienvenue au chat perché ⚞^. .^⚟");
+    this.title.setTitle("Bienvenue au CatCafé ⚞^. .^⚟");
 
     this.estVueGerant = this.route.snapshot.url.some(part => part.path === 'gerant');
 
