@@ -12,7 +12,7 @@ export class GerantConnexionService {
 
   private readonly apiUrl = 'http://localhost:8080';
   private http: HttpClient = inject(HttpClient);
-  private _token: string = sessionStorage.getItem("token") ?? "";
+  private _token: string = "";
 
   public get token(): string {
     return this._token;
