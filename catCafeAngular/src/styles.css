@@ -1,4 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+/* Polices : remplace tes deux blocs @font-face (voir explications) */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap');
+
+/*Variables*/
+  
 :root{
   --brun:#5a3a28; --brun-doux:#8a6248; --trait:3px solid var(--brun);
   --creme:#fff6e6; --creme-2:#fbecd2; --beige:#f3dfbf; --bois-clair:#e8b46a; --bois-moyen:#c98a4b;
@@ -10,44 +14,349 @@
   --bois:#e8b46a; --bois-fonce:#c98a4b; --encre:#5a3a28; --encre-doux:#8a6248;
   --ombre:0 6px 0 rgba(90,58,40,.18), 0 18px 30px -16px rgba(90,58,40,.45);
   --rayon:24px;
+
+  /* AJOUTS pour les composants communs */
+  --creme-fond:#fdf0dc;
+  --jaune-clair:#f9d56e;
+  --bord-champ:#97664b;
+  --danger:#c9714f;
+  --danger-fonce:#a85636;
+  --rayon-boite:25px;
+  --rayon-champ:13px;
+  --rayon-bouton:25px;
+  --ombre-bouton:0 4px 0 var(--brun);
+  --ombre-boite:0 7px 0 var(--brun), 0 25px 50px -18px rgba(59, 34, 23, .50);
+  --police-titre:'Fredoka','Nunito',system-ui,sans-serif;
+  --police-texte:'Nunito',system-ui,sans-serif;
+
+  --fond-pois:
+    radial-gradient(circle at 12px 12px, rgba(246,184,192,.35) 3px, transparent 3.5px) 0 0 / 48px 48px,
+    radial-gradient(1000px 600px at 10% -10%, #fff8ea 0%, transparent 60%),
+    linear-gradient(180deg, #fdf0dc, #f6e3c3);
 }
 
+/* 2. Base  */
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body{
   margin:30px;
   font-family:'Nunito',system-ui,sans-serif;font-weight:600;color:var(--brun);
+  font-weight:600;
+  color:var(--brun);
   background:
-    radial-gradient(circle at 12px 12px, rgba(246,184,192,.35) 3px, transparent 3.5px) 0 0/48px 48px,
-    radial-gradient(1000px 600px at 10% -10%, #fff8ea 0%, transparent 60%),
-    linear-gradient(180deg, #fdf0dc, #f6e3c3);
+    radial-gradient(
+      circle at 12px 12px,
+      rgba(246, 184, 192, .35) 3px,
+      transparent 3.5px
+    ) 0 0 / 48px 48px repeat,
+
+    radial-gradient(
+      1000px 600px at 10% -10%,
+      #fff8ea 0%,
+      transparent 60%
+    ) no-repeat,
+
+    linear-gradient(
+      180deg,
+      #fdf0dc,
+      #f6e3c3
+    ) no-repeat;
+
+  background-attachment: fixed;
 }
 
-@font-face {
-    font-family: 'Nunito';
-    font-style: normal;
-    font-weight: 600;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofIOOaBXso.woff2) format('woff2');
-    unicode-range: U +0460 -052F, U +1C80 -1C8A, U +20B4, U +2DE0 -2DFF, U + A640-A69F, U + FE2E-FE2F;
+/* AJOUTS base */
+button, input, select, textarea { font-family: inherit; }
+
+h1, h2, h3, h4 {
+  font-family: var(--police-titre);
+  font-weight: 700;
+  color: var(--brun);
 }
 
-@font-face {
-    font-family: 'Fredoka';
-    font-style: normal;
-    font-weight: 500;
-    font-stretch: 100%;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/fredoka/v17/X7n64b87HvSqjb_WIi2yDCRwoQ_k7367_DWu89U.woff2) format('woff2');
-    unicode-range: U +0000 -00FF, U +0131, U +0152 -0153, U +02BB -02BC, U +02C6, U +02DA, U +02DC, U +0304, U +0308, U +0329, U +2000 -206F, U +20AC, U +2122, U +2191, U +2193, U +2212, U +2215, U + FEFF, U + FFFD;
+:focus-visible {
+  outline: 3px solid var(--jaune);
+  outline-offset: 3px;
 }
 
-/* 
-Partie paiement
-*/
+::selection {
+  background: var(--rose);
+  color: var(--brun);
+}
 
+/*    3. Fenêtre modale : .voile + .boite + .fermer
+   <div class="voile ouvert"><div class="boite">...</div></div>*/
+.voile {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  place-items: center;
+  padding: 18px;
+  background: rgba(38, 52, 30, .42);
+  backdrop-filter: blur(3px);
+}
+.voile.ouvert { display: grid; }
+
+.boite {
+  position: relative;
+  z-index: 1;
+  width: min(524px, 94vw);
+  max-height: calc(100dvh - 36px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 44px 22px 28px;
+  background: var(--creme);
+  border: 3px solid var(--brun);
+  border-radius: var(--rayon-boite);
+  color: var(--brun);
+  box-shadow: var(--ombre-boite);
+}
+
+/* Store rose et crème en haut de la boîte */
+.boite::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  border-bottom: 3px solid var(--brun);
+  border-radius: 21px 21px 0 0;
+  background: repeating-linear-gradient(90deg,
+    var(--rose) 0 26px,
+    var(--creme) 26px 52px);
+  pointer-events: none;
+}
+
+.boite h2 {
+  margin: 0 0 4px;
+  font-size: clamp(24px, 5vw, 32px);
+  line-height: 1.08;
+}
+
+.boite .sous {
+  margin: 0 0 16px;
+  color: var(--encre-doux);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/*Bouton fermé*/
+
+.fermer,
+.close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+
+  display: grid;
+  place-items: center;
+
+  width: 34px;
+  height: 34px;
+  padding: 0;
+
+  border: 3px solid var(--brun);
+  border-radius: 50%;
+
+  background: var(--rose);
+  color: var(--brun);
+  box-shadow: 0 3px 0 var(--brun);
+
+  font-family: var(--police-texte);
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1;
+
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+/* Survol du bouton */
+.fermer:hover,
+.close:hover {
+  background: var(--rose-fonce);
+}
+
+/* Effet au clic */
+.fermer:active,
+.close:active {
+  transform: translateY(3px);
+  box-shadow: none;
+}
+
+/* Position si la popup possède les rayures */
+.boite .fermer,
+.boite .close {
+  top: 36px;
+}
+
+/*    4. Carte avec store (bloc de page, hors modale)
+   <section class="carte">...</section>   (variante : class="carte simple") */
+.carte {
+  position: relative;
+  padding: 44px 22px 24px;
+  background: var(--creme);
+  border: 3px solid var(--brun);
+  border-radius: var(--rayon-boite);
+  box-shadow: var(--ombre-boite);
+  overflow: hidden;
+}
+.carte::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  border-bottom: 3px solid var(--brun);
+  background: repeating-linear-gradient(90deg,
+    var(--rose) 0 26px,
+    var(--creme) 26px 52px);
+  pointer-events: none;
+}
+.carte.simple { padding: 22px; }
+.carte.simple::before { display: none; }
+
+/*    5. Formulaires
+   <div class="champ"><label>Nom</label><input><span class="err"></span></div> */
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.champ label {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--brun);
+}
+
+.champ input,
+.champ select,
+.champ textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 2px solid var(--bord-champ);
+  border-radius: var(--rayon-champ);
+  outline: none;
+  background: #fffdf9;
+  color: var(--brun);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.champ textarea { min-height: 90px; resize: vertical; }
+
+.champ input:focus,
+.champ select:focus,
+.champ textarea:focus {
+  border-color: var(--brun);
+  box-shadow: 0 0 0 4px rgba(255, 202, 70, .60);
+}
+
+.champ.invalide input,
+.champ.invalide select,
+.champ.invalide textarea { border-color: var(--terracotta-fonce); }
+
+.champ .err {
+  min-height: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--terracotta-fonce);
+}
+
+/*    6. Boutons : .btn (jaune) + .rose .vert .danger .clair, tailles .large .petit */
+.btn {
+  display: inline-block;
+  padding: 10px 18px;
+  border: 3px solid var(--brun);
+  border-radius: var(--rayon-bouton);
+  background: var(--jaune);
+  color: var(--brun);
+  box-shadow: var(--ombre-bouton);
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn:hover { background: var(--jaune-clair); color: var(--brun); }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--brun); }
+.btn:focus-visible { outline: 3px solid #d69522; outline-offset: 4px; }
+.btn:disabled,
+.btn[disabled] { opacity: .55; cursor: not-allowed; transform: none; box-shadow: var(--ombre-bouton); }
+
+.btn.large { display: block; width: 100%; min-height: 46px; padding: 10px 14px; }
+.btn.petit { padding: 6px 12px; font-size: 12.5px; border-width: 2px; box-shadow: 0 3px 0 var(--brun); }
+
+.btn.rose { background: var(--rose); }
+.btn.rose:hover { background: var(--rose-fonce); }
+
+.btn.vert { background: var(--sauge); }
+.btn.vert:hover { background: var(--sauge-fonce); }
+
+.btn.danger { background: var(--danger); color: var(--creme); }
+.btn.danger:hover { background: var(--danger-fonce); color: var(--creme); }
+
+.btn.clair { background: var(--creme); }
+.btn.clair:hover { background: #fff; }
+
+/*    7. Messages et indices : .message.erreur / .info / .ok */
+.message {
+  margin: 10px 0;
+  padding: 10px 13px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.message.erreur { border: 2px solid #f0c1ad; background: #fbe3da; color: var(--danger-fonce); }
+.message.info   { border: 2px solid #c9d6b4; background: var(--sauge-clair); color: var(--mousse-fonce); }
+.message.ok     { border: 2px solid #bcd9a0; background: #e4f1d6; color: #3d6a2c; }
+
+.indice {
+  margin: 13px 0 0;
+  color: var(--encre-doux);
+  font-size: 11.5px;
+  line-height: 1.4;
+  text-align: center;
+}
+.indice b { font-weight: 800; }
+
+/*    8. Tableau (opt-in : <table class="tableau">) */
+.tableau {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  background: #fffdf9;
+  border: 3px solid var(--brun);
+  border-radius: 16px;
+}
+.tableau th {
+  padding: 10px 12px;
+  background: var(--rose);
+  color: var(--brun);
+  font-family: var(--police-titre);
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 3px solid var(--brun);
+}
+.tableau td {
+  padding: 9px 12px;
+  border-bottom: 2px dashed rgba(90, 58, 40, .25);
+  font-weight: 600;
+}
+.tableau tr:last-child td { border-bottom: none; }
+.tableau tbody tr:hover td { background: rgba(255, 204, 72, .18); }
+
+/*    9. Partie paiement (ton existant) */
 .statut-badge {
   background: #e1f0d4;
   color: #3d6a2c;
@@ -83,33 +392,39 @@ Partie paiement
 
 .modal {
   position: relative;
-    width: min(560px, 94vw);
-    max-height: 90vh;
-    overflow: auto;
-    background: var(--creme);
-    border-radius: 26px;
-    padding: 24px 26px 22px;
-    box-shadow: 0 30px 60px -20px rgba(30, 44, 24, .6);
-    border: 3px solid #fffaf0;
-    animation: pop .3s cubic-bezier(.3, 1.5, .5, 1);
+  width: min(560px, 94vw);
+  max-height: 90vh;
+  overflow: auto;
+  background: var(--creme);
+  border-radius: 26px;
+  padding: 24px 26px 22px;
+  box-shadow: 0 30px 60px -20px rgba(30, 44, 24, .6);
+  border: 3px solid #fffaf0;
+  animation: pop .3s cubic-bezier(.3, 1.5, .5, 1);
+}
+/* Apparence commune à toutes les pop-up */
+.boite,
+.modal {
+  background: var(--creme);
+  border: 3px solid var(--brun);
+  border-radius: var(--rayon-boite);
+  box-shadow: var(--ombre-boite);
 }
 
-.close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 2px solid var(--sauge-clair);
-    background: #fffdf6;
-    cursor: pointer;
-    font-size: 20px;
-    line-height: 1;
-    color: var(--mousse-fonce);
+
+
+/* Animation d'apparition utilisée par .modal (à supprimer si déjà définie ailleurs) */
+@keyframes pop {
+  from { transform: scale(.85); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
 }
 
-.close:hover {
-    background: var(--sauge-clair);
+/*    10. Mobile */
+@media (max-width: 480px) {
+  .voile { padding: 12px; }
+  .boite { width: 100%; padding: 44px 18px 23px; border-radius: 22px; }
+  .boite::before { border-radius: 18px 18px 0 0; }
+  .boite h2 { font-size: 26px; }
+  .boite .sous { padding-right: 8px; }
+  .carte { padding: 44px 16px 20px; }
 }
-

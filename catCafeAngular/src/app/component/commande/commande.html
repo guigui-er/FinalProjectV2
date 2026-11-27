@@ -22,7 +22,7 @@
 
     <!-- BOISSONS CHAUDES -->
     <section class="categorie">
-        <h4>Boissons chaudes</h4>
+        <h4>☕ Boissons chaudes</h4>
 
       @for (boisson of (boissonschaudes$ | async); track boisson.id) {
         <div class="ligne-menu">
@@ -42,7 +42,7 @@
 
     <!-- BOISSONS FROIDES -->
     <section class="categorie">
-      <h4>Boissons froides</h4>
+      <h4>🧋 Boissons froides</h4>
       
       @for (boisson of (boissonsfroides$ | async); track boisson.id) {
         <div class="ligne-menu">
@@ -62,7 +62,7 @@
 
     <!-- GATEAUX -->
     <section class="categorie">
-      <h4>Gâteaux</h4>
+      <h4>🍰 Gâteaux</h4>
       
       @for (gateau of (gateaux$ | async); track gateau.id) {
       <div class="ligne-menu">
@@ -82,7 +82,7 @@
 
     <!-- GLACES -->
     <section class="categorie">
-      <h4>Glaces</h4>
+      <h4>🍦 Glaces</h4>
       
       @for (glace of (glaces$ | async); track glace.id) {
       <div class="ligne-menu">
@@ -102,7 +102,7 @@
 
     <!-- PLATS -->
     <section class="categorie">
-      <h4>Plats</h4>
+      <h4>🍽️ Plats</h4>
       
       @for (plat of (plats$ | async); track plat.id) {
       <div class="ligne-menu">
@@ -122,7 +122,7 @@
 
     <!-- RECETTES SPECIALES -->
     <section class="categorie">
-      <h4>Recettes spéciales</h4>
+      <h4>✨ Recettes spéciales</h4>
       
       @for (recette of (recettesSpeciales$ | async); track recette.id) {
       <div class="ligne-menu">
@@ -160,7 +160,7 @@
     </div>
     
     <!-- Bouton commander -->
-    <button class="btn-commander" type="button" [disabled]="getTotal() === 0" (click)="commander()">Commander</button>
+    <button class="btn large" type="button" [disabled]="getTotal() === 0" (click)="commander()">Commander</button>
 
   </div>
 

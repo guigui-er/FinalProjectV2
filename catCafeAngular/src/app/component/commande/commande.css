@@ -1,74 +1,32 @@
 /* Fond général de la commande */
 .commande {
-  background-color: #fbf6ea;
-  color: #45483d;
-
-  /* La commande occupe toute la largeur de la popup */
   width: 100%;
-  max-width: none;
-  box-sizing: border-box;
-
-  /* Apparence */
-  padding: 28px;
-  border-radius: 26px;
-  box-shadow: 0 8px 25px rgba(70, 60, 40, 0.12);
-
-  /* Police générale */
-  font-family: 'Caveat', cursive;
+  color: var(--brun);
+  font-family: var(--police-texte);
 }
 
 /* En-tête de la commande */
 .header {
   position: relative;
-  text-align: center;
-  padding-bottom: 15px;
+  padding-bottom: 16px;
 }
 
-/* Titre principal "Menu du Café" */
+/* Titre principal */
 .header h2 {
-  color: #3d5a33;
-  font-size: 36px;
-  margin: 5px 0 10px;
+  font-family: var(--police-titre);
+  color: var(--brun);
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 35px 6px 0;
 }
 
 /* Informations table, client, réservation */
 .infos {
-  color: #817d70;
-  font-size: 14px;
-  font-weight: normal;
+  color: var(--brun-doux);
+  font-size: 13px;
+  font-weight: 600;
   margin: 0;
-  font-family: Arial, sans-serif;
-  letter-spacing: 0.3px;
-}
-
-/* Bouton fermer de la popup */
-.btn-fermer {
-  /* positionnement par rapport à l'en-tête */
-  position: absolute;
-  top: -10px;
-  right: -5px;
-
-  /* Apparence du bouton */
-  background: transparent;
-  border: none;
-  color: #a64f38;
-  font-size: 28px;
-
-  /* Curseur en forme de main */
-  cursor: pointer;
-}
-
-/* Changement d'apparence au survol */
-.btn-fermer:hover {
-  color: #893e2c;
-  transform: scale(1.1);
-}
-
-/* Séparateurs verticaux */
-hr {
-  border: none;
-  border-top: 1px solid #e8e1d2;
-  margin: 18px 0;
+  line-height: 1.5;
 }
 
 /* Contenu du menu */
@@ -78,141 +36,201 @@ hr {
 
 /* Catégories du menu */
 .categorie {
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
 
-/* Titres des catégories : boissons, gâteaux, plats... */
+/* Titres des catégories */
 .categorie h4 {
-  color: #a64f38;
+  font-family: var(--police-titre);
+  color: var(--brun);
+  background: var(--rose-pale);
   font-size: 21px;
-  margin: 12px 0 10px;
   font-weight: 600;
+  padding: 9px 12px;
+  border-radius: 10px;
+  margin: 0 0 8px;
 }
 
 /* Ligne des articles */
 .ligne-menu {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 10px 5px;
-  border-bottom: 1px dotted #dcd4bd;
+  border-bottom: 2px dotted var(--beige);
+  transition: background 0.2s;
 }
 
 .ligne-menu:hover {
-  background-color: #f4eddd;
+  background: var(--creme-2);
+  border-radius: 8px;
 }
 
 /* Nom de l'article */
 .nom {
   flex: 1;
-  font-weight: normal;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 /* Prix de l'article */
 .prix {
-  color: #777467;
-  font-size: 14px;
-  font-weight: normal;
-  min-width: 65px;
+  color: var(--brun-doux);
+  font-size: 16px;
+  font-weight: 700;
+  min-width: 50px;
   text-align: right;
+  white-space: nowrap;
 }
 
-/* Boutons et Quantités des articles */
+/* Quantités des articles */
 .qte {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
+  flex-shrink: 0;
 }
 
+/* Boutons + et - */
 .qte button {
-  width: 29px;
-  height: 29px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 2px solid var(--brun);
   border-radius: 9px;
-  border: 1px solid #aebd9f;
-  background-color: #f0f3e9;
-  color: #52634b;
+  background: var(--creme);
+  color: var(--brun);
+  font-family: var(--police-texte);
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 2px 0 var(--brun);
   cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
 }
 
-.qte button:hover {
-  background-color: #dce5d1;
+/* Bouton moins */
+.qte button:first-child {
+  background: var(--creme);
 }
 
+.qte button:first-child:hover {
+  background: var(--rose-pale);
+}
+
+/* Bouton plus */
+.qte button:last-child {
+  background: var(--vert-doux);
+}
+
+.qte button:last-child:hover {
+  background: var(--sauge-fonce);
+}
+
+/* Effet au clic */
+.qte button:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+/* Nombre d'articles sélectionnés */
 .qte span {
   min-width: 18px;
   text-align: center;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 800;
 }
 
 /* Message lorsqu'une catégorie est vide */
 .vide {
-  color: #999386;
-  font-size: 13px;
+  color: var(--brun-doux);
+  font-size: 14px;
   font-style: italic;
+  padding: 5px;
+}
+
+/* Séparateur horizontal */
+hr {
+  border: none;
+  border-top: 2px dashed var(--beige);
+  margin: 18px 0;
 }
 
 /* Pied de commande */
 .footer {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   gap: 15px;
-  margin-top: 20px;
-  font-weight: bold;
+  padding: 16px;
+  background: var(--creme-2);
+  border-radius: 15px;
 }
 
-/* Affichage de la ligne récapitulative (nombre articles et montant total) */
+/* Récapitulatif de la commande */
 .recap {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-/* Affichage du nombre d'articles */
+/* Nombre d'articles */
 .nombre-articles {
-  color: #3b3a2c
-;
-  font-size: 16px;
+  color: var(--brun-doux);
+  font-size: 14px;
+  font-weight: 700;
 }
 
-/* Affichage du montant total */
+/* Montant total */
 .total {
-  color: #45483d;
-  text-align: right;
+  color: var(--brun);
+  font-weight: 700;
   white-space: nowrap;
 }
 
-/* Affichage du montant total */
+/* Prix total */
 .footer b {
-  color: #52634b;
-  font-size: 25px;
+  font-family: var(--police-titre);
+  color: var(--brun);
+  font-size: 26px;
+  font-weight: 600;
 }
 
-/* Bouton commander */
-.btn-commander {
-  width: 100%;
-  box-sizing: border-box;
-  background-color: #a64f38;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 12px 22px;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-}
+/* Adaptation sur mobile */
+@media (max-width: 480px) {
+  .header h2 {
+    font-size: 26px;
+  }
 
-/* Changement de couleur au survol, uniquement si le bouton n'est pas désactivé */
-.btn-commander:hover:not(:disabled) {
-  background-color: #893e2c;
-}
+  .ligne-menu {
+    gap: 6px;
+    padding: 10px 0;
+  }
 
-/* Apparence lorsque le panier est vide, bouton non cliquable */
-.btn-commander:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  .nom {
+    font-size: 12px;
+    overflow-wrap: anywhere;
+  }
+
+  .prix {
+    min-width: 40px;
+    font-size: 12px;
+  }
+
+  .qte {
+    gap: 5px;
+  }
+
+  .qte button {
+    width: 27px;
+    height: 27px;
+  }
+
+  .categorie h4 {
+    font-size: 19px;
+  }
 }

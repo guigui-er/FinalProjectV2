@@ -69,10 +69,10 @@
 .bouton-retour-table {
   background: var(--creme);
   color: var(--mousse-fonce);
-  box-shadow: 0 4px 0 #cdd8bb;
-  border: 2px solid var(--sauge-clair);
+  box-shadow: var(--ombre-bouton);
+  border: 3px solid var(--brun);
   cursor: pointer;
-  border-radius: 14px;
+  border-radius: var(--rayon-bouton);
   padding: 10px 18px;
   font-weight: 700;
   font-size: 14.5px;
@@ -81,14 +81,15 @@
 
 .bouton-retour-table:hover {
   filter: brightness(1.07);
+  
 }
 
 .bouton-payer-table {
   background: var(--terracotta);
-  box-shadow: 0 4px 0 var(--terracotta-fonce);
-  border: none;
+  box-shadow: var(--ombre-bouton);
+  border: 3px solid var(--brun);
   cursor: pointer;
-  border-radius: 14px;
+  border-radius: var(--rayon-bouton);
   padding: 10px 18px;
   font-weight: 700;
   font-size: 14.5px;

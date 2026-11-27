@@ -8,14 +8,16 @@ import { ChatDTO } from '../../model/chat';
 import { Assise } from '../../model/assise';
 import { Article } from '../../model/article';
 import { StatsGerantResponse } from '../../model/stats-gerant';
-import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
+import { AsyncPipe, CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { TableAssisesResponse } from '../../model/table-assise';
 import { TableReservationsResponse } from '../../model/table-reservation';
 import { Router } from '@angular/router';
 import { GerantConnexionService } from '../../service/gerant-connexion-service';
+import { IMAGES_CHATS, PELAGES_CHATS } from '../ecran-principal/scene-salon';
+import { ChatService } from '../../service/chat-service';
 
 @Component({
-  imports: [RouterLink,CommonModule,AsyncPipe,DatePipe],
+  imports: [RouterLink,CommonModule,AsyncPipe,DatePipe,DecimalPipe],
   selector: 'app-gerant-page',
   styleUrl: './gerant-page.css',
   templateUrl: './gerant-page.html',
@@ -24,6 +26,7 @@ export class GerantPage {
 
   protected title: Title = inject(Title);
   protected gerantService: GerantService = inject(GerantService);
+  protected service: ChatService = inject(ChatService);
 
 
   constructor(
@@ -46,7 +49,7 @@ export class GerantPage {
   protected filtreStatut = '';
 
   ngOnInit(): void {
-    this.title.setTitle("Page du gérant");
+    this.title.setTitle("Page du gérant ⚞^. .^⚟");
 
     this.reservations$ = this.gerantService.findAllReservations();
     this.chats$ = this.gerantService.findAllChats();
@@ -84,8 +87,26 @@ export class GerantPage {
 
   protected logout() {
     this.gerantConnexService.resetAuth();
-    this.router.navigate(['ecranPrincipal'])
+    this.router.navigate(['/ecranPrincipal'])
   }
+
+  protected imageChatGerant(i: number): string {
+  const pelage = PELAGES_CHATS[i % PELAGES_CHATS.length];
+
+  return IMAGES_CHATS[`chat-${pelage}-assis-sol`].src;
+
+  
+}
+formatAge(ageEnMois: number): string {
+  const annees = Math.floor(ageEnMois / 12);
+  const mois = ageEnMois % 12;
+
+  if (mois === 0) {
+    return `${annees} an${annees > 1 ? 's' : ''}`;
+  }
+
+  return `${annees > 0 ? annees + ' an' + (annees > 1 ? 's' : '') + ' et ' : ''}${mois} mois`;
+}
 
 
 

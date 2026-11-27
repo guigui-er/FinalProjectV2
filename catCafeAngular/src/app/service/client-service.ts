@@ -11,7 +11,6 @@ export class ClientService {
   private http: HttpClient = inject(HttpClient);
   private apiUrl: string = '/client';
 
-
   public findAll(): Observable<Client[]> {
       return this.http.get<Client[]>(`http://localhost:8080/api${this.apiUrl}`);
   }

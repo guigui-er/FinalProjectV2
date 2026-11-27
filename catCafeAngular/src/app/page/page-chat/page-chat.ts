@@ -37,6 +37,7 @@ export class PageChat implements OnInit {
 
   chat = input.required<ChatDTO>();
   fermerPopupChat = output<void>();
+  image = input<string>('');
 
   ngOnInit(): void {
     this.client = this.reservationService.ReservationForm.client;

@@ -27,7 +27,7 @@ export class GerantConnexionComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
-    this.titleService.setTitle('Connexion gérant — CatCafé');
+    this.titleService.setTitle('Connexion gérant ⚞^. .^⚟');
     this.formLoginUsernameCtrl = this.formBuilder.control("", Validators.required);
     this.formLoginPasswordCtrl = this.formBuilder.control("",[Validators.required, Validators.minLength(2)]); //voir pour rajouter caractére spéciaux et majuscule
 

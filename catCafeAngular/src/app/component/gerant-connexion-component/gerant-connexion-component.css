@@ -96,7 +96,7 @@ button, input, select { font-family:inherit }
 .boite .sous{
       margin:0 0 16px;
       color:var(--encre-doux);
-      font-size:14px;
+      font-size:16px;
       line-height: 1.4;
       }
 
@@ -136,7 +136,7 @@ button, input, select { font-family:inherit }
   margin-bottom: 12px;
 }
 .champ label {
-  font-size: 12.5px;
+  font-size: 15px;
   font-weight: 800;
   color: var(--brun);
 }
@@ -150,7 +150,7 @@ button, input, select { font-family:inherit }
   outline: none;
   background: #fffdf9;
   color: var(--brun);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
 }
 .champ input:focus,
@@ -162,7 +162,7 @@ button, input, select { font-family:inherit }
 .champ.invalide select { border-color: var(--terracotta-fonce); }
 .champ .err {
   min-height: 16px;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--terracotta-fonce);
 }
@@ -175,7 +175,7 @@ button, input, select { font-family:inherit }
   background: var(--jaune);
   color: var(--brun);
   box-shadow: 0 4px 0 var(--brun);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
   text-align: center;
   cursor: pointer;
@@ -200,7 +200,7 @@ button, input, select { font-family:inherit }
   margin: 10px 0;
   padding: 10px 13px;
   border-radius: 12px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
 }
 .message.erreur {
