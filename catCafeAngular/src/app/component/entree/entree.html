@@ -60,7 +60,7 @@
     <label class ="sous" for="nb_personne">Nombre de personnes : </label>
     <select id="nb_personne" [formControl]="nbClientCtrl" placeholder="Nombre de clients" >
       @for (nb of nbPersonnes; track nb) {
-          <option [ngValue]="nb">{{`${nb} personnes`}}</option>
+          <option [ngValue]="nb">{{ nb }} {{ nb > 1 ? 'personnes' : 'personne' }}</option>
         }
     </select>
     </div>
