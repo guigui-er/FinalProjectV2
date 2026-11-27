@@ -10,6 +10,7 @@ import cat_cafe.model.StatutCommande;
 public record CommandeResponse(
     Integer commandeId, 
     LocalDateTime date,
+    StatutCommande statutCommande,
     Reservation reservation,
     List <DetailCommandeResponse> details,
     double prixTotal,
@@ -39,6 +40,7 @@ public record CommandeResponse(
         return new CommandeResponse(
             commande.getId(),
             date,
+            statutCommande,
             reservation,
             details,
             prixTotal,
