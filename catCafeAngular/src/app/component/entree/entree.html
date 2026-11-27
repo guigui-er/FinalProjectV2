@@ -55,11 +55,10 @@
 <form (submit)="ajouterClient()" [formGroup]="clientForm">
 
     <div class="champ"><input type="text" [formControl]="prenomCtrl" placeholder="Prenom"/></div>
-    <div class="champ"><input type="text" [formControl]="nomCtrl" placeholder="nom"/></div>
+    <div class="champ"><input type="text" [formControl]="nomCtrl" placeholder="Nom"/></div>
     <div class="champ">
     <label class ="sous" for="nb_personne">Nombre de personnes : </label>
-    <select id="nb_personne" [formControl]="nbClientCtrl" >
-      <option [ngValue]="" >choisir</option>
+    <select id="nb_personne" [formControl]="nbClientCtrl" placeholder="Nombre de clients" >
       @for (nb of nbPersonnes; track nb) {
           <option [ngValue]="nb">{{`${nb} personnes`}}</option>
         }

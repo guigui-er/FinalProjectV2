@@ -57,7 +57,8 @@ export class Entree implements OnInit {
 
     this.clientForm = this.formBuilder.group({
       prenom: this.prenomCtrl,
-      nom: this.nomCtrl
+      nom: this.nomCtrl,
+      nbClient: this.nbClientCtrl
     });
   }
 
