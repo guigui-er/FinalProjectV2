@@ -12,6 +12,7 @@ import { Table } from '../../model/table';
 import { Router } from '@angular/router';
 import { Genre } from '../../model/genre';
 import { Assise } from '../../model/assise';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   imports: [CommonModule,ReactiveFormsModule],
@@ -20,6 +21,7 @@ import { Assise } from '../../model/assise';
   templateUrl: './entree.html',
 })
 export class Entree implements OnInit {
+  protected title: Title = inject(Title);
 
   private clientService: ClientService = inject(ClientService);
   private reservationService: ReservationService = inject(ReservationService);
@@ -46,6 +48,8 @@ export class Entree implements OnInit {
 
 
   ngOnInit(): void {
+
+    this.title.setTitle("Connexion client ⚞^. .^⚟");
 
     this.prenomCtrl = this.formBuilder.control('', Validators.required);
     this.nomCtrl = this.formBuilder.control('', Validators.required);

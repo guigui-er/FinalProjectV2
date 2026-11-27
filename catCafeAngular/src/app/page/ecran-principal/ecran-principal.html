@@ -178,7 +178,7 @@
               @if (c.reservation) {
                 <div class="resume-ligne">
                   <b>{{`T${c.reservation?.assise?.id}`}}</b>
-                  <span>client : {{ c.reservation.client?.nom ?? '-' }} - {{ c.reservation.assise?.capacite ?? '-' }} pers.</span>
+                  <span>client : {{ c.reservation.client?.nom ?? '-' }} </span>
                   <span > {{`${c.statutCommande}`}}</span>
                 </div>
               }
